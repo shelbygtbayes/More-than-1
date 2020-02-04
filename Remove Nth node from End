@@ -1,0 +1,40 @@
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode * temp = head;
+        int temp_val = 1 , total = 0;
+        // Approach 1
+        while(temp!=NULL)                                         /// Count the No of Nodes  (Pass 1)
+        {
+         total++;
+         temp = temp->next;
+        }
+        n = total-n+1;                                         /// Get the Node No. w.r.t starting point
+        temp = head;
+        if(n == 1 and total == 1) return NULL;                /// Single Node Case
+        bool condition = false;
+        while(temp->next!=NULL)                              /// (Pass 2)
+        {
+            if(n==total and temp_val == n-1)                /// Deleting the Last Node : When Node to delete is Last actually
+            {
+                temp->next = NULL;
+                return head;
+            }
+            if(temp->next->next == NULL)                  /// Deleting the Last Node : When Node to delete is intermediate actually
+            {
+                temp->val = temp->next->val;
+                temp->next = NULL;
+                break;
+            }
+            if(temp_val == n || condition)              /// When reached the Node to delete
+            {
+                condition = true;
+                swap(temp->val , temp->next->val);
+            }
+            else
+                temp_val++;
+            temp = temp->next;
+        }
+        return head;
+    }
+};
