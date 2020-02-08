@@ -1,0 +1,42 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool isPalindrome(ListNode* head) {
+        int cnt = 0;
+        if(head==NULL || head->next == NULL) return true;
+        ListNode* temp , *slow , *fast;
+        temp  = slow = fast = head;
+        while(temp!=NULL)                               // To Count the no of nodes
+        {
+            temp = temp->next;
+            cnt++;
+        }
+        while(fast!=NULL and fast->next!=NULL)          // To Find Mid Point of the Linked List
+        {
+            slow = slow->next;                          // Mid Pointer
+            fast = fast->next->next;
+        }
+        stack<int> st;                                  // Stack to check palindrome ( Extra Space )
+        fast = head;
+        while(fast!=slow)
+        {
+            st.push(fast->val);
+            fast = fast->next;
+        }
+        if(cnt%2!=0) fast = slow->next;                // To Skip the Mid Element
+        while(fast!=NULL)
+        {
+            if(st.empty()) return false;
+            if(fast->val==st.top()) st.pop();
+            fast = fast->next;
+        }
+        return st.empty();
+    }
+};
