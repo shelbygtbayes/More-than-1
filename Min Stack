@@ -1,0 +1,36 @@
+class MinStack {
+public:
+    /** initialize your data structure here. */
+    public:
+    priority_queue<int, vector<int> , greater<int> > min_q;               // log(n)
+    vector<int> s;
+    MinStack() {
+    }
+    
+    void push(int x) {
+        s.push_back(x);
+        min_q.push(x);                                                      //  log(n)
+    }
+    
+    void pop() {                                                                
+        if(*(s.end()-1) == min_q.top()) min_q.pop();                      //  log(n)
+        s.pop_back();
+    }
+    
+    int top() {
+        return *(s.end()-1);
+    }
+    
+    int getMin() {
+        return min_q.top();
+    }
+};
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack* obj = new MinStack();
+ * obj->push(x);
+ * obj->pop();
+ * int param_3 = obj->top();
+ * int param_4 = obj->getMin();
+ */
