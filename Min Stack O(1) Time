@@ -1,3 +1,41 @@
+// Using Stack of Pairs 
+// pair.first --> Holding current value
+// pair.second --> Holding Minimum at that current time
+class MinStack {
+public:
+    /** initialize your data structure here. */
+    public:
+    stack< pair<int,int> > s;
+    MinStack() {
+        
+    }
+    
+    void push(int x) {
+        if(s.empty())
+            s.push(make_pair(x,x));
+         else
+            s.push(make_pair(x , min( x , s.top().second )));
+    }
+    
+    void pop() {
+        s.pop();
+    }
+
+    int top() {
+        if(!s.empty())
+            return s.top().first;
+        else return -1;
+    }
+    
+    int getMin() {
+        if(!s.empty())
+            return s.top().second;
+        else return -1;
+    }
+};
+
+
+
 class MinStack {
 public:
     /** initialize your data structure here. */
