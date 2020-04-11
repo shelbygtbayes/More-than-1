@@ -1,3 +1,20 @@
+//O(1) Space Complexity
+// Simply replace the dp[i][j] by grid[i][j] 
+  
+  int m = grid.size();
+        int ans = INT_MAX;
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < m; j++) {
+                if(!i) grid[i][j] = grid[i][j];
+                else if(!j && j != m - 1) grid[i][j] = min( grid[i - 1][j], grid[i - 1][j + 1]) + grid[i][j];
+                else if(j && j == m - 1) dp[i][j] = min( grid[i - 1][j], grid[i - 1][j - 1]) + grid[i][j];
+                else if(m == 1) grid[i][j] = grid[i - 1][j] + grid[i][j];
+                else grid[i][j] = min(min( grid[i - 1][j], grid[i - 1][j + 1]), grid[i - 1][j - 1]) + grid[i][j];
+            }
+        }
+        for(int i = 0; i < m; i++) ans = min(ans, grid[m - 1][i]);
+        return ans;
+
 class Solution {
 public:
     long int min(long int a , long int b)
