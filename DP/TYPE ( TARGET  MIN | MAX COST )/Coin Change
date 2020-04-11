@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+
+        if(amount == 0) return 0;
+        if(find(coins.begin(),coins.end(),amount)!=coins.end()) return 1;
+        long int dp[amount+1];
+        for(int i = 0 ; i <= amount ; i++)
+        {
+            dp[i] = INT_MAX;
+        }
+        dp[0] = 0;
+        for(int amt = 1 ; amt <= amount ; amt++)
+        {
+            for(auto c : coins)
+            {
+                if(amt - c >= 0)
+                {
+                    dp[amt] = min(dp[amt],dp[amt - c] + 1);
+               
+                }
+            }
+    
+        }
+        if(dp[amount] == INT_MAX) return -1;
+        return dp[amount];
+    }
+};
+/*
+     ways possible to generte i = 
+            ways to generate k  + ways to generate i-k
+                        or
+    dp[n] = min(dp[n-coins[i]] + dp[coins[i]]);  // Here dp[coins[i]] = 1  
+                where i =0 to coins.size()-1
+              or better
+     dp[n] = min(dp[n-coins[i]] + 1);
+    Also
+        dp[0] = 0         // Not at all
+        dp[coins[i]] = 1 // Using the coin only
+        
+        */
