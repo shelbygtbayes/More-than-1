@@ -1,0 +1,54 @@
+class Solution {
+public:
+    long int min(long int a , long int b)
+    {
+        return (a < b) ? (a) : (b);
+    }
+    int minFallingPathSum(vector<vector<int>>& A) {
+        int m = A.size() , n = A[0].size();
+        if(m == 1) return A[0][0];
+        long int dp[m][n];
+        for(int c = 0 ; c < n ; c++)
+            dp[0][c] = A[0][c];
+        
+        for(int r = 1 ; r < n ; r++)
+        {
+            for(int c = 0 ; c < m ; c++)
+            {
+               long int temp = dp[r-1][c] + A[r][c];
+                if(c-1 >= 0)
+                    temp = min(dp[r-1][c-1] + A[r][c] , temp);
+                if(c+1 < m)
+                    temp = min(dp[r-1][c+1] + A[r][c] , temp);
+                dp[r][c] = temp;
+                //dp[r][c] = min(dp[r-1][c-1] , dp[r-1][c] , dp[r-1][c+1]) + A[r][c];
+            }
+        }
+        int ans = dp[n-1][0];
+        for(int c = 1 ; c < m ; c++)
+            ans = min(ans , dp[n-1][c]);
+        return ans;
+      }
+};
+/*
+Term 1: Min
+Term 2 : Path Sum
+Target Reach Last Row
+Ways to Move:
+    Column Diff AtMost by 1:
+        Left j-1 --> j
+        Right j+1 --> j
+        Stable j
+    Hence 
+        At row i Going from i-1
+        Min Cost to reach at row 'i' and column 'j' ( In falling version )
+        dp[i][j] = min(dp[i-1][j-1] , dp[i-1][j] , dp[i-1][j+1]) + Grid[i][j];
+Also
+for 1st row 
+    dp[0][j] = Grid[0][j];
+for 1st column
+    dp[i][0] = min(dp[i-1][0] , dp[i-1][0+1]) + Grid[i][0];
+for last column
+    dp[i][n-1] = min(dp[i-1][n-1-1] , dp[i-1][n-1] ) + Grid[i][n-1];
+Finally check for the minimum path sum possible in the last row
+*/
