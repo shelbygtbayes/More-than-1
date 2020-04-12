@@ -1,0 +1,40 @@
+class Solution {
+public:
+    int mincostTickets(vector<int>& days, vector<int>& costs) {
+        long int dp[366]; // Cponstant Space
+        memset(dp , 0 , sizeof(dp));
+        int n = days.size() , max_day = days[n-1];
+        int curr = 0;
+        for(int d = 1  ; d <= max_day ; d++)
+        {
+            if(curr < n and d != days[curr]) // Not Required days
+            {
+                dp[d] = dp[d-1];           //  Don't buy new one's , Hence cost doesn't change
+            } 
+            else
+            {
+                // Way 1 : Buy Ticket for 1 day
+                dp[d] = dp[d-1] + costs[0];
+                
+             // Way 2   : 7 days Pass
+            //      1. Buy Ticket on-spot for next 7 days
+                if(d < 7)
+                    dp[d] = min(dp[d] , dp[7-7] + costs[1]);
+         //         2. Check if Ticket bought previously for 7 days
+                else if(d >= 7)
+                    dp[d] = min(dp[d] , dp[d-7] + costs[1]);           
+       //       Way 3:   30 Days pass
+      //                 1. Buy Ticket for next 30 days
+                if(d < 30)
+                    dp[d] = min(dp[d] , dp[30-30] + costs[2]);   
+    //                   2. Check if ticket bought already for 30 days
+                else if(d >=30)
+                    dp[d] = min(dp[d] , dp[d-30] + costs[2]);
+                    // ( bought at 'i-30' for cost dp[i-30] + cost[2] ) to allow from day 'i-30' to 'i'
+                curr++;
+            }
+        }
+        //cout << "Here : "<<dp[max_day]<<endl;
+        return dp[max_day];
+    }
+};
