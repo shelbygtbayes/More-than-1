@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int lastStoneWeightII(vector<int>& stones) {
+        int Weight_sum = accumulate(stones.begin(),stones.end(),0);
+        int Partition_Max_sum = Weight_sum/2;
+        int n = stones.size();
+        int dp[n][Partition_Max_sum+1];
+        memset(dp , -1 , sizeof(dp));
+        dp[0][0] = 0;
+        // dp[i][j] --> Max sum of weights such that <= j upto stone 'i'
+        if(stones[0] <= Partition_Max_sum)
+            dp[0][stones[0]] = stones[0];
+        
+        int max_partition_sum = -1;
+        
+        for(int i = 1 ; i < n ; i++)
+        {
+            for(int w = 0 ; w <= Partition_Max_sum ; w++)
+            {
+                dp[i][w] = dp[i-1][w];
+                if(stones[i] <= w and dp[i][w-stones[i]] != -1)
+                    dp[i][w] = max(dp[i][w] , dp[i-1][w-stones[i]] + stones[i]);
+                max_partition_sum = max(max_partition_sum , dp[i][w]);
+            }
+        }
+        
+        return abs(Weight_sum - 2*max_partition_sum);
+    }
+};
