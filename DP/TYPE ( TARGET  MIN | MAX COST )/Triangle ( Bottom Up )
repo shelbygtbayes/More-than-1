@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int minimumTotal(vector<vector<int>>& triangle) {
+        int n = triangle.size();
+        if(n == 0) return 0;
+        if(n == 1) return triangle[0][0];
+        int r = n-2;
+        while(r >= 0)
+        {
+            for(int c = 0 ; c < triangle[r].size() ; c++)
+            {
+                triangle[r][c] += min(triangle[r+1][c] , triangle[r+1][c+1]);
+            }                
+            r--;
+        }
+        return triangle[0][0];
+    }
+};
+  // Greedy Approach From taking Minimum from top and selecting minimum upto bottom
+       /* for(int r = 1 ; r < n ; r++)
+        {
+            int c = hash[r-1];
+            int opt1 = triangle[r][c] , opt2 = triangle[r][c+1];
+            if(opt1 < opt2)
+            {
+                hash[r] = c;
+                //cout << "OPT1 :"<< opt1<<endl;
+                dp[r] = opt1 + dp[r-1];
+            }
+            else
+            {
+                hash[r] = c+1;
+                //cout << "OPT2 :"<< opt2<<endl;
+                dp[r] = opt2 + dp[r-1];
+            }
+        }*/
+      
