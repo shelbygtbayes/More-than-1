@@ -1,0 +1,58 @@
+class Solution {
+public:
+    int findMaxForm(vector<string>& strs, int m, int n) {
+        int size = strs.size();  
+        if(size == 0) return 0;
+        vector< vector<int> > weights(size,{0,0});
+        
+        // Create weights [w1,w2] for each string
+        for(int s = 0; s < size ; s++)
+        {
+            int one = 0 , zero = 0;
+            for(auto c : strs[s])
+            {
+                if(c == '1')
+                    one++;
+                else
+                    zero++;
+            }
+            weights[s] = {zero , one};
+        }
+       
+       // Here dp[ind][p][q] --> Max no of strings upto index 'ind' whose concatenation have 'p' zeros and 'q' ones
+       
+       int dp[size][m+1][n+1];
+       // For 1st string
+        for(int i = 0 ; i <= m ; i++)
+        {
+            for(int j = 0 ; j <= n ; j++)
+            {
+                int p = weights[0][0] , q = weights[0][1]; 
+                if( p <= i and q <= j)
+                    dp[0][i][j] = 1;
+                else
+                    dp[0][i][j] = 0;
+            }
+        }
+        
+        for(int ind = 1 ; ind < size ; ind++)
+        {
+            for(int zeros = 0 ; zeros <= m ; zeros++)
+            {
+                for(int ones = 0 ; ones <= n ; ones++)
+                {
+                    dp[ind][zeros][ones] = dp[ind-1][zeros][ones];
+                    
+                    int w1 = weights[ind][0] , w2 = weights[ind][1];
+                    
+                    if(w1 <= zeros and w2 <= ones)
+                    {
+                        dp[ind][zeros][ones] = max( dp[ind][zeros][ones]   ,    dp[ind-1][zeros-w1][ones-w2] + 1 );
+                        // Add  one for the 'ind' string
+                    }
+                }
+            }
+        }
+        return dp[size-1][m][n];
+    }
+};
