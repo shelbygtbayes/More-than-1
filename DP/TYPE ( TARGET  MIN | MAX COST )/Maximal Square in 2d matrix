@@ -1,0 +1,55 @@
+/*
+Tricky
+Term1 : Max
+Term2 : Area --> side_length
+Target: Upto last cell
+Ways : table[r][c] =  min( table[r-1][c] , table[r][c-1] , table[r-1][c-1] ) + 1;
+
+1) Create a Look up table (m+1 * n+1 ) storing the max_side_length using (r,c) 
+2) Add the 1st row and column filled with 0's
+3) Now If Matrix element = 0 , table[r][c] = 0
+4) else check value for 3 adjacent previous points as : min( table[r-1][c] , table[r][c-1] , table[r-1][c-1] ) + 1
+
+Now return the area of max square
+*/
+class Solution {
+public:
+    int maximalSquare(vector<vector<char>>& matrix) {
+        int n = matrix.size();
+        if(n == 0) return 0;
+        int m = matrix[0].size() , max_side = 0;
+        if(m == 0) return 0;
+        
+        if(m == 1 and n == 1) return matrix[0][0] == '1';
+        int min_3_points[n+1][m+1];
+        for(int r = 0 ; r <= n ; r++)
+        {
+            min_3_points[r][0] = 0;
+        }
+        
+        for(int c = 0 ; c <= m ; c++)
+        {
+            min_3_points[0][c] = 0;
+        }
+        
+        for(int r = 1 ; r <= n ; r++)
+        {
+            for(int c = 1 ; c <= m ; c++)
+            {
+                
+                if(matrix[r-1][c-1] == '0')
+                {
+                    min_3_points[r][c] = 0;
+                }
+                else
+                {
+                    min_3_points[r][c] = min(min_3_points[r-1][c] ,min( min_3_points[r][c-1] , min_3_points[r-1][c-1] ) ) + 1;
+                    max_side = max(max_side , min_3_points[r][c]);
+                }
+            }
+        }
+        return max_side*max_side;
+    }
+};
+
+
