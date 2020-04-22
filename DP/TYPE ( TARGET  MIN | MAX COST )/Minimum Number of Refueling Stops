@@ -1,0 +1,40 @@
+// Greedy Approach Using Priority Queue
+class Solution {
+public:
+    int minRefuelStops(int target, int startFuel, vector<vector<int>>& stations) {
+        int fuel_left = startFuel;
+        priority_queue<int> pq;
+        int curr_pos = 0 , station_visited = 0;
+        int distance_to_travel;
+        for(auto s : stations)
+        {
+            int station_pos = s[0] , fuel_avail = s[1];
+            distance_to_travel = min(station_pos , target) - curr_pos;
+            while(!pq.empty() and fuel_left < distance_to_travel)
+            {
+                int fuel_fill = pq.top();
+                pq.pop();
+                fuel_left += fuel_fill;
+                station_visited++;
+            }
+            if(distance_to_travel > fuel_left)
+                return -1;
+            else // Reached the Station
+                fuel_left = fuel_left - distance_to_travel;
+            curr_pos = min(station_pos , target);
+            pq.push(fuel_avail);
+        }
+        distance_to_travel =  target - curr_pos;
+        while(!pq.empty() and fuel_left < distance_to_travel)
+        {
+            int fuel_fill = pq.top();
+            pq.pop();
+            fuel_left += fuel_fill;
+            station_visited++;
+        }
+        if(distance_to_travel > fuel_left)
+            return -1;
+        else
+            return station_visited;
+    }
+};
