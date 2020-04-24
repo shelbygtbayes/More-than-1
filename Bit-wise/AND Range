@@ -1,0 +1,33 @@
+// By finding the Least significant bit ( b and -b )
+int func(int a,int b)
+{
+  while(a < b){ 
+      // -b is the 2's complement of b when do bitwise or with b  
+      //we get LSB and we subtract that from b 
+      b -= (b & -b); 
+  } 
+  return b; 
+}
+// By finding the most significant bit ( floor(log2(b)) )
+class Solution {
+public:
+    int rangeBitwiseAnd(int m, int n) {
+       if(m == n || m==0) return m;
+       int ans = 0;
+       while(true)
+       {
+           if(m==0) return ans;
+           int msb1 = floor(log2(m)) , msb2 = floor(log2(n));
+           if(msb1 != msb2) 
+               return ans;
+           else
+           {
+               int val = (1 << msb1);
+               ans += val;
+               m -= val;
+               n -= val;
+           }
+       }
+        return ans;
+    }
+};
