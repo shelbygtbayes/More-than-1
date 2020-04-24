@@ -1,0 +1,67 @@
+bool comp(vector<int> a , vector<int> b)
+{
+    if(a[0] == b[0])
+        return (a[1]+a[2] < b[1]+b[2]) ? (true) : (false);
+    else
+        return a[0] < b[0];
+}
+unsigned int kruskals(int g_nodes, vector<int> g_from, vector<int> g_to, vector<int> g_weight) {
+
+    if(g_nodes == 2) return g_weight[0];
+    int parent[g_nodes+1] , rank[g_nodes+1];
+    for(int i = 1 ; i <= g_nodes ; i++)
+    {
+        parent[i] = i;
+        rank[i] = 1;
+    }
+    vector<vector<int>> graph;
+    //priority_queue< pair<int, pair<int,int>> , vector< pair<int,pair<int,int>> > , greater< pair<int,pair<int,int>> > ) pq;
+    auto find = [&](int root)
+    {
+        while(root != parent[root])
+            root = parent[root];
+        return parent[root];
+    };
+
+    auto Union = [&](int r1 , int r2)
+    {
+        int p1 = parent[r1] , p2 = parent[r2];
+        if(p1 == p2) return p1;
+        if(rank[p1] > rank[p2])
+        {
+            parent[p2] = p1;
+            rank[p1] = rank[p1] + rank[p2];
+            return p1;
+        }
+        else
+        {
+            parent[p1] = p2;
+            rank[p2] = rank[p1] + rank[p2];
+            return p2;
+        }
+    };
+    int n = g_weight.size();
+    for(int i = 0 ; i < n ; i++)
+    {
+        vector<int> edge;
+        edge.push_back(g_weight[i]);
+        edge.push_back(g_from[i]);
+        edge.push_back(g_to[i]);
+
+        graph.push_back(edge);
+        //pq.push(make_pair(g_weight , make_pair(g_from , g_to)));
+    }
+    sort(graph.begin() , graph.end() , comp);
+    unsigned int ans = 0;
+    for(auto edge : graph)
+    {
+        int w = edge[0] , u = edge[1] , v = edge[2];
+        if(find(u) != find(v))
+        {
+            parent[u] = parent[v] = Union(u , v);
+            ans += w;
+        }
+    }
+    
+    return ans;
+}
