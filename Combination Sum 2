@@ -1,0 +1,33 @@
+class Solution {
+public:
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        sort(candidates.begin(),candidates.end());
+        vector<int> temp;
+        vector<vector<int>> ans1;
+        set<vector<int>> ans;
+        //for(int st = 0 ; st < candidates.size() ; st++)
+            backtrack(0,ans,temp,target,0,candidates);
+        for(auto v : ans)
+            ans1.push_back(v);
+        
+        return ans1;
+    }
+    void backtrack(int index , set<vector<int>> & ans, vector<int> &pruned , int target , int sum , vector<int> candidates)
+    {
+        if(sum > target) return;
+        else if(sum == target)
+        {
+            ans.insert(pruned);
+            return;
+        }
+        for(int i = index ; i < candidates.size() ; i++)    
+        {
+            sum += candidates[i];
+            pruned.push_back(candidates[i]);
+            backtrack(i+1 , ans , pruned , target , sum , candidates);
+            sum -= candidates[i];
+            pruned.pop_back();
+        }
+    }
+    
+};
