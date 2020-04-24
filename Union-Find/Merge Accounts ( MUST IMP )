@@ -1,0 +1,68 @@
+class Solution {
+public:
+    vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
+        int parent[1001] , rank[1001] , position[1001];
+        for(int i = 0 ; i < accounts.size() ; i++)
+        {
+            parent[i] = i;
+            rank[i] = 1;
+            position[i] = -1;
+        }
+        /*New Technique*/
+        auto find = [&](int root){
+            while(root != parent[root])
+                root = parent[root];
+            return parent[root];
+        };
+        auto Union = [&](int n1 , int n2)
+        {
+            int p1 = find(n1) , p2 = find(n2);
+            if(p1 == p2)
+                return p1;
+            if(rank[p1] > rank[p2])
+            {
+                parent[p2] = p1;
+                rank[p1] = rank[p1] + rank[p2];
+                return p1;
+            }
+            else
+            {
+                parent[p1] = p2;
+                rank[p2] = rank[p2] + rank[p1];
+                return p2;
+            }
+        };
+        /**/
+        map<string,int> hsh_email;
+        for(int i = 0 ; i < accounts.size() ; i++)
+        {
+            int id = i;
+            for(int j = 1 ; j < accounts[i].size() ; j++)
+            {
+                string email = accounts[i][j];
+                if(hsh_email.find(email) == hsh_email.end())
+                {
+                    hsh_email[email] = id;
+                }
+                else
+                {
+                    id = hsh_email[email] = Union(id , hsh_email[email]);
+                }
+            }
+        }
+        /***/
+        vector< vector<string> > ans;
+        int n = 0;
+        for(auto e : hsh_email)
+        {
+            int parent_id = find(e.second);
+            if(position[parent_id] < 0)
+            {
+                position[parent_id] = n++;
+                ans.push_back(vector<string>{accounts[parent_id][0]});
+            }
+            ans[position[parent_id]].push_back(e.first);
+        }
+        return ans;
+    }
+};
