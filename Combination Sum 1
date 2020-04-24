@@ -1,0 +1,29 @@
+// Approach 1 Using Backtrack
+class Solution {
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        vector<int> temp;
+        vector<vector<int>> ans;
+        sort(candidates.begin() , candidates.end());
+        backtrack(candidates , target , temp , ans , 0 , 0);
+        return ans;
+    }
+    void backtrack(vector<int> candidates , int target,vector<int> & pruned , vector<vector<int>> & ans , int sum , int index)
+    {
+        if(sum > target) return;
+        else if(sum == target)
+        {
+            ans.push_back(pruned);
+            return;
+        }
+        
+        for(int i = index ; i < candidates.size() and candidates[i] <= target; i++)
+        {
+            pruned.push_back(candidates[i]);
+            sum += candidates[i];
+            backtrack(candidates,target,pruned,ans,sum,i);
+            sum -= candidates[i];
+            pruned.pop_back();
+        }
+    }
+};
