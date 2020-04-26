@@ -1,0 +1,15 @@
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        // Think in reverse direction
+        // Now Update the Last_index from which we can reach the end of string
+        int last_index = nums.size()-1;
+        for(int i = nums.size() - 1 ; i >= 0 ; i--)
+        {
+            if(i+nums[i] >= last_index)
+                last_index = i;
+        }
+        // If last_index is 0 then there exist a way to reach the end from 0
+        return last_index == 0;
+    }
+};
