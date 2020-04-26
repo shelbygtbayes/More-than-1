@@ -1,0 +1,40 @@
+class Solution
+{
+public:
+   vector<vector<string>> suggestedProducts(vector<string>& products, string searchWord) {
+       map<string,int> hash;
+       int k = 3;
+       for(auto s : products)
+       {
+           hash[s] = 2; // product_elements
+       }
+       vector<vector<string> > ans;
+       string temp = "";
+       for(int index = 0 ; index < searchWord.size() ; index++)
+       {
+           temp += searchWord[index];
+           if(hash.find(temp) == hash.end()) //New Mark down
+                hash[temp] = 1;
+           
+            vector<string> res;
+           
+            auto it = hash.find(temp);     //Finding suggestion in Map after the New Mark down
+            while(it != hash.end() and res.size() < k)
+            {
+                string s = it->first;
+                if(s.substr(0,index+1) == temp)
+                {
+                    if(hash[s] == 2 )
+                    {
+                        res.push_back(s);
+                    }
+                }
+                it++;
+            }
+            ans.push_back(res);
+       }
+       return ans;
+   }
+};
+
+
