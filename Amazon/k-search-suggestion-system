@@ -1,3 +1,68 @@
+// Using Trie
+
+class Solution {
+public:
+    struct node
+    {
+        node* child[26];
+        bool has_word;
+        vector<string> words; // To Store Top 3 Products
+        node()
+        {
+            for(int i = 0 ; i < 26 ; i++)
+                child[i] = NULL;
+            has_word = 0;
+        }
+    }*root = NULL;
+    void insert(string s)
+    {
+        if(root == NULL)
+            root = new node();
+        node* curr = root;
+        for(auto c : s)
+        {
+            int index = c-'a';
+            if(curr->child[index] == NULL)
+            {
+                curr->child[index] = new node(); // Create a child
+            }
+            curr = curr->child[index];          // Move to child
+            curr->words.push_back(s);         
+            sort(curr->words.begin() , curr->words.end()); // In presence of other words
+            if(curr->words.size() > 3)                    // Take Top 3 only
+                curr->words.pop_back();
+            curr->has_word = 1;
+        }
+    }
+    vector<string> find(string search)
+    {
+        node* curr = root;
+        vector<string> empty;
+        for(auto c : search)
+        {
+            int index = c-'a';
+            if(curr->child[index] == NULL) // Not in Trie
+                return empty;
+            curr = curr->child[index];
+        }
+        return curr->words; // Return Top Words After Match
+    }
+    vector<vector<string>> suggestedProducts(vector<string>& products, string searchWord) {
+        vector<vector<string>> ans;
+        for(auto s : products)
+        {
+            insert(s);
+        }
+        for(int index = 0 ; index < searchWord.size() ; index++)
+        {
+            vector<string> res = find(searchWord.substr(0 , index+1));
+            ans.push_back(res);    
+        }
+        return ans;
+    }
+};
+
+// Using Hash Map 
 class Solution
 {
 public:
