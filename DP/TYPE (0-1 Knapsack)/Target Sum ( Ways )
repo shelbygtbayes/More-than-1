@@ -1,0 +1,50 @@
+class Solution {
+public:
+    int findTargetSumWays(vector<int>& nums, int S) {
+           int n = nums.size();
+           if(S > 1000) return 0;
+           int dp[n][1000+1000+1];
+           memset(dp , 0 , sizeof(dp));
+         // To include
+        //  Since Max Negative sum = -1000 --> 2001-1000 = 1
+            dp[0][1000 + nums[0]] = 1;
+            dp[0][1000 - nums[0]] += 1;
+            for(int index = 1 ; index < n ; index++)
+            {
+                for(int sum = -1000 ; sum <= 1000 ; sum++)
+                {
+                    if(dp[index-1][1000+sum] > 0){
+                    dp[index][1000 + sum + nums[index]] += dp[index-1][1000 + sum];
+                    dp[index][1000 + sum - nums[index]] += dp[index-1][1000 + sum];
+                }
+                }
+            }
+            return dp[n-1][S+1000];
+    }
+};     /*     1000+sum --> x  --> (0 , 2000)   k = nums[index]
+            dp[index][x+k] += dp[index-1][x]
+            dp[index][x-k] += d[index-1][x]
+            
+<--------sum------->|--(i)------>
+                   i-1
+No of ways to get 'sum-nums[k]' upto index 'i' = No of ways to get 'sum' upto index 'i-1'
+No of ways to get 'sum+nums[k]' upto index 'i' = No of ways to get 'sum' upto index 'i-1'
+Since same'sum-nums[k]' property can be possible for different combinations of 'sum' and 'nums[k]'
+/*
+
+Recurrsion:
+Ways(0 , nums , 0);
+int cnt = 0;
+void Ways(int sum , vector<int> nums,int index)
+{
+    if(index == nums.size())
+    {
+        if(sum == Target)
+            cnt++;
+    }
+    else
+        Ways(sum + nums[i] , nums , index+1)
+        Ways(sum - nums[i] , nums , index+1);
+}
+
+*/
