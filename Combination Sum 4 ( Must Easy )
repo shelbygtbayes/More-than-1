@@ -1,0 +1,24 @@
+class Solution {
+public:
+    
+    int combinationSum4(vector<int>& nums, int target) {
+        long int dp[target+1];
+       // int mod = INT_MAX;
+        memset(dp,0,sizeof(dp));
+        for(int sum = 1 ; sum <= target ; sum++)
+        {
+            for(int index = 0 ; index < nums.size() ; index++)
+            {
+                if(sum == nums[index]) dp[sum] += 1;
+                if(sum > nums[index] )
+                    dp[sum] = dp[sum] + dp[sum - nums[index]];
+                if(dp[sum] > INT_MAX)
+                    dp[sum] = 0;
+            }
+        }
+        return dp[target];
+    }
+};
+// Since we can use any no of times and in any order and No duplicates : no need of factor index in dp left
+Thus 
+  Ways(sum) += Ways( sum - nums[index] )
