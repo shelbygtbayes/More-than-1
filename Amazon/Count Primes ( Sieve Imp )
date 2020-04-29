@@ -1,0 +1,29 @@
+class Solution {
+public:
+    /**
+     * @param n: a integer
+     * @return: return a integer
+     */
+   
+    int countPrimes(int n) {
+        // write your code here
+        if(n < 2) return 0;
+        else if(n == 3) return 1;
+        int p[n];
+        memset(p , 0 , sizeof(p));
+        p[2] = 0;
+        p[3] = 0;
+        int ans = 0;
+        for(int i = 2 ; i < n ; i++)
+        {
+            if(!p[i])
+            {
+                ans++;
+                for(int j = i ; j < n ; j = j+i)
+                    p[j] = 1;
+            }
+            
+        }
+        return ans;
+    }
+};
