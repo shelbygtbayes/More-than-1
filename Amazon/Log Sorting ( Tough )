@@ -1,0 +1,44 @@
+class Solution {
+public:
+    /**
+     * @param logs: the logs
+     * @return: the log after sorting
+     */
+    bool comp(string &a , string &b)
+    {
+        int index1 = a.find(' ') , index2 = b.find(' ');
+        string p1 = a.substr(index1+1) , p2 = b.substr(index2+1);
+        if(p1 == p2) return a.substr(0,index1) < b.substr(0,index2);
+        else return p1 < p2;
+    }
+    vector<string> logSort(vector<string> &logs) {
+        // Write your code here
+        vector<string> letterLogs , DigitLogs;
+        for(auto s : logs)
+        {
+            int index = s.find(' ');
+            if(isalpha(s[index+1])) letterLogs.emplace_back(s);
+            else DigitLogs.emplace_back(s);
+        }
+        auto swap = [&](int i , int j , vector<string> & letterLogs)
+        {
+          string temp = letterLogs[i];
+          letterLogs[i] = letterLogs[j];
+          letterLogs[j] = temp;
+        };
+        for(int i = 0 ; i < letterLogs.size()-1 ; i++)
+        {
+            int swap_ind = i;
+            for(int j = i+1 ; j < letterLogs.size() ; j++)
+            {
+                if(!comp(letterLogs[swap_ind] , letterLogs[j]))
+                {
+                    swap_ind = j;
+                }
+            }
+            swap(i , swap_ind , letterLogs);
+        }
+        letterLogs.insert(letterLogs.end() , DigitLogs.begin() , DigitLogs.end());
+        return letterLogs;
+    }
+};
