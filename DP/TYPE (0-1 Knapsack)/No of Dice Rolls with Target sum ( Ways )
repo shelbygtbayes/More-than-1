@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int numRollsToTarget(int d, int f, int target) {
+        int dp[d+1][max(target,f)+1];
+        memset(dp,0,sizeof(dp));
+        int mod = 1000000007;
+        for(int sum  = 1 ; sum <= f ; sum++)
+            dp[1][sum] = 1;
+        for(int dice = 2 ; dice <= d ; dice++)
+        {
+            for(int sum = 1 ; sum <= target ; sum++)
+            {
+                for(int k = 1 ; k <=f ; k++)
+                {
+                    if(sum >= k)
+                    {
+                        dp[dice][sum] +=  dp[dice-1][sum-k];
+                        dp[dice][sum] %= mod;
+                    }
+                }
+            }
+        }
+        return dp[d][target];
+    }
+};
+/*
+No of dices Using --> No of ways possible
+1                 --> 1 (sum = 1 and sum <=f)
+2                 --> ways[dice = 1][sum-k] k<=f  getting sum Using "d-1" dices 
+3                 --> ways[dice = 2][sum-k] k<=f
+
+for(d = 2 to dices)
+    for(sum = 1 to target)
+        for(k = 1 to f)
+            if(sum >= k)
+                ways[d][sum] += ways[d-1][sum-k]
+                
+ */
