@@ -1,0 +1,38 @@
+// Exactly k stops
+class Solution {
+public:
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int K) {
+        unsigned long int dp[n][K+2];
+        for(int v = 0 ; v < n ; v++)
+            dp[v][0] = INT_MAX;
+        dp[src][0] = 0;
+        // For K stops --> K+1 edges ( Exactly src to dest)
+        for(int k = 1 ; k <= K+1 ; k++)
+        {
+            for(int v = 0 ; v < n ; v++)
+                dp[v][k] = INT_MAX;
+            
+            for(auto edge : flights)
+            {
+                int x = edge[0] , y = edge[1] , w = edge[2];
+               
+                if(dp[x][k-1] != INT_MAX)
+                {
+                   
+                    dp[y][k] = min(dp[y][k] , dp[x][k-1] + w);
+                    
+                }
+                    
+            }
+        }
+        if(dp[dst][K+1] == INT_MAX) return -1;
+        return dp[dst][K+1];
+        /*  For atmost K stops
+              unsigned long int ans = INT_MAX;
+              for(int k = 0 ; k <= K+1 ; k++)
+                  ans = min( ans , dp[dst][k] );
+              if(ans == INT_MAX) return -1;
+              return ans;
+        */
+    }
+};
