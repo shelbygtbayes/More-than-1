@@ -1,5 +1,6 @@
 class Solution {
 public:
+// Solution Link: https://leetcode.com/problems/first-missing-positive/discuss/602504/C%2B%2B-solution-100-seed-o(n)-with-explanations
     int firstMissingPositive(vector<int>& nums) {
         int ind = 0 , n = nums.size();
         while(ind < nums.size())
