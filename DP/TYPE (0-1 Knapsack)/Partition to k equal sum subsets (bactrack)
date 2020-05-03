@@ -1,0 +1,29 @@
+class Solution {
+public:
+    bool backtrack(int bucketNo,int st ,int target,int sum,vector<int>& nums,map<int,bool> &vis)
+    {
+        if(bucketNo == 1)
+            return 1;
+        else if(target == sum)
+            return backtrack(bucketNo-1 , 0 , target , 0 , nums , vis);
+        for(int ind = st ; ind < nums.size() ; ind++)
+        {
+            if(!vis[ind])
+            {
+                vis[ind] = 1;
+                if(backtrack(bucketNo , ind+1 , target , sum+nums[ind] ,nums,vis))
+                    return 1;
+                vis[ind] = 0;
+            }
+        }
+        return 0;
+    }
+    bool canPartitionKSubsets(vector<int>& nums, int k) {
+        long int total_sum = accumulate(nums.begin() , nums.end() , 0);
+        if(k == 0 || total_sum % k != 0)
+            return 0;
+        int target = total_sum/k;
+        map<int,bool> vis;
+        return backtrack(k , 0 , target , 0 , nums , vis);
+    }
+};
