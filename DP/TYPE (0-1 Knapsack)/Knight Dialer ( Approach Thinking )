@@ -1,0 +1,47 @@
+class Solution {
+public:
+    int knightDialer(int N) {
+        if(N == 1) return 10;
+        unsigned long int dp[N][10];
+        int mod = 1000000007;
+        memset(dp,0,sizeof(dp));
+        for(int dial = 0 ; dial < 10 ; dial++)
+            dp[0][dial] = 1;
+        /*
+        1 --> 8,6
+        2 --> 7,9
+        3 --> 4,8
+        4 --> 3,9,0
+        5 --> X
+        6 --> 1,7,0
+        7 --> 6,2
+        8 --> 1,3
+        9 --> 2,4
+        0 --> 4,6
+        */
+        for(int hops = 1 ; hops < N ; hops++)
+        {
+            dp[hops][0] = dp[hops-1][4] + dp[hops-1][6];
+            dp[hops][1] = dp[hops-1][6] + dp[hops-1][8];
+            dp[hops][2] = dp[hops-1][7] + dp[hops-1][9];
+            dp[hops][3] = dp[hops-1][4] + dp[hops-1][8];
+
+            dp[hops][4] = dp[hops-1][3] + dp[hops-1][9] + dp[hops-1][0];
+            dp[hops][5] = 0;
+            dp[hops][6] = dp[hops-1][1] + dp[hops-1][7] + dp[hops-1][0];
+            dp[hops][7] = dp[hops-1][6] + dp[hops-1][2];
+            dp[hops][8] = dp[hops-1][1] + dp[hops-1][3];
+            dp[hops][9] = dp[hops-1][4] + dp[hops-1][2];
+                
+            for(int dial = 0; dial < 10; dial++)
+                dp[hops][dial] %= mod;
+        }
+        int ans = 0;
+        for(int dial = 0 ; dial < 10 ; dial++)
+        {
+            ans += dp[N-1][dial];
+            ans %= mod;
+        } 
+        return ans;
+    }
+};
