@@ -1,0 +1,34 @@
+// Next Level Algorithm ( Boyer-Moore Voting Algorithm ) O(n) O(1)
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        int ans = -1 , count = 0;
+        for(auto n : nums)
+        {
+            if(count == 0)
+            {
+                ans = n;
+            }
+            count += (n == ans) ? (1) : (-1);
+        }
+        return ans;
+    }
+};
+// Naive Algorithm
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        unordered_map<int ,int > hsh;
+        int cnt = nums.size()/2 , ans = nums[0];
+        for(auto n : nums)
+        {
+            hsh[n]++;
+            if(hsh[n] > cnt)
+            {
+                ans = n;
+                break;
+            }
+        }
+        return ans;
+    }
+};
