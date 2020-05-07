@@ -1,0 +1,31 @@
+// Using Heap Sort of Heap size k ---> O(nlog(k))
+int sortK(int arr[] , int n , int k)
+{
+    priority_queue<int , vector<int>, greater<int> > pq(arr, arr+k+1);
+    int index = 0;
+    for(int ind = k + 1 ; ind < n ; ind++)
+    {
+        arr[index++] = pq.top();
+        pq.pop();
+        pq.push(arr[ind]);
+    }
+    while(!pq.empty())
+    {
+        arr[index++] = pq.top();
+        pq.pop();
+    }
+}
+// Using basic insertion sort          O(nk)
+int sortK(int arr[] , int n , int k)
+{
+    for(int ind = 1 ; ind < n ; ind++)
+    {
+      int key = arr[ind] , k = ind-1;
+      while(k >=0 and arr[k] > key) // Max k times Occur
+      {
+        arr[k+1] = arr[k];
+        k--;
+      }
+      arr[k+1] = key;
+    }
+}
