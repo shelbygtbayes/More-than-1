@@ -1,0 +1,34 @@
+class Solution {
+public:
+    bool isCousins(TreeNode* root, int x, int y) {
+        
+        if(root->val == x || root->val == y) 
+            return 0;
+        queue<TreeNode*> q;
+        int cnt = -1;
+        q.push(root);
+        map< int , int > parent;
+        map< int , int > level;
+        level[root->val] = 0;
+        while(!q.empty())   
+        {
+            TreeNode* r = q.front();
+            q.pop();
+            if(r->left)
+            {
+                q.push(r->left);
+                level[r->left->val] = level[r->val] + 1;
+                parent[r->left->val] = r->val;
+            }
+            if(r->right)
+            {
+                q.push(r->right);
+                level[r->right->val] = level[r->val] + 1;
+                parent[r->right->val] = r->val;
+            }   
+        } 
+        if(parent[x] != parent[y] && level[x] == level[y])
+            return 1;
+        return 0;
+    }
+};
