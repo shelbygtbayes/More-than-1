@@ -1,0 +1,19 @@
+Requirement when need to sort a large data ( from disk ) when limited RAM is available
+Important at then time when we were having the taps rather than the Hard disk
+Assume we have 5GB of Data which is to be sort using the 1GB of RAM
+Step1
+Read files of size 1GB from the disk created from the data(say f1 , f2...f5)
+Sort the files and write to the disk (say f1_s , f2_s ... f5_s)
+
+Step2
+Now read Chunks from each sorted file of suitable size ( say 150MB )
+Write the Chunk of each file to the RAM
+After Write Operations, we are left with some space which will be using as output buffer ( 1024 - 150*5)
+
+Step3
+Apply k-way Merge Algorithm over the chunks and write the result to the output-buffer untill gets filled
+When output buffer filled , Write the buffer file to the disk and empty the buffer
+Continue the Merging Untill a chunk data got used
+When a chunk got used, write another chunk from the same sorted file to the same allocated space
+
+Continue Untill All chunks of each file written into the disk
