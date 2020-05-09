@@ -1,0 +1,47 @@
+#include<iostream>
+#include<climits>
+#include<vector>
+#include<queue>
+#define pp pair<int,pair<int,int>> 
+using namespace std;
+vector<int> merge_k(vector<vector<int>>& arr)
+{
+    int k = arr.size() , n = arr[0].size();
+    vector<int> ans;
+    priority_queue<pp, vector<pp> , greater<pp>> pq;
+    for(int ind = 0 ; ind < k ; ind++)
+        pq.push(make_pair(arr[ind][0] , make_pair(ind , 0)));
+    int ans_size = 0;
+    while(ans_size < n*k )
+    {
+        pp _p = pq.top();
+        pq.pop();
+        int val = _p.first , index = _p.second.first , curr = _p.second.second;
+        if(curr < n)
+        {
+            ans.push_back(val);
+            ans_size++;
+        }
+        if(curr + 1 < n)
+        {
+            pq.push(make_pair(arr[index][curr+1] , make_pair(index , curr+1)));
+        }
+        else
+        {
+            pq.push(make_pair(INT_MAX , make_pair(index , n)));
+        }
+    } 
+    return ans;
+}
+int main()
+{
+    vector<int> ans;
+    vector<vector<int>> arr{{2, 6, 12, 34}, 
+                            {-1, 9, 20, 1000}, 
+                            {23, 34, 90, 2000},
+                            {-100,100,200,500}}; 
+    ans =  merge_k(arr);
+    for(auto c : ans)
+        cout << c << " ";
+    return 0;
+}
