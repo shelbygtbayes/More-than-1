@@ -1,0 +1,24 @@
+class Solution {
+public:
+ // [(a,b) (c,d) ...]
+    int findLongestChain(vector<vector<int>>& pairs) {
+        int n = pairs.size();
+        if(n <= 1) return n;
+        vector<int> dp(n,1);
+        sort(pairs.begin(),pairs.end()); // Sort w.r.t 'a' first element of each pair
+        int ans = 1;
+        for(int i = 1 ; i < n ; i++)
+        {
+            for(int j = 0 ; j < i ; j++)
+            {
+                //To Achieve the required condition Since (a,b) => a < b and (c,d) => c < d then To check b < c
+                if(pairs[i][0] > pairs[j][1]) 
+                {
+                    dp[i] = max(dp[i] , dp[j]+1);
+                }
+            }
+            ans = max(ans , dp[i]);
+        }
+        return ans;
+    }
+};
