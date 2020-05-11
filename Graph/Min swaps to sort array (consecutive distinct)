@@ -1,0 +1,35 @@
+int minimumSwaps(vector<int> arr) {
+    map<int,bool> vis;
+    int ind = 0 , size = 0 , ans = 0;
+    while(ind < arr.size()) 
+    {
+        if(!vis[ind])
+        {   
+            vis[ind] = 1;
+            if(ind+1 == arr[ind]) // To New index which is at right place
+            {
+                if(size > 0)
+                {
+                    ans += (size);
+                    size = 0;
+                }
+                ind++;
+            }
+            else
+            {
+                ind = arr[ind]-1;
+                size++;
+            }
+        }
+        else // Reach the Visited index again Hence, Must be a cycle complete
+        {
+            if(size > 0)
+            {
+                ans += (size-1); // Therefore cycle_size-1
+                size = 0;
+            }
+            ind++;
+        }
+    }
+    return ans;
+}
