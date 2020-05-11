@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int minSwap(vector<int>& A, vector<int>& B) {
+        int n = A.size();
+        if(n == 1) return 0;
+        vector<int> swap(n,n);          // No of swaps required
+        vector<int> no_swap(n,n);      //  No of no_swaps required ( as it is )
+        no_swap[0] = 0 , swap[0] = 1;
+        for(int ind = 1 ; ind < n ; ind++)
+        {
+            if(A[ind] > A[ind-1] and B[ind] > B[ind-1]) // Already Sorted
+            {
+                // Leave as it is
+                no_swap[ind] = no_swap[ind-1];
+                // if swapped the curr index then need 1 more swap to reverse the swapped effect 
+                // and make both array sorted
+                swap[ind] = swap[ind-1]+1;
+            }
+            if(A[ind] > B[ind-1] and B[ind] > A[ind-1])// If crossed condition
+            {
+                // Just Need 1 current swap to sort the array
+                swap[ind] = min(swap[ind] , no_swap[ind-1]+1);
+                // if we don't swap the current then need swap at prev location for sorted
+                no_swap[ind] = min(no_swap[ind] , swap[ind-1]);
+            }
+        }
+        return min(no_swap[n-1] , swap[n-1]);
+    }
+};
