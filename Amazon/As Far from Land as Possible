@@ -1,0 +1,51 @@
+class Solution {
+public:
+    int maxDistance(vector<vector<int>>& grid) {
+        int n = grid.size() , m = grid[0].size() , land = 0 , water = 0;
+        int dx[4] = {0,1,-1,0};
+        int dy[4] = {-1,0,0,1};
+        queue<vector<int>> q;
+        bool vis[n][m];
+        memset(vis,0,sizeof(vis));
+        for(int r = n-1 ; r >=0  ; r--)
+        {
+            for(int c = m-1 ; c >= 0 ; c--)
+            {
+                if(grid[r][c])
+                {
+                    vis[r][c] = 1;
+                    q.push(vector<int>{r,c});
+                    land++;
+                }
+                else
+                    water++;
+            }
+        }
+        if(!land or !water) return -1;
+        int level = 0;
+        while(!q.empty())
+        {
+            int size = q.size();
+            for(int ind = 0 ; ind < size ; ind++)
+            {
+                vector<int> front = q.front();
+                q.pop();
+                int r = front[0] , c = front[1];
+                for(int i = 0 ; i < 4 ; i++)
+                {
+                    int x = r + dx[i] , y = c + dy[i];
+                    vector<int> adj_pos{x,y};
+                    if(x < 0 || y < 0 || x >= n || y >= m || vis[x][y] )
+                        continue;
+                    q.push(adj_pos);
+                    vis[x][y] = 1;
+                }
+            }
+            level++;
+        }
+        return level-1;
+    }
+};
+/* 0 --> water
+
+*/
