@@ -1,0 +1,30 @@
+class Solution {
+public:
+    
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
+        int color = image[sr][sc];
+        if(color == newColor)
+            return image;
+        int dx[4] = {-1,0,1,0};
+        int dy[4] = {0,-1,0,1};
+        int m = image.size() , n = image[0].size();
+        queue<vector<int>> q;
+        q.push(vector<int>{sr,sc});
+        image[sr][sc] = newColor;
+        while(!q.empty())
+        {
+            vector<int> front = q.front();
+            int r = front[0] , c = front[1];
+            q.pop();
+            for(int ind = 0 ; ind < 4 ; ind++)
+            {
+                int x = r + dx[ind] , y = c + dy[ind];
+                if(x < 0 || y < 0 || x >= m || y >= n || image[x][y] != color)
+                    continue;
+                q.push(vector<int>{x,y});
+                image[x][y] = newColor;
+            }
+        }
+        return image;
+    }
+};
