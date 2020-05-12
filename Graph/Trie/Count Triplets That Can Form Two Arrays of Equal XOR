@@ -1,0 +1,59 @@
+class Solution
+{
+public:
+    struct TrieNode
+    {
+        TrieNode* child[2]; // 0,1
+        int sum_of_indexes;
+        int no_of_indexes;
+        TrieNode(){
+            child[0] = child[1] = NULL;
+            sum_of_indexes = no_of_indexes = 0;
+        }
+    };
+    void insert(TrieNode* root,int number,int index)
+    {
+        // Considering no to be 32-bit integer
+        for(int bits = 31 ; bits >= 0 ; bits--)
+        {
+            int curr_bit = (number >> bits) & 1;
+            if(root->child[curr_bit] == NULL)
+                root->child[curr_bit] = new TrieNode();
+            root = root->child[curr_bit];
+        }
+        // set the sum and no of indexes of leaf node
+        root->sum_of_indexes += index;
+        root->no_of_indexes++;
+    }
+    int checkExists(TrieNode* root , int num , int index)
+    {
+        for(int bits = 31; bits >=0 ; bits--)
+        {
+            int curr_bit = (num >> bits) & 1;
+            if(root->child[curr_bit] == NULL)
+                return 0;
+            root = root->child[curr_bit];
+        }
+        int size = root->no_of_indexes;
+        int sum = root->sum_of_indexes;
+        int count = size*index - sum;
+        return count;
+    }
+    int countTriplets(vector<int>& arr) {
+        int n = arr.size();
+        int curr_xor = 0;
+        int ans = 0;
+        TrieNode * root = new TrieNode();
+        for(int ind = 0 ; ind < n ; ind++)
+        {
+            insert(root , curr_xor , ind);
+            int val = arr[ind];
+            curr_xor = curr_xor ^ val;
+            // Check if already exists in Trie
+            ans += checkExists(root , curr_xor , ind);
+        }
+        return ans;
+    }
+};
+
+
