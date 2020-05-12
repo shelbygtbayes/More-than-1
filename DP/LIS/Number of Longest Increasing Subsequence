@@ -1,0 +1,58 @@
+class Solution {
+public:
+    int findNumberOfLIS(vector<int>& nums) {
+        int n = nums.size() , max_len = 1 ;
+        // Check whether increasing subsequence exists or not
+        bool notexists = 1;
+        for(int ind = 0; ind < n-1 ; ind++)
+        {
+           if(nums[ind] < nums[ind+1]) 
+           {
+                notexists = 0;
+                break;
+           }
+        }
+        if(notexists)
+            return n;
+            
+        vector<int> dp(n,1);    // To find the Max length of Increasing subsequence upto index
+        vector<int> ways(n,0); //  To find no of ways to get the above sequence upto index
+        ways[0] = 1;
+        for(int ind = 1 ; ind < n ; ind++)
+        {
+            for(int j = 0 ; j < ind ; j++)
+            {
+                if(nums[j] < nums[ind])
+                {
+                    dp[ind] = max(dp[ind] , dp[j]+1);
+                }
+            }
+            // To get Max length
+            if(dp[ind] > max_len)
+            {
+                max_len = dp[ind];
+            }
+            // If length = 1, then only single way exists
+            if(dp[ind] == 1) ways[ind] = 1;
+            else
+            {
+                for(int j = 0 ; j < ind ; j++)
+                {
+                // If formed using index 'j' then add it's ways to current index ways
+                    if(nums[j] < nums[ind] and dp[ind] == dp[j]+1)
+                    {
+                        ways[ind]+=ways[j];
+                    }
+                }                
+            }
+        }
+        int ans = 0;
+        for(int ind = 0 ; ind < n ; ind++)
+        {
+            // Now find No of ways where LIS is of Max_len 
+            if(dp[ind] == max_len)
+                ans += ways[ind];
+        }
+        return ans;
+    }
+};
