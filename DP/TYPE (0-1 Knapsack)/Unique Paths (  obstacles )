@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+        int m = obstacleGrid.size() ;
+        if(m == 0)
+            return 0;
+        int n = obstacleGrid[0].size();
+        // Source or destination are blocked
+        if(obstacleGrid[0][0] || obstacleGrid[m-1][n-1]) return 0;
+        
+        int dp[m][n];
+        memset(dp , 0 , sizeof(dp));
+        dp[0][0] = 1;
+        for(int ind = 1 ; ind < n ; ind++)
+        {
+            // Untill Block we can move in 1 way only
+            if(obstacleGrid[0][ind]) break;
+            dp[0][ind] = 1;
+        }
+        for(int ind = 1 ; ind < m ; ind++)
+        {
+            if(obstacleGrid[ind][0]) break;
+            dp[ind][0] = 1;
+        }
+        for(int i = 1 ; i < m ; i++)
+        {
+            for(int j = 1 ; j < n ; j++)
+            {
+                if(!obstacleGrid[i][j]) // If no Obstacle
+                    dp[i][j] = dp[i][j-1] + dp[i-1][j];
+            }
+        }
+        return dp[m-1][n-1];
+    }
+};
+
