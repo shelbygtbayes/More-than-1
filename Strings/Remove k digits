@@ -1,0 +1,33 @@
+class Solution {
+public:
+    string removeKdigits(string num, int k) {
+        
+        for(int iter = 0 ; iter < k ; iter++)
+        {
+            int ind = 0 , n = num.size() ;
+            // Remove 1 char such that min 
+            for(ind = 0 ; ind < n-1; ind++)
+            {
+                // If curr > next then remove that digit
+                if((num[ind]-48) > (num[ind+1] - 48))
+                {
+                    num.erase(ind , 1);    
+                    break;
+                }
+            }
+            // If equal or in sorted order then remove the last digit
+            if(ind == n-1)
+                num.erase(ind , 1);
+        }
+        
+        int st = 0;
+        // Remove the leading zeros
+        while(st < num.size() -1 and num[st] == '0')
+        {
+            num.erase(st , 1);
+        }
+        if(num.size() == 0)
+            return "0";
+        return num;
+    }
+};
