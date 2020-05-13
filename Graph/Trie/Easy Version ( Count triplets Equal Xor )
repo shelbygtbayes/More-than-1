@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int countTriplets(vector<int>& arr) {
+        int ans = 0 , n = arr.size();
+        for(int ind = 0 ; ind < n-1; ind++)
+        {
+            int curr_xor = arr[ind];
+            for(int ind2 = ind+1 ; ind2 < n ; ind2++)
+            {
+                curr_xor = curr_xor ^ arr[ind2];
+                if(curr_xor == 0)
+                {
+                    ans += (ind2 - ind);
+                }
+            }
+        }
+        return ans;
+    }
+};
