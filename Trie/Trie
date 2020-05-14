@@ -1,0 +1,67 @@
+class Trie {
+public:
+    /** Initialize your data structure here. */
+    char letter;
+    Trie* child[26];
+    Trie* root;
+    bool end;
+    Trie() {
+        root = NULL;
+        for(int i = 0 ; i < 26 ; i++)
+            child[i] = NULL;
+        end = 0;
+    }
+    /** Inserts a word into the trie. */
+    void insert(string word) {
+        if(!root)
+            root = new Trie();
+        Trie * curr = root;
+        for(auto c : word)
+        {
+            int index = c - 97;
+            if(curr->child[index] == NULL)
+            {
+                curr->child[index] = new Trie();
+                curr->child[index]->letter = c;
+            }
+            curr = curr->child[index];
+        }
+        curr->end = 1;
+    }
+    
+    /** Returns if the word is in the trie. */
+    bool search(string word) {
+        Trie * curr = root;
+        if(!root) return 0;
+        for(auto c : word)
+        {
+            int index = c - 97;
+            if(curr->child[index] == NULL) 
+                return 0;
+            curr = curr->child[index];
+        }
+        return curr->end == 1;
+    }
+    
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    bool startsWith(string prefix) {
+        Trie * curr = root;
+        if(!root) return 0;
+        for(auto c : prefix)
+        {
+            int index = c - 97;
+            if(curr->child[index] == NULL) 
+                return 0;
+            curr = curr->child[index];
+        }
+        return 1;
+    }
+};
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * Trie* obj = new Trie();
+ * obj->insert(word);
+ * bool param_2 = obj->search(word);
+ * bool param_3 = obj->startsWith(prefix);
+ */
