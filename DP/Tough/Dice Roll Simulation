@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int mod = 1e9 + 7;
+    int dieSimulator(int n, vector<int>& rollMax) {
+        rollMax.insert(rollMax.begin(), 0);
+        long long dp[n+1][7];
+        memset(dp , 0 , sizeof(dp));
+        
+        dp[0][0] = 1;
+        for(int iter = 1; iter <= n; iter++)
+        {
+            for(int k = 1; k <= 6; k++) 
+            {
+                long long sum = 0;
+                for(int times = 1; times <= rollMax[k] && times <= iter ; times++) 
+                {
+                    sum += (dp[iter - times][0] - dp[iter - times][k] + mod) % mod;
+                }
+                dp[iter][k] = sum;
+                dp[iter][0] = (dp[iter][0] + sum) % mod;
+                // Appending the Calculated ans of curr_iteration to the 1st position in order to get ans at dp[n][0]
+            }
+        }
+        return dp[n][0];
+    }
+};
