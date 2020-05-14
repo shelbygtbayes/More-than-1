@@ -1,0 +1,67 @@
+class Solution {
+public:
+    int findCircleNum(vector<vector<int>>& M) {
+        int n = M.size();
+        if(n == 1) return M[0][0];
+        int parent[n];
+        int rank[n];
+        for(int node = 0 ; node < n ; node++)
+        {
+            parent[node] = node;
+            rank[node] = 1;
+        }
+        auto find = [&](int a){
+            while(a != parent[a])
+                a = parent[a];
+            return parent[a];
+        };
+        
+        auto Union = [&](int a, int b){
+            int p1 = find(a) , p2 = find(b);
+            if(p1 == p2)
+                return p1;
+            else if(rank[p2] > rank[p1])
+            {
+                parent[p1] = p2;
+                rank[p2] += rank[p1];
+                return p2;
+            }
+            else
+            {
+                parent[p2] = p1;
+                rank[p1] += rank[p2];
+                return p1;
+            }
+        };
+        for(int ind1 = 0 ; ind1 < n ; ind1++)
+        {
+            for(int ind2 = ind1 ; ind2 < n ; ind2++)
+            {
+                if(M[ind1][ind2])
+                {
+                    parent[ind1] = parent[ind2] = Union(ind1 , ind2);
+                }       
+            }
+        }
+        int ans = 0;
+        for(int node = 0 ; node < n ; node++)
+        {
+            if(parent[node] == node)
+                ans++;
+        }
+        return ans;
+    }
+};
+/*
+       0  1  2
+parent 0  0  1
+rank   2  1  1
+[    0   1   2
+  0 [1 , 1 , 0],
+  1 [1 , 1 , 0],
+  2 [0 , 1 , 1],
+]
+
+*/
+
+
