@@ -1,0 +1,57 @@
+class Solution {
+public:
+    
+    double func(vector<int> &arr , vector<int> &nums)
+    {
+        int n = arr.size() , m = nums.size() , median = 0;
+        int st = 0 , end = arr.size() , ind1 , ind2;
+        while(st <= end)
+        {
+            ind1 = (st + end)/2 ;
+            ind2 = (n+m+1)/2 - ind1;
+            if(ind2 < 0)
+            {
+                end = ind1-1;
+                continue;
+            }
+            if(ind1 < n and ind2 > 0 and arr[ind1] < nums[ind2-1])
+            {
+                st = ind1+1;
+            }
+            else if(ind1 > 0 and ind2 < m and arr[ind1-1] > nums[ind2])
+            {
+                end = ind1 - 1;
+            }
+            else
+            {
+                if(ind1 == 0)
+                {
+                    median = nums[ind2-1];
+                }
+                else if(ind2 == 0)
+                {
+                    median = arr[ind1-1];
+                }
+                else
+                {
+                    median = max(arr[ind1-1] , nums[ind2-1]);
+                }
+                break;
+            }
+        }
+        if((n+m)%2 == 1) return (double)median;
+        if(ind1 == n)
+            return (median + nums[ind2])/2.0;
+        else if(ind2 == m)
+            return (median + arr[ind1])/2.0;
+        else
+            return (median + min(arr[ind1] , nums[ind2]))/2.0;
+    }
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        int n1 = nums1.size() , n2 = nums2.size();
+        if(n1 < n2)
+            return func(nums1,nums2);
+        else
+            return func(nums2 , nums1);
+    }
+};
