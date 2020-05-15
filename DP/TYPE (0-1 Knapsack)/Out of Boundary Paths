@@ -1,0 +1,49 @@
+class Solution {
+public:
+    bool existsonBoard(int n,int m,int r,int c)
+    {
+        if(r < 0 || c < 0 || r >= m || c >= n) return 0;
+        return 1;
+    }
+    int func(int N, int r,int c,int moves,int n,int m,long int ***dp)
+    {
+        if(!existsonBoard(n,m,r,c))
+            return 1;
+        
+        else if(moves == 0)
+            return 0;
+        
+        else if(dp[r][c][moves] != -1) 
+            return dp[r][c][moves];
+        
+        int mod = 1e9 + 7;
+        int dx[4] = {1,0,-1,0};
+        int dy[4] = {0,1,0,-1};
+        int ans = 0;
+        for(int d = 0 ; d < 4 ; d++)
+        {
+            int x = r + dx[d] , y = c + dy[d];
+            ans = ((func(N,x,y,moves-1,n,m,dp))% mod + ans % mod) % mod;
+        }
+        dp[r][c][moves] = ans % mod;
+        return ans;
+    }
+    int findPaths(int m, int n, int N, int i, int j) {
+        if(N == 0)
+            return 0;
+        if(m == 1 and n == 1)
+            return 4;
+        long int *** dp = new long int**[m];
+        for(int r = 0 ; r < m ; r++)
+        {
+            dp[r] = new long int*[n];
+            for(int c = 0 ; c < n ; c++)
+            {
+                dp[r][c] = new long int[N+1];
+                for(int moves = 0 ; moves < N+1 ; moves++)
+                    dp[r][c][moves] = -1;
+            }
+        }
+        return  func(N, i, j, N, n, m, dp);
+    }
+};
