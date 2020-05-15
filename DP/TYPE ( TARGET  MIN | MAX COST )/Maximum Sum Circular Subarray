@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int kadane(vector<int> & A)
+    {
+        int ans = INT_MIN , curr_sum = 0;
+        for(int ind = 0 ; ind < A.size() ; ind++)
+        {
+            curr_sum = max(0 , curr_sum + A[ind]);
+            if(ans < curr_sum)
+                ans = curr_sum;
+        }
+        return ans;
+    }
+    int maxSubarraySumCircular(vector<int>& A) {
+        int n = A.size();
+        if(n == 1)
+            return A[0];
+        int max_ = *max_element(A.begin() , A.end());
+        if(max_ < 0)
+            return max_;
+        int sum = accumulate(A.begin() , A.end() , 0);
+        int positiveK = kadane(A);
+        // To take account of wrap of array
+        for(int ind = 0 ; ind < n ; ind++)
+            A[ind] = -A[ind];
+        int negativeK = kadane(A);
+        int max_nK = negativeK + sum;
+        return max(max_nK , positiveK);
+    }
+};
+/*
+sum = 3
+[3,-1,2,-1]  4
+[-3 1 -2 1]  1 => 3 + 1 = 4   
+
+sum = 7
+[5 , -3 , 5 ]  7 
+[-5   3   -5]  3 => 7 + 3 = 10
+*/
