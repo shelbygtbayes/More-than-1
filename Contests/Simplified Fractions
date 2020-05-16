@@ -1,0 +1,44 @@
+class Solution {
+public:
+    vector<string> simplifiedFractions(int n) {
+        vector<string> ans;
+        if(n == 1)
+            return ans;
+        int num = 1 , denom = 2;
+        map< long double , int> red;
+        while(denom <= n)
+        {
+            for(int num = 1 ; num < denom ; num++)
+            {
+                long double frac = num/(long double)denom;
+                if(!red[frac])
+                {
+                    string s = "";
+                    s+= to_string(num);
+                    s+="/";
+                    s+= to_string(denom);
+                    ans.push_back(s);
+                    red[frac] = 1;
+                }
+            }
+            denom++;
+        }
+        return ans;
+    }
+};
+/*
+class Solution {
+public:
+    vector<string> simplifiedFractions(int n) {
+        vector<string> ret;
+        for(int i = 1; i <= n; ++i)
+            for(int j = i + 1; j <= n; ++j)
+                if(__gcd(i, j) == 1) {
+                    string buf = to_string(i) + "/" + to_string(j);
+                    ret.push_back(buf);
+                }
+        return ret;
+    }
+};
+
+*/
