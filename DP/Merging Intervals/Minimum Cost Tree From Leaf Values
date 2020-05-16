@@ -1,0 +1,58 @@
+class Solution {
+public:
+    int mctFromLeafValues(vector<int>& arr) {
+        int n = arr.size();
+        if(n == 2)
+            return arr[0]*arr[1];
+        
+        int max_val[n][n];
+        for(int st = 0 ; st < n ; st++)
+        {
+            int max_ = arr[st] , end;
+            for(end = st ; end < n ; end++)
+            {
+                max_ = max(arr[end] , max_);   
+                max_val[st][end] = max_;
+            }
+        }
+      
+        
+        unsigned int dp[n][n];
+        memset(dp , 0 , sizeof(dp));
+        for(int length = 1 ; length < n ; length++)
+        {
+            for(int left = 0 ; left < n -length ; left++)
+            {
+                int right = left + length;
+                dp[left][right] = INT_MAX;
+                for(int curr = left ; curr < right ; curr++)
+                {
+                    dp[left][right] = min(dp[left][curr] + dp[curr+1][right] + /*result[cutt]*/ max_val[left][curr] * max_val[curr+1][right] , dp[left][right]);
+                }
+            }
+        }
+        return dp[0][n-1];
+    }
+};
+
+/*
+for (int l = 1; l < n; ++l) {
+   for (int i = 0; i < n - l; ++i) {
+       int j = i + l;
+       dp[i][j] = INT_MAX;
+       for (int k = i; k < j; ++k) {
+           dp[i][j] = min(dp[i][j], dp[i][k] + dp[k+1][j] + maxs[i][k] * maxs[k+1][j]);
+       }
+   }
+}
+    |   |
+0---1---2
+6---2---4
+
+    0   1   2
+0   6   6   6
+1   X   2   4   
+2   X   X   4
+
+
+*/
