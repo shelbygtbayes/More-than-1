@@ -1,0 +1,18 @@
+Given a set of numbers find an optimal solution 
+for a problem considering 
+Best from 
+Left side , current , Right sides
+
+from left to right :
+  dp[left][right] = dp[left][current] + result[current] + dp[current+1][right]
+
+for(int length = 1; length < n; length++) {
+   for(int left = 0; left < n-length ; left++) {
+       int right = left + length;
+       for(int curr = left; curr < right; curr++) {
+           dp[left][right] = max(dp[left][right], dp[left][curr] + result[curr] + dp[curr+1][right]);
+       }
+   }
+}
+ 
+return dp[0][n-1]
