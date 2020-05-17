@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int numTrees(int n) {
+        // Catlan Number
+        if(n < 2)
+            return 1;
+        vector<int> c(n+1,0);
+        c[0] = c[1] = 1;
+        for(int nx = 2 ; nx <= n ; nx++)
+        {
+            for(int i = 1 ; i <= nx ; i++)
+                c[nx] += c[nx-i]*c[i-1];
+        }
+        return c[n];      
+    }
+};
+//E c n-i * C i-1
