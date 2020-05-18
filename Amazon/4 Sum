@@ -1,0 +1,36 @@
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        vector<vector<int>> ans;
+        int n = nums.size();
+        if(n < 4)
+            return ans;
+        unordered_map<int , vector<vector<int>>> hsh;
+        
+        for(int ind1 = 0 ; ind1 < n ; ind1++)
+        {
+            for(int ind2 = ind1 + 1 ; ind2 < n ; ind2++)
+            {
+                int to_find = target - (nums[ind2] + nums[ind1]);
+                auto it = hsh.find(to_find);
+                if(it != hsh.end())
+                {
+                    vector<vector<int>> v = (*it).second;
+                    for(auto e : v)
+                    {
+                        vector<int> r{e[0],e[1],nums[ind1],nums[ind2]};
+                        sort(r.begin(),r.end());
+                        if(find(ans.begin() , ans.end() , r) == ans.end())
+                            ans.push_back(r);
+                    }
+                }
+            }
+            for(int ind = ind1 - 1; ind >= 0 ; ind-- )
+            {
+                int sum = nums[ind1] + nums[ind];
+                hsh[sum].push_back(vector<int>{nums[ind1] , nums[ind]});
+            }
+        }
+        return ans;
+    }
+};
