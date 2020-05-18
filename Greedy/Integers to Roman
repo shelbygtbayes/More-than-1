@@ -1,0 +1,92 @@
+class Solution {
+public:
+    string intToRoman(int num) {
+        string s = "";
+        
+        int dig = 0, pos = 1;
+        
+        while(num > 0){
+            string tmp = "";
+            dig = num%10;
+            if(dig == 9){
+                tmp += return_char(pos);
+                tmp += return_char(pos*10);
+            }else if(dig == 4){
+                tmp += return_char(pos);
+                tmp += return_char(pos*5);
+            }else{
+                if(dig>=5){
+                    tmp += return_char(pos*5);
+                    dig -= 5;
+                }
+                if(dig>0){
+                    for(int i=0 ; i<dig ; ++i)
+                        tmp += return_char(pos);
+                }
+            }
+            num /= 10;
+            pos *= 10;
+            s.insert(0, tmp);
+        }
+        
+        return s;
+    }
+    
+    char return_char(int x){
+        
+        switch(x){
+            case 1: return 'I'; break;
+            case 5: return 'V'; break;
+            case 10: return 'X'; break;
+            case 50: return 'L'; break;
+            case 100: return 'C'; break;
+            case 500: return 'D'; break;
+            case 1000: return 'M'; break;
+            default: return 'E'; break;
+        }
+        
+        return 'E';
+    }
+};
+
+class Solution {
+public:
+    string intToRoman(int num) {
+        map<int ,string> m;
+        m[1] = "I";
+        m[5] = "V";
+        m[4] = "IV";
+        m[10] = "X";
+        m[9] = "IX";
+        m[50] = "L";
+        m[40] = "XL";
+        m[100] = "C";
+        m[90] = "XC";
+        m[500] = "D";
+        m[400] = "CD";
+        m[900] = "CM";
+        string ans = "";
+        if(m.find(num) != m.end())
+            return ans+=m[num]; 
+        
+        vector<int> s{1,4,5,9,10,40,50,90,100,400,500,900,1000};
+        int n = num;
+        while(n)
+        {
+            if( n >= 1000)
+            {
+                ans+='M';
+                n -= 1000;
+            }        
+            else
+            {
+                int x = upper_bound(s.begin(),s.end(),n) - s.begin() - 1;
+                ans += m[s[x]];
+                n -= s[x];    
+            }
+            
+        }
+        return ans;
+    }
+};
+//1 5 10 50 100 500 1000
