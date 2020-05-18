@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int minScoreTriangulation(vector<int>& A) {
+        // Matrix Chain Multiplication
+        // find min sum of product of order of Matrixes to multiply
+        // M(n) = M1*M2*M3....*Mn
+        // In what partition to get the minimum sum of product of order
+        int n = A.size();
+        if( n < 3 )
+            return 0;
+        else if(n == 3)
+            return A[0] * A[1] * A[2];
+        long int table[n][n];
+        
+        for(int len = 1 ; len < n ; len++)
+        {
+            for(int left = 0 ; left < n  - len ; left++)
+            {
+                int right = left + len;
+                // i_j_k min len of partitiion must be 2
+                if(len < 2)
+                    table[ left ][ right ] = 0;
+                else{
+                    table[ left ][ right ] = INT_MAX;
+                    for(int curr = left + 1 ; curr < right ; curr++)
+                    {
+                        table[ left ][ right ] = min( table[ left ][ right ] , table[ left ][ curr ] + table[ curr ][ right ] + A[ left ]*A[ curr ]*A[ right ]) ;
+                    }
+                }
+               
+            }
+          
+        }
+        return table[0][n-1];
+    }
+};
