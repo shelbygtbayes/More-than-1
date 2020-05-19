@@ -1,0 +1,37 @@
+Approach Better 
+class StockSpanner {
+public:
+    stack<pair<int, int>> s;
+     StockSpanner() {
+    }
+    int next(int price) {
+        int ans = 1;
+        while (!s.empty() and s.top().first <= price) {
+            ans += s.top().second;
+            s.pop();
+        }
+        s.push({price, res});
+        return ans;
+    }
+};
+Approach 1 Without Stack 
+class StockSpanner {
+public:
+    priority_queue<int , vector<int> , greater<int> > pq;
+    unordered_map<int , int> hsh;
+    StockSpanner() {
+        
+    }
+    
+    int next(int price) {
+        int ans = 0;
+        while(pq.size() > 0 and pq.top() <= price)
+        {
+            ans = ans + hsh[pq.top()];
+             pq.pop();
+        }
+        pq.push(price);
+        hsh[price] = ans+1;
+        return ans+1;
+    }
+};
