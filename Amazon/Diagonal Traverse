@@ -1,0 +1,56 @@
+class Solution {
+public:
+    vector<int> findDiagonalOrder(vector<vector<int>>& matrix) {
+        vector<int> ans;
+        int m = matrix.size();
+        if(m == 0)
+            return ans;
+        int n = matrix[0].size();
+        bool dir = 1;
+        int r = 0 , c = 0;
+        auto exists = [&](int r,int c)
+        {
+            if(r < 0 || c < 0 || r >= m || c >= n ) return 0;
+            return 1;   
+        };
+        int st = 0 , end = 0;
+        for(int col = 0 ; col < n ; col++)
+        {
+            r = 0;
+            c = col;
+            while(exists(r,c))
+            {
+                ans.push_back(matrix[r][c]);
+                end++;
+                r++;
+                c--;
+            }
+            if(dir)
+            {
+                reverse(ans.begin() + st , ans.begin() + end);
+            }
+            st = end ;
+            dir = !dir;
+        }
+        dir = dir%2;
+        for(int row = 1 ; row < m ; row++)
+        {
+            r = row;
+            c = n-1;
+            while(exists(r,c))
+            {
+                ans.push_back(matrix[r][c]);
+                end++;
+                r++;
+                c--;
+            }
+            if(dir)
+            {
+                reverse(ans.begin() + st , ans.begin() + end);
+            }
+            st = end;
+            dir = !dir;
+        }
+        return ans;
+    }
+};
