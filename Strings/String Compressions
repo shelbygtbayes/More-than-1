@@ -1,0 +1,33 @@
+class Solution {
+public:
+    /**
+     * @param originalString: a string
+     * @return: a compressed string
+     */
+    string compress(string &originalString) {
+        // write your code here
+        int st = 0 , n = originalString.size();
+        if( n < 2 )
+            return originalString;
+        string s = "";
+        for(int r = 0 ; r < n ; r++)
+        {
+            if(r+1 == n or originalString[r] != originalString[r+1])
+            {
+                int cnt = r - st + 1;
+                s += originalString[r];
+                string k = to_string(cnt);
+                for(auto c : k)
+                {
+                    s += c;
+                }
+                st = r+1;
+            }
+        }
+        
+        if( s.size() < originalString.size() )
+            return s;
+        else
+            return originalString;
+    }
+};
