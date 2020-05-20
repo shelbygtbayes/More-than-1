@@ -1,0 +1,41 @@
+// Follow Up
+Combine an indexing structure (we could keep BST here) with a double linked list.
+The overall time complexity for insert/delete + search of kth smallest is O(H+k) instead of O(2H+k).
+
+Complexity Analysis
+
+    Time complexity for insert/delete + search of kth smallest: O(H+k)\mathcal{O}(H + k)O(H+k), where H is a tree height.
+    O(log⁡N+k) in the average case
+    O(N+k) in the worst case.
+
+    Space complexity : O(N) to keep the linked list.
+
+Such a structure would provide:
+
+    O(H) time for the insert and delete.
+
+    O(k) for the search of kth smallest.
+
+class Solution {
+public:
+    int kthSmallest(TreeNode* root, int k) {
+        TreeNode* curr = root;
+        stack< TreeNode*> st;
+        int cnt = 0;
+        while(!st.empty() || curr != NULL)
+        {
+            while(curr != NULL)
+            {
+                st.push(curr);
+                curr = curr->left;   
+            }
+            curr = st.top();
+            st.pop();
+            cnt++;
+            if(cnt == k)
+                break;
+            curr = curr->right;
+        }
+        return curr->val;
+    }
+};
