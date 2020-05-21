@@ -1,0 +1,50 @@
+class Solution {
+public:
+    bool exists(int r, int c ,int m , int n)
+    {
+        if(r < 0 || r >= m || c < 0 || c >= n) return 0;
+        return 1;
+    }
+    bool func(int r, int c , int ind , string s , vector<vector<char>> board , map<pair<int,int>,bool> & vis)
+    {
+            if(ind+1 == s.size())
+                return 1;
+            vis[make_pair(r,c)] = 1;
+            int m = board.size() , n = board[0].size();
+            int dx[4] = {-1 , 0 , 1 , 0};
+            int dy[4] = { 0 , 1 , 0 , -1};
+            bool ans = 0;
+            for(int dir = 0 ; dir < 4 ; dir++)
+            {
+                int x = r + dx[dir] , y = c + dy[dir];
+                if(exists(x,y,m,n) and !vis[make_pair(x,y)] and s[ind+1] == board[x][y])
+                    ans = func(x,y,ind+1,s,board,vis);
+                if(ans)
+                    return 1;
+            }
+            vis[make_pair(r,c)] = 0;
+            return 0;
+    }
+    bool exist(vector<vector<char>>& board, string word) {
+        int m = board.size() , n = board[0].size();
+        map< pair<int,int> , bool > vis;
+        for(int r = 0 ; r < m ; r++)
+        {
+            for(int c = 0 ; c < n ; c++)
+            {
+                if(board[r][c] == word[0])
+                {
+                    bool ans = func(r , c , 0 , word , board , vis);
+                    if(ans)
+                        return 1;
+                }
+            }
+        }
+        return 0;
+    }
+};
+/*
+["C","A","A"]
+["A","A","A"]
+["B","C","D"]
+*/
