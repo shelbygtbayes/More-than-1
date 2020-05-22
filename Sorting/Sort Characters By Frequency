@@ -1,0 +1,36 @@
+class Solution {
+public:
+    string frequencySort(string s) {
+        if(s.size() < 2)
+            return s;
+        vector<int> hsh(256,0);
+        
+        for(auto c : s)
+        {
+            hsh[c]++;
+        }
+      
+        auto func = [&](char &a , char &b){
+            if(hsh[a] != hsh[b])
+                return hsh[a] > hsh[b];
+            return a > b;
+        };
+        sort(s.begin() , s.end() , func);
+        /* INSERTION SORT TLE
+        for(int ind = 1 ; ind < s.size(); ind++)
+        {
+            int ind2 = ind-1;
+            char key = s[ind];
+            while(ind2 >= 0 and (func(key , s[ind2])))
+            {
+                s[ind2+1] = s[ind2];
+                ind2--;
+            }
+            
+            s[ind2+1] = key;
+        }*/
+        return s;
+
+        
+    }
+};
