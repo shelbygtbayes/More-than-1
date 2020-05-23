@@ -1,0 +1,85 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    int height(TreeNode* root)
+    {
+        if(!root) return 0;
+        return max(height(root->left) , height(root->right)) + 1;
+    }
+    void func(string &s , TreeNode* root , int h)
+    {
+        if(!root)
+        {
+            if(h == 0)
+                s += 'X';
+            return;
+        }
+        if(h == 0)
+        {
+            s += to_string(root->val);
+            return;
+        }
+        func(s , root->left , h-1);
+        func(s , root->right , h-1);
+    }
+    string serialize(TreeNode* root) {
+        string ans = "";
+        if(!root) return ans+='X';
+        int ht = height(root);
+        for(int h = 0 ; h < ht ; h++)
+        {
+            string s = "";
+            func(s , root , h);
+            ans += s;
+        }
+
+        return ans;
+    }
+ //   string to_integer()
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        
+        if(data[0] == 'X') return NULL;
+        TreeNode* root = new TreeNode( data[0] - 48 );
+        queue< TreeNode* > q;
+        q.push(root);
+        bool makeleft = 1;
+        TreeNode* curr = NULL;
+        for(int ind = 1 ; ind < data.size() ; ind++)
+        {
+            TreeNode* newNode = NULL;
+            if(data[ind] != 'X')
+            {
+                newNode = new TreeNode(data[ind] - 48);
+                q.push(newNode);
+            }
+            if(makeleft)
+            {
+                curr = q.front();
+                q.pop();
+                curr->left = newNode;
+                makeleft = 0;
+            }
+            else
+            {
+                curr->right = newNode;
+                makeleft = 1;
+            }
+        }
+        return root;
+    }
+};
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec;
+// codec.deserialize(codec.serialize(root));
