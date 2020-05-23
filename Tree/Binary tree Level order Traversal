@@ -1,0 +1,92 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+ // Recurrsive
+class Solution {
+public:
+    int height(TreeNode* root)
+    {
+        if(!root) return 0;
+        int l = height(root->left);
+        int r = height(root->right);
+        return max(l,r) + 1;
+    }
+    void func(vector<int> &ans , int h , TreeNode* root)
+    {
+        if(!root) return;
+        if(h == 0)
+        {
+            ans.push_back(root->val);
+            return;
+        }
+        func( ans , h-1 , root->left);
+        func( ans , h-1 , root->right);
+    }
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> ans;
+        if(!root)
+            return ans;
+        int ht = height(root);
+        for(int h = 0 ; h < ht ; h++)
+        {
+            vector<int> temp;
+            func(temp , h , root);
+            ans.push_back(temp);
+        }
+        return ans;
+    }
+};
+    
+// Iterative
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> ans;
+        if(root == NULL) return ans;
+        
+        
+        vector<int> t;
+        queue<TreeNode*> q;
+        
+        q.push(root);
+        t.push_back(root->val);
+        
+        q.push(NULL);
+        ans.push_back(t);
+        t.clear();
+        while(!q.empty())
+        {
+            if(q.size() == 1 and q.front()==NULL) break;
+            TreeNode* temp = q.front();
+            if(temp==NULL)
+            {
+                q.push(NULL);
+                ans.push_back(t);
+                t.clear();
+            }
+            else
+            {
+                if(temp->left!=NULL)
+                {
+                    q.push(temp->left);
+                    t.push_back(temp->left->val);
+                }
+                if(temp->right!=NULL)
+                {
+                    q.push(temp->right);
+                    t.push_back(temp->right->val);
+                }
+            }
+             q.pop();
+        }
+        return ans;
+    }
+};
