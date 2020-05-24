@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int maxDotProduct(vector<int>& nums1, vector<int>& nums2) {
+        int n = nums1.size() , m = nums2.size();
+        int product[n+1][m+1];
+        memset(product , -1000006 , sizeof(product));
+        for(int  i  = 1 ;  i  <= n ;  i ++)
+        {
+            for(int  j  = 1 ;  j  <= m ;  j ++)
+            {
+                // Excluding either number from 1st list or from another list
+                product[ i ][ j ] =  max ( product[ i ][ j-1] , product[ i - 1 ][ j ] );
+                
+                // Including                                    Current Product         +            Previous sub-problem
+                product[ i ][ j ] = max( product[ i ][ j ] , nums1[ i-1 ] * nums2[ j-1 ] + max( 0 , product[ i-1 ][ j-1 ]) );
+                
+            }
+            cout << endl;
+        }
+        return product[ n ][ m ];
+    }
+};
