@@ -1,0 +1,49 @@
+// Minimizing the Maximum sum of subarray among all 'k' subarrays 
+int check(long long int mid,vector<int> paintings) // Returns no. of workers required to do the job in "mid" time.
+{
+    int count=1 , n = paintings.size();
+    long long int sum=0;
+    for(int i=0; i < n;i++)
+    {
+        if(sum + paintaings[i] > mid)  
+        {
+            sum = paintings[i];
+            count++;
+            if(paintings[i] > mid)  // If the dimension of a board is more than mid then it is impossible for a worker to complete the job in mid time so we will return INT_MAX;
+            {
+                return INT_MAX;
+            }
+        }
+        else
+        {
+            sum += paintings[i];
+        }
+    }
+    return count;  // return no. of Painters needed.
+}
+int Solution::paint(int k, int B, vector<int> & paintaings) {
+    long long int low = LONG_MAX;   // If a painter paints the smallest board then it will take the least time.
+    long long int high = 0;  // If a single painter paints all the board then it will take the highest time.
+    int n = paintaings.size();
+    for(int i=0 ; i < n ;i++)
+    {
+        low = min( low , (long long)paintaings[i] );  
+        high += paintaings[i]; 
+    }
+    long long int ans;
+    long long int mid;
+    while(low <= high)    
+    {
+        mid=low + (high-low)/2;
+        if(check(mid, paintaings) <= k)  // If "mid" is the amount of time we have then check() function will return number of workers we need to complete the job in "mid" time.
+        {
+            ans = mid; 
+            high = mid-1;  // We will check if we can do the job in time less than "mid".
+        }
+        else
+        {
+            low = mid+1; // if it is not possible to do the job in given time. We will increase our range.
+        }
+    }
+    return ( ans*B ) % 10000003;
+}
