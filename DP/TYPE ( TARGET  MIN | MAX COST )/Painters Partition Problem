@@ -1,0 +1,64 @@
+// Divide an array of size 'n' into 'k' subarrays such that Maximum sum of the subarray among those sub-arrays is minimized  
+// Dynamic Programming
+// T(n,k) = min ( Max( T(n , i) , summation of A[j] where j = i+1 to n ) )
+// T(n ,k ) -> Min time taken by the 'k' painters to paint 'n' paintings 
+// Note If k = 1 ( Means Single Painter ) Hence acc to given conditions, Same will paint all paintings 
+// Thus T(n,1) = sum of elements of array
+// If n = 1 ( Means single Painting )  Hence acc to given conditions, Any Painter will paint that painting
+// Hence T(1,k) = arr[0]
+// Also for n = 0 , k =0 => T( n , k) = 0
+
+int Solution::paint(int A, int B, vector<int> & paintings) {
+    int n = paintings.size() , k = A;
+    unsigned long int dp[k+1][n+1];
+    int mod = 10000003;
+    // 0 painters or single painter
+    unsigned long int sum = 0;
+    for(int c = 0 ; c <= n ; c++)
+    {
+        dp[0][c] = 0;
+        if(c > 0)
+        {
+            sum = ((paintings[c-1]) % mod + (sum) % mod) % mod;
+            dp[1][c] = sum;
+        }
+    }
+    
+    auto summation = [&](int st , int end) {
+        unsigned long int sum = 0;
+        for(int ind = st ; ind <= end ; ind++)
+            sum = (( paintings[ind] ) % mod + ( sum % mod ))% mod ;
+        return sum % mod;
+    };
+    
+    auto min = [&](unsigned long int a , unsigned long int  b)
+    {
+        return (a < b) ? (a) : (b);
+    };
+    auto max = [&](unsigned long int a , unsigned long int  b)
+    {
+        return (a > b) ? (a) : (b);
+    };
+    
+    // Zero or Single Painting    
+    for(int r = 0 ; r <= k ; r++)
+    {
+        dp[r][0] = 0;
+        if(r > 0)
+            dp[r][1] = paintings[0] % mod;
+    }
+    
+    for(int r = 2 ; r <= k ; r++)
+    {
+        for(int c = 2 ; c <= n ; c++)
+        {
+            unsigned long int best = INT_MAX;
+            for(int p = 1 ; p <= c ; p++)
+            {
+                best = min( best , max( dp[r-1][p] , summation(p , c-1) ));
+            }
+            dp[r][c] = best % mod;
+        }
+    }
+    return (( dp[k][n] % mod ) * ( B % mod )) % mod;
+}
