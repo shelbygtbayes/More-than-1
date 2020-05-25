@@ -1,0 +1,30 @@
+vector<int> Solution::dNums(vector<int> &A, int B) {
+    vector<int> ans;
+    int n = A.size();
+    if(B > n)
+        return ans;
+    unordered_map<int , int> s;
+    set<int> s1;
+    for(int ind = 0 ; ind < B ; ind++)
+    {
+        s[A[ind]]++;
+        s1.insert(A[ind]);
+    }
+    ans.push_back(s1.size());
+    int st = 0 , end = B-1;
+    while(end < n)
+    {
+        s[A[st]]--;
+        if(s[A[st]] == 0)
+            s1.erase(A[st]);
+        st++;
+        end++;
+        if(end < n)
+        {
+            s[A[end]]++;
+            s1.insert(A[end]);
+            ans.push_back(s1.size());   
+        }
+    }
+    return ans;
+}
