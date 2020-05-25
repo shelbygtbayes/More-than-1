@@ -1,0 +1,39 @@
+//## ( Maximizing the Minimum distance b/w cows )
+bool check_valid_gap(int d , vector<int> &stalls_position ,int cows)
+{
+    int cnt = 1 , stall_no = 1 , n = stalls_position.size() , prev_pos = stalls_position[0];
+    while(stall_no  < n and cnt < cows)
+    {
+        if(stalls_position[stall_no] - prev_pos >= d)
+        {
+            cnt++;
+            prev_pos  = stalls_position[stall_no];
+        }
+        stall_no++;
+    }
+    if(cnt == cows) return 1;
+    return 0;
+}
+int Solution::solve(vector<int> &stalls_position, int cows) {
+    sort( stalls_position.begin() , stalls_position.end() );
+    int n = stalls_position.size();
+    if(cows == 2)
+    {
+        return stalls_position[n-1] - stalls_position[0];
+    }
+    int /*min_gap*/left = 0 , /*max_gap*/right = stalls_position[n-1] , ans;
+    while(left <= right)
+    {
+        int mid = left + (right - left) / 2;
+        if(check_valid_gap(mid , stalls_position , cows))
+        {
+            ans = mid;
+            // To Maximize the Minimum distance Move as right as possible
+            left = mid + 1;
+        }
+        else
+            right = mid - 1;
+    }
+
+    return ans;
+}
