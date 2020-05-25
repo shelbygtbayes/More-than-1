@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int func(vector<int> & up , vector<int> & down)
+    {
+        int n = up.size() , m = down.size() ;
+        int dp[n+1][m+1];
+        memset(dp , 0 , sizeof(dp));
+        for(int r = 1 ; r <= n ; r++)
+        {
+            for(int c = 1 ; c <= m ; c++)
+            {
+                if(up[r-1] == down[c-1])
+                    dp[r][c] = dp[r-1][c-1] + 1;
+                else
+                    dp[r][c] = max(dp[r-1][c] , dp[r][c-1]);
+            }
+        }
+        return dp[n][m];
+    }
+    int maxUncrossedLines(vector<int>& A, vector<int>& B) {
+        int n = A.size() , m = B.size() , ans = 0;
+        if(n == m and n == 1) return A[0] == B[0];
+        ans = func(A , B);
+        return ans;
+    }
+};
+/*
+    _  _  _
+2   5  1   2   7         
+    _     _        _
+10  5  2  1    5   2
+
+Longest Common Subsequence
+
+1  4  2
+1  2  4
+
+3,3,1,3
+1,3,2,3,3,1
+
+*/
