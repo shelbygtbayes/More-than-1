@@ -1,3 +1,55 @@
+// Check out the below solution for reference
+int Solution::paint(int k, int B, vector<int> &dimensions) {
+    long long int low = INT_MAX;
+    long long int high = 0;
+    int mod = 10000003;
+    int n = dimensions.size();
+    for(auto len : dimensions)
+    {
+        low = min(low , (long long)len);
+        high += len;
+    }
+    auto painters_required = [&](long long int len){
+        int st = 0 , painters = 1;
+        long long int length = 0;
+        while(st < n)
+        {
+            if(length + dimensions[st] > len) // Create Partition Since greater than Max length
+            {
+                painters++;
+                if(dimensions[st] > len)
+                    return 0;
+                length = dimensions[st];
+            }
+            else
+            {
+                length += dimensions[st];
+            }
+            st++;
+        }
+        return (painters <= k) ? (1) : (0);
+
+    };
+    long long int ans = 0;
+    while(low <= high)
+    {
+        long long int mid = low + (high - low)/2;
+        if(painters_required(mid)) 
+        {
+            ans = mid;
+            // Minimize the Max length
+            high = mid-1;
+        }
+        else
+        {
+            low = mid+1;
+        }
+    }
+    return (ans*B) % mod;
+}
+
+
+
 // Minimizing the Maximum sum of subarray among all 'k' subarrays 
 int check(long long int mid,vector<int> paintings) // Returns no. of workers required to do the job in "mid" time.
 {
