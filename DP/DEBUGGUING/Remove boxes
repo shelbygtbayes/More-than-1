@@ -1,0 +1,55 @@
+class Solution {
+public:
+    
+    int func(int l , int r , int k , vector<vector<vector<int>>> &dp , vector<int>& boxes)
+    {
+        if(l > r)
+            return 0;
+        
+        if(dp[l][r][k] != 0) 
+            return dp[l][r][k];
+        
+        // Now consider removing the same color boxes from l+1 to r and calculating the points
+        
+        int ind = l+1 , point = k;
+        
+        
+        while( ind <= r and boxes[ind] == boxes[ind-1] )
+            ind++; point++;
+        // Resultant point after removing the box
+         //cout << " Working";
+        int ans = (point)*(point) + func( ind , r , 0 , dp , boxes);
+       
+        // Considering by removing some coming boxes and joinig the same color future box
+        // To make the same color pattern
+        
+        for(int index = ind ; index <= r ; index++)
+        {
+        // remove the same color boxes from ind to index-1 and
+        // then combine l .. ind + index , Hence Now point -> k+1
+        // and continue the subproblem same for index to r
+            if(boxes[index] == boxes[ind-1])  
+            {
+                ans = max( ans , func(ind , index-1 , 0 , dp , boxes) + func(index , r , point , dp , boxes) );        
+            }
+        }
+        
+        dp[l][r][k] = ans;
+        
+        return ans;
+        
+    }
+    int removeBoxes(vector<int>& boxes) {
+        // Since Merge Intervals Type
+        // T1 : problem(l,r) depend on subproblems(l,i) + result[i] + subproblems(i,r)
+        // T2 : min / max
+        int n = boxes.size();
+        if(n == 1)
+            return 1;
+        
+        vector<vector<vector<int>>> dp( 101 , vector<vector<int> >( 101 , vector<int>( 101 , 0 )));
+        return func(0 , n -1 , 0 , dp , boxes);
+    }
+};
+/*
+*/
