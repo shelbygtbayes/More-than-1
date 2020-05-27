@@ -1,0 +1,45 @@
+class Solution {
+public:
+    int mergeStones(vector<int>& stones, int K) {
+        int n = stones.size();
+        // TO merge the piles such that left with 1 pile
+        // n -> n - k + 1 = n - (k-1) -> n - 2*(k-1) --> { n - m*(k-1) = 1 }
+        //n-1 = m * (k-1)
+        if((n-1) % (K-1) > 0) 
+            return -1;
+        vector<int> sum(n+1,0);
+        
+        for(int ind = 0 ; ind < n ; ind++)
+            sum[ind+1] += (sum[ind] + stones[ind]);
+            
+        int dp[n][n];
+        memset(dp , 0 , sizeof(dp));
+         
+        // the length will compensate in calculating the dp[left][right] as current incrementing "K-1"
+        for(int len = K-1 ; len < n ; len++)
+        {
+            for(int left = 0; left < n - len; left++)
+            {
+                int right = left + len;
+                dp[left][right] = INT_MAX;
+                
+                for(int curr = left ; curr < right ; curr = curr + (K-1))
+                {
+                    dp[left][right] = min( dp[left][right] , dp[left][curr] + dp[curr+1][right]);
+                }
+                
+                // If Merging result in single Pile Then add the Merging cost from sum
+                if(len % (K-1) == 0)
+                {
+                    dp[left][right] += (sum[right+1] - sum[left]);
+                }
+            }   
+        }
+        return dp[0][n-1];
+    }
+};
+/*
+    0   1   2   3
+0   3   5   9   10
+
+*/
