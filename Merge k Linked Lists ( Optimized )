@@ -1,0 +1,26 @@
+class Solution {
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        if (lists.empty()) {return NULL;}
+        auto comp = [](auto &a, auto &b){return a->val > b->val;};
+        priority_queue<ListNode*, vector<ListNode*>, decltype(comp)> q(comp);
+        for (auto list : lists) {
+            if (list != NULL) {
+                q.push(list);
+            }
+        }
+        if (q.empty()) {return NULL;}
+        ListNode* res = new ListNode(0);
+        ListNode* curr = res;
+        while (!q.empty()) {
+            auto tmp = q.top();
+            curr->next = tmp;
+            if (tmp->next) {
+                q.push(tmp->next);
+            }
+            q.pop();
+            curr = curr->next;   
+        }
+        return res->next;
+    }
+};
