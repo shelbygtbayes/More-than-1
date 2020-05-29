@@ -1,0 +1,45 @@
+class Solution {
+public:
+    int countSubstrings(string s) {
+        
+        int n = s.size();
+        if(n < 2)
+            return n;
+        unsigned int dp[n][n] , ans = 0;
+        memset(dp , 0 , sizeof(dp));
+        
+        for(int len = 0; len < n ; len++)
+        {
+            for(int st = 0 ; st < n - len ; st++)
+            {
+                int end = st + len;
+                // Single Length Palindrome
+                if(st == end) dp[st][end] = 1; 
+                // Since result of current doesn't depend on the left and right ( In between )
+                // Palindrome from st+1 to end-1
+                else if(s[st] == s[end] and dp[st+1][end-1] == end-st-1)
+                {
+                    dp[st][end] = dp[st+1][end-1] + 2;
+                }
+                // Can't form Palindrome
+                else
+                    dp[st][end] = 0;
+                // If Palindrome Length > 0 : then add to answer
+                ans += (dp[st][end]) ? (1) : (0);
+            }
+        }
+        
+        return ans;
+    }
+};
+/*
+
+0 1  2
+|    |
+a b  a
+Max Palindrome Length
+a b aba
+
+len = (j-1) - (i + 1) + 1
+
+*/
