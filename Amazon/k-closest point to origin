@@ -1,0 +1,43 @@
+// Normal
+class Solution {
+public:
+    
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int K) {
+        struct comp
+        {
+            bool operator()(const vector<int> &a , const vector<int> &b)
+            {
+                long int x1 = a[0] , x2 = b[0] , y1 = a[1] , y2 = b[1];
+                if((x1*x1 + y1*y1) != (x2*x2 + y2*y2)) return (x1*x1 + y1*y1) > (x2*x2 + y2*y2);
+                else return (x1 > x2 or y1 > y2);
+            }   
+        };
+        priority_queue< vector<int> , vector<vector<int>> , comp > pq;
+        vector<vector<int>> ans;
+        for(int ind = 0 ; ind < points.size() ; ind++)
+        {
+            pq.push(points[ind]);
+        }
+        for(int ind = 0 ; ind < K ; ind++)
+        {
+            ans.push_back(pq.top());
+            pq.pop();
+        }
+        return ans;
+    }
+};
+
+// Hifi
+class Solution {
+public:
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int K) {
+        nth_element(points.begin(), points.begin() + K, points.end(),[](
+            vector<int> &v1, vector<int> &v2)
+                    {
+                        return v1[0]*v1[0] + v1[1]*v1[1] < v2[0]*v2[0] + v2[1]*v2[1];
+                    });
+        points.resize(K);
+        
+        return points;
+    }
+};
