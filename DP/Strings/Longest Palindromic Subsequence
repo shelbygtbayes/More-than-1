@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int longestPalindromeSubseq(string s) {
+        
+        int n = s.size();
+        if(n < 2)
+            return n;
+        else if(n == 2)
+            return (s[0] == s[1]) ? (2) : (1);
+        int dp[n][n];
+        memset(dp , 0 , sizeof(dp));
+        for(int len = 0 ; len  < n ; len++)
+        {
+            for(int st = 0 ; st < n - len ; st++)
+            {
+                int end = st + len;
+				
+				// single Length Palindrome
+                if(st == end) 
+                    dp[st][end] = 1;
+					
+				// 2 character Palindrome
+                else if(end - st == 1) 
+                    dp[st][end] = (s[st] == s[end]) ? (2) : (1);
+					
+				// IF st and end matches and Inbetween String is Palindrome
+                else if(s[st] == s[end] and end-1 >= st+1) 
+                    dp[st][end] = max(dp[st][end] , dp[st+1][end-1] + 2);
+					
+				// If not Now with the Max Palindrome Possible
+                else if(end-1 >= st+1) 
+                    dp[st][end] = max( dp[st+1][end] , dp[st][end-1]);
+            }
+        
+        }
+        return dp[0][n-1];
+    }
+};
