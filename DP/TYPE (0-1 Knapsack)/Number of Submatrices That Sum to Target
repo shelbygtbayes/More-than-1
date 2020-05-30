@@ -1,0 +1,46 @@
+class Solution {
+public:
+    int numSubmatrixSumTarget(vector<vector<int>>& matrix, int target) {
+        int m = matrix.size() , n = matrix[0].size();    
+        if(m == n and m == 1)
+            return matrix[0][0] == target;
+        for(int r = 0 ; r < m ; r++)
+        {
+            for(int c = 1; c < n ; c++)
+            {
+                matrix[r][c] += matrix[r][c-1];
+            }
+        }
+        int ans = 0;
+        for(int c1 = 0 ; c1 < n ; c1++)
+        {
+            for(int  c2 = c1 ;  c2 < n ;  c2++)
+            {
+                int curr = 0;
+                // Handling sum row-wise;
+                unordered_map<int,int> cnt; // due to '0' element presence
+                // sum of matrixes formed from subsequent can remain same
+                // which will be in our answer
+                cnt[0] = 1;
+                for(int r = 0 ; r < m ; r++)
+                {
+                    // To get sum of required Matrix 1 row wise and add to previous rows sum
+                    // to get Matrix sum ( Expanded row-wise ) 'r'
+                    if(c1 > 0 )
+                        curr += (matrix[r][c2] - matrix[r][c1 - 1]); // to get sum from columns c1 to c2
+                    else 
+                    {
+                        curr += matrix[r][c2];
+                    }
+                    // If present
+                    if(cnt.find(curr - target)!=cnt.end())
+                        ans += cnt[curr - target];
+                    
+                    cnt[curr]++;
+                }
+            }
+        }
+        return ans;  
+
+    }
+};
