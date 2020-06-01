@@ -1,0 +1,61 @@
+class Solution {
+public:
+    int makeConnected(int n, vector<vector<int>>& connections) {
+        
+        unordered_map<int , bool> vis;
+        vector<int> parent(n,-1);
+        
+        auto find = [&](int r){
+            while(r != parent[r])
+                r = parent[r];
+            return parent[r];
+        };
+        auto Union = [&](int a , int b){
+            int u = find(a) , v = find(b);
+            if(u == v)
+            {
+                return u; 
+            }
+            else if(u < v)
+            {
+                parent[v] = parent[u];
+                return parent[u];
+            }
+            else
+            {
+                parent[u] = parent[v];
+                return parent[v];
+            }
+        };
+        
+        for(int ind = 0 ; ind < n ; ind++)
+            parent[ind] = ind;
+        
+        int loop = 0;
+        for(auto edge : connections)
+        {
+            int u = edge[0] , v = edge[1];
+            vis[u] = 1;
+            vis[v] = 1;
+            if(find(u) != find(v))
+            {
+                parent[u] = parent[v] = Union(u,v);
+            }
+            else
+            {
+                loop++;
+            }
+        }
+        int left = 0 , comp = 0;
+        for(int ind = 0 ; ind < n ; ind++)
+        {
+            if(!vis[ind])
+                left++;
+            if(ind == parent[ind])
+                comp++;
+        }
+        //cout << left << " " << loop << " " << comp << endl;
+        if(left > loop) return -1;
+        else return comp - 1;
+    }
+};
