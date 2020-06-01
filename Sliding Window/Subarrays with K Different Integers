@@ -1,0 +1,57 @@
+class Solution {
+public:
+    int count_at_most(int k , vector<int>& arr)
+    {
+        int n = arr.size() , ans = 0;
+        unordered_map<int , int > cnt;
+        int st = 0 , end = 0;
+        while(end < n)
+        {
+            cnt[arr[end]]++;
+            while(cnt.size() > k)
+            {
+                int left = arr[st];
+                cnt[left]--;
+                if(cnt[left] == 0)
+                    cnt.erase(left);
+                st++;
+            }
+            end++;
+            ans += (end -st + 1);
+        }
+        return ans;
+    }
+    int subarraysWithKDistinct(vector<int>& A, int K) {
+        int n = A.size();
+        if(n == 1) return K == 1;
+        //if(K == 1) return n;
+        return count_at_most(K , A) - count_at_most(K-1 , A);
+    }
+};
+
+/*
+TLE Brute force
+class Solution {
+public:
+    int subarraysWithKDistinct(vector<int>& A, int K) {
+        int n = A.size();
+        int m[n][n];
+        // Brute Force 
+        memset(m , 0, sizeof(m));
+        unordered_set<int> s;
+        int ans = 0;
+        for(int st = 0 ; st < n ; st++)
+        {
+            s.clear();
+            for(int end = st ; end < n ; end++)
+            {
+                s.insert(A[end]);
+                if(s.size() == K)
+                    ans++;
+            }
+        }
+        return ans;
+    }
+};
+
+*/
