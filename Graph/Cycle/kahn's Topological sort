@@ -1,0 +1,22 @@
+ vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+        int n = graph.size();  // node count in the graph
+        vector<int> res, color(n,0);
+   
+        vector<int> degree(n,0);
+        unordered_map<int, vector<int>> rg;
+         
+        for (int i = 0; i < n; ++i) {
+            if (graph[i].empty()) res.push_back(i);
+            degree[i] = graph[i].size();
+            for(auto v:graph[i]) rg[v].push_back(i);
+        }
+     
+        for (int i = 0; i < res.size(); ++i){
+            for(auto v:rg[res[i]]){
+                if (degree[v] == 0 || --degree[v] == 0) res.push_back(v);
+            }
+        }
+        sort(res.begin(), res.end());
+        
+        return res;
+    }
