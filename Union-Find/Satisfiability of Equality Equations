@@ -1,0 +1,48 @@
+class Solution {
+public:
+    bool equationsPossible(vector<string>& equations) {
+        vector<int> parent(26 , 0);
+        for(int ind = 0 ; ind < 26 ; ind++)
+        {
+            parent[ind] = ind;
+        }
+        auto find = [&](int r){
+            while(r != parent[r])
+                r = parent[r];
+            return parent[r];
+        };
+        auto merge = [&](int a , int b){
+            int p1 = find(a) , p2 = find(b);
+            if(p1 == p2)
+                return p1;
+            else if(p1 < p2)
+            {
+                parent[p2] = p1;
+                return p1;
+            }
+            else{
+                parent[p1] = p2;
+                return p2;
+            }
+        };
+        for(auto eq : equations){
+            char cond = eq[1];
+            int c1 = eq[0] - 'a', c2 = eq[3] - 'a';
+            if(cond == '=')
+            {
+                parent[c1] = parent[c2] = merge(c1 , c2);
+            }
+        }
+        for(auto eq : equations){
+            char cond = eq[1];
+            int c1 = eq[0] - 'a', c2 = eq[3] - 'a';
+            if(cond == '!')
+            {
+                int p1 = find(c1) , p2 = find(c2);
+                if(p1 == p2) return 0;
+            }
+        }
+        return 1;
+    }
+};
+
