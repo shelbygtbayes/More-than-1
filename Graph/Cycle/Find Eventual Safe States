@@ -1,0 +1,59 @@
+// Tricky Changes Same Modified State Map
+class Solution {
+public:
+    bool func(vector<int> &vis , int ind , vector<vector<int>>& graph)
+    {
+        if(vis[ind]) return vis[ind] == 1;
+        vis[ind] = 2;
+        for(auto node : graph[ind])
+        {
+            if(!func(vis, node, graph))
+                return 0;
+        }
+        vis[ind] = 1;
+        return 1;
+    }
+    vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+        int n = graph.size();
+        if(n == 0)
+            return {};
+        vector<int> ans;
+        vector<int> vis(n,0);
+        for(int ind = 0 ; ind < n ; ind++)
+        {
+            if(func(vis , ind , graph))
+                ans.push_back(ind);
+        }
+        return ans;
+    }
+};
+
+// TLE DFS
+class Solution {
+public:
+    bool func(unordered_map<int , bool> &vis , int ind , vector<vector<int>>& graph)
+    {
+        if(vis[ind]) return 0;
+        vis[ind] = 1;
+        for(auto node : graph[ind])
+        {
+            if(!func(vis, node, graph))
+                return 0;
+        }
+        vis[ind] = 0;
+        return 1;
+    }
+    vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+        int n = graph.size();
+        if(n == 0)
+            return {};
+        vector<int> ans;
+        for(int ind = 0 ; ind < n ; ind++)
+        {
+            unordered_map<int , bool> vis;
+            if(func(vis , ind , graph))
+                ans.push_back(ind);
+        }
+        return ans;
+    }
+};
