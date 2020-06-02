@@ -1,0 +1,66 @@
+// Brute force remove every char and check for valid expression and simultanouesly for min length
+// Length of Valid expression remains same but their may vary
+// Find out the Invalid positioned bracket first which can be removed ( left / right _remain ) 
+class Solution {
+public:
+    void func( int ind , int left , int right , int left_rem , int right_rem , string curr , set<string> &ans , string s)
+    {
+        
+        if(ind == s.size())
+        {
+            if(left == right and left_rem == right_rem and left_rem == 0)
+            {
+                ans.insert(curr);
+            }
+        }
+        else
+        {
+            if(s[ind] == '(' and left_rem > 0)
+                func(ind+1 , left , right , left_rem-1 , right_rem, curr , ans , s);
+            
+            if(s[ind] == ')' and right_rem > 0)
+                func(ind+1 , left , right , left_rem , right_rem -1, curr , ans , s);
+            
+            if(s[ind] != '(' and s[ind] != ')')
+                func(ind+1 , left , right , left_rem , right_rem, curr + s[ind] , ans , s);
+            
+            else if(s[ind] == '(')
+                func(ind+1 , left+1 , right , left_rem , right_rem , curr + s[ind] , ans , s);
+            
+            else if(s[ind] == ')' and right < left)
+                func(ind+1 , left , right+1 , left_rem , right_rem , curr + s[ind] , ans , s);   
+           // cout << ind << " " << s[ind] << " " << curr << endl;
+            
+        }
+    }
+
+    vector<string> removeInvalidParentheses(string s) {
+        
+        int left_rem = 0 , right_rem = 0 , n = s.size();
+        
+        vector< string > ans;
+        
+        set< string > temp_ans;
+        
+        for(auto c : s)
+        {
+            if( c == '(') left_rem += 1;
+            else if(c == ')')
+            {
+                if(left_rem == 0) right_rem += 1;
+                else left_rem -= 1;
+            }    
+        }
+        //cout << left_rem << " " << right_rem << endl;
+        func(0 , 0 , 0 , left_rem , right_rem , "" , temp_ans , s);
+        
+        for(auto str : temp_ans)
+            ans.push_back(str);
+        
+        return ans;
+    }
+};
+
+
+
+
