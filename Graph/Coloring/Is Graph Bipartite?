@@ -1,0 +1,52 @@
+class Solution {
+public:
+    bool func(queue< pair<int,int> > &q , vector<int> &color , vector<int> & parent , vector<vector<int>>& graph)
+    {
+        if(q.empty()) return 1;
+        
+        pair<int,bool> n = q.front();
+        
+        int curr_node  = n.first;
+        int col = n.second;
+        
+        q.pop();
+        color[ curr_node ] = !col;
+        
+        for(auto node : graph[curr_node])
+        {
+            if(node != parent[node])
+            {
+                if(color[ curr_node ] == color[node]) return 0;
+                if(parent[node] == -1)
+                {
+                     q.push(make_pair(node,color[ curr_node ]));
+                     parent[node] =  curr_node ;
+                }
+            }
+        }
+        return func(q , color , parent , graph);
+    }
+    bool isBipartite(vector<vector<int>>& graph) {
+        int n = graph.size();
+        if(n == 1)
+            return graph[0].size() == 0;
+        queue< pair<int,int> > q;
+        vector<int> color(n,-1);
+        vector<int> parent(n,-1);
+
+        int start = 0;
+        for(auto edgeList : graph)
+        {
+            if(edgeList.size() > 0 and color[start] == -1) 
+            {
+                parent[start] = -3;
+                q.push( make_pair(start , 0));
+                if(!func(q , color , parent , graph))
+                    return 0;
+            }
+            start++;
+        }
+        
+        return 1;
+    }
+};
