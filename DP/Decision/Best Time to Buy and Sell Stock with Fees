@@ -1,0 +1,13 @@
+class Solution {
+public:
+    int maxProfit(vector<int>& prices, int fee) {
+        int cash = 0 , hold = -prices[0];
+
+        for(int ind = 1 ; ind < prices.size() ; ind++)
+        {
+            cash = max( cash , hold + prices[ind] - fee);
+            hold = max( hold , cash - prices[ind] );
+        }
+        return cash;
+    }
+};
