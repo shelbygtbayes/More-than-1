@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+    
+        int n = prices.size();
+        if(n < 2)
+            return 0;
+        else if(n == 2)
+            return max( prices[1] - prices[0] , 0 );
+        int dp[n][n];
+        memset(dp , 0 , sizeof(dp));
+        
+        dp[0][0] = -prices[0]; // Buying 
+        dp[0][1] = 0;         // Since can't sell on first day 
+        dp[1][0] = max(dp[0][0] , -prices[1] ); // either bought at 0 or 1
+        dp[1][1] = max( 0 , prices[1] - prices[0]); 
+        
+        // Thinking to BUY STOCK AT ith day dp[i][0]
+         // Then 2 options
+        // dp[i-2][1] - prices[i] ( Let's buy it , then diff must be of 2 days atleast)
+        // dp[i-1][0]  ( Let's Continue with the flow)
+        
+        // Thinking to SELL STOCK AT ith day dp[i][1]
+         // Then 2 options
+        // dp[i-1][0] + prices[i] ( Let's sell it , then must bought 1 day before atleast)
+        // dp[i-1][1]  ( Let's Continue with the flow)
+        
+        for(int ind = 2 ; ind < n ; ind++)
+        {
+            dp[ind][0] = max( dp[ind-2][1] - prices[ind] , dp[ind-1][0]);
+            dp[ind][1] = max( dp[ind-1][0] + prices[ind] , dp[ind-1][1]);
+        }
+        return dp[n-1][1];
+    }
+};
+
