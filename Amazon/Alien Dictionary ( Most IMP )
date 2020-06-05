@@ -1,0 +1,52 @@
+class Solution {
+public:
+    /**
+     * @param words: a list of words
+     * @return: a string which is correct order
+     */
+    string alienOrder(vector<string>& words)
+    {
+        map<char, set<char> >graph,  reverse_graph;
+        set<char> letter;
+        string prev;
+        for (string curr : words) 
+        {
+            letter.insert(curr.begin(), curr.end());
+            for (int i = 0; i < min( prev.size(), curr.size() ); i++) 
+            {
+                char a = prev[i], b = curr[i];
+                if (a != b) 
+                {
+                    graph[a].insert(b);
+         //   Reverse   cout << b << " -> " << a << endl;
+                    reverse_graph[b].insert(a);
+                    break;
+                }
+            }
+            prev = curr;
+        }     
+        set<char> completed = letter; 
+        for (auto p :  reverse_graph)      
+        {
+            // Removing those letters having indegree > 0 (edge in reverse graph (src))
+            char node = p.first;
+            //cout << p.first << " ";
+            completed.erase(node);
+        }
+        string order;               
+        while (completed.size()) 
+        {
+            char a = *(completed.begin());
+            //char a = *begin(completed);   
+            completed.erase(a);
+            order += a;
+            for (char b : graph[a]) 
+            { 
+                reverse_graph[b].erase(a);       
+                if(reverse_graph[b].size() == 0)    
+                    completed.insert(b); 
+            }
+        }
+        return order.size() == letter.size() ? order : "";
+    }
+};
