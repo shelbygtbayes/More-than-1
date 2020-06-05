@@ -1,0 +1,38 @@
+class Solution {
+public:
+    /**
+     * @param words: the array of string means the list of words
+     * @param order: a string indicate the order of letters
+     * @return: return true or false
+     */
+    bool isAlienSorted(vector<string> &words, string &order) {
+        //
+        int st = 0;
+        vector<int> pos(26 , 0);
+        for(int ind = 0 ; ind < 26 ; ind++)
+        {
+            pos[order[ind] - 'a'] = ind;
+        }
+        while(st < words.size() - 1)
+        {
+                int curr = 0 , ind = st+1;
+                while(curr < words[st].size() and curr < words[ind].size())
+                {
+                    int p1 = words[st][curr] - 'a' , p2 = words[ind][curr] - 'a';
+                    if(pos[p1] != pos[p2])
+                        break;
+                
+                    curr++;
+                }
+                if(curr < words[st].size() and curr < words[ind].size())
+                {
+                    int p1 = words[st][curr] - 'a' , p2 = words[ind][curr]-'a';
+                    if(pos[p1] > pos[p2]) return 0;
+                }
+                else if(curr < words[st].size())
+                    return 0;
+            st++;
+        }
+        return 1;
+    }
+};
