@@ -1,0 +1,44 @@
+  class Solution {
+public:
+    // Approach
+    // Moving src cornor to dest cornor is same like moving from dest to src cornor
+    // Also While moving from the src to dest, at any position for the 2 distinct paths
+    // the distance from src remain same ( as we are moving 1 step every time regardless of direction )
+    // Hence Person P1 moving on path 1 and current corrdinates ( r1 , c1 )
+    // Similarly (r2 , c2) for another person moving on path 2
+    // Now at every step distance (Manhattan acc to constraints direction)
+    //from src = (r1-0) + (c1-0) = (r2 - 0) + (c2 - 0)
+    // r2 = r1 + c1 - c2
+	
+    int dp[50][50][50];
+    int func(vector<vector<int>>& grid , int r1 , int c1 , int c2 , int n)
+    {
+        int r2 = r1 + c1 - c2;
+        if( r1 >= n || r2 >= n || c1 >= n || c2 >= n || grid[r1][c1] == -1 || grid[r2][c2] == -1) return INT_MIN;
+        if(dp[r1][c1][c2] != -1) return dp[r1][c1][c2];
+		
+        // If reached destination then other also
+        if(r1 == n-1 and c1 == n-1) return grid[r1][c1];
+        // Path1 Cherry
+        int ans = grid[r1][c1];
+        // Path2 Cherry ( If different )
+        if(r1 != r2) 
+            ans += grid[r2][c2];
+        // Now Max from different Paths (P1 , P2)
+        // (Down_1,Down) (Down_1,Right) (Right_1,Down) (Right_1,Right)
+        
+        int max_cherry = max( func(grid , r1+1 , c1 , c2 , n) , func(grid , r1+1 , c1 , c2 + 1, n) );
+        max_cherry = max( max_cherry , func(grid , r1 , c1 + 1, c2 , n));
+        max_cherry = max( max_cherry, func(grid , r1 , c1 + 1, c2 + 1, n));
+        
+        dp[r1][c1][c2] = ans + max_cherry ;
+        
+        return dp[r1][c1][c2];
+    }
+    int cherryPickup(vector<vector<int>>& grid) 
+    {
+        int n = grid.size();
+        memset(dp , -1 , sizeof(dp));
+        return max(0 , func(grid , 0 , 0 , 0 , n));
+    }
+};
