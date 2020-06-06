@@ -1,0 +1,19 @@
+class Solution {
+public:
+    vector<vector<int>> reconstructQueue(vector<vector<int>>& people) {
+        vector<vector<int>> ans;
+        sort( people.begin() , people.end() , [](const vector<int> & a , const vector<int> & b){
+            if(a[0] != b[0])
+                return a[0] > b[0]; // Decreasing Height
+            return a[1] < b[1];    //  sorted Position count
+        });
+        //ans = people;
+        //ans.clear();
+        
+        for(int ind = 0 ; ind < people.size() ; ind++)
+        {
+            ans.insert( ans.begin() + people[ind][1] , people[ind] );
+        }
+        return ans;
+    }
+};
