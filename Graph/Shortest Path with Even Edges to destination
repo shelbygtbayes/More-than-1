@@ -1,0 +1,65 @@
+#include<stdlib.h>
+#include<iostream>
+#include<queue>
+#include<vector>
+#include<climits>
+#include<unordered_map>
+#define pp pair<int,int> 
+using namespace std;
+int even(int x) 
+{ 
+    return x * 10 + 2; 
+} 
+
+int odd(int x) 
+{ 
+    return x * 10 + 1; 
+} 
+void addEdge(int src , int dest , int w , unordered_map<int , vector< pair<int,int> > > &graph)
+{
+   
+    graph[even(src)].push_back({ odd(dest), w }); 
+    graph[odd(src)].push_back({ even(dest), w }); 
+    graph[odd(dest)].push_back({ even(src), w }); 
+    graph[even(dest)].push_back({ odd(src), w }); 
+}
+
+int dijsktra(int src , int dest , int n , unordered_map<int , vector< pair<int,int> > > & graph)
+{
+    vector<int> dis(n+1 , INT_MAX);
+    dis[0] = dis[src] = 0;
+    priority_queue< pp , vector<pp> , greater<pp> > pq;
+    pq.push(make_pair(0 , src));
+    while(!pq.empty())
+    {
+        pp p = pq.top();
+        int distance1 = p.first , u = p.second;
+        if(u == dest)   
+            return distance1;
+        pq.pop();
+        for(auto edge : graph[u])
+        {  
+            int v = edge.first , w = edge.second;
+            if(dis[v] > distance1 + w)
+            {
+                dis[v] = distance1 + w;
+                pq.push(make_pair(dis[v] , v));
+            }
+        } 
+    }
+    return -1;
+}
+int main()
+{
+    int n = 5;
+    unordered_map<int , vector< pair<int,int> > > graph;
+    addEdge(1, 2, 1 , graph); 
+    addEdge(2, 3, 2 , graph); 
+    addEdge(2, 5, 15 , graph); 
+    addEdge(3, 5, 1 , graph); 
+    addEdge(3, 4, 4 , graph); 
+    addEdge(5, 4, 3 , graph); 
+    
+    cout << dijsktra(even(1) , even(5) , 5 , graph);
+    return 0;
+}
