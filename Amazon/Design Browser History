@@ -1,0 +1,60 @@
+class BrowserHistory {
+public:
+    struct node
+    {
+        string link;
+        node* next;
+        node* prev;
+    };
+    node* create(string val)
+    {
+        node* n = new node();
+        n->link = val;
+        n->next = n->prev = NULL;
+        return n;
+    }
+    node* home = NULL;
+    node* curr = NULL;
+    
+    BrowserHistory(string homepage) {
+        home = create(homepage);
+        curr = home;
+    }
+    
+    void visit(string url) {
+        if(!curr) return;
+        curr->next = NULL; // Remove If exists
+     //  node* previous = curr;
+        node* n = create(url);
+        n->prev = curr;
+        curr->next = n;
+        curr = curr->next;
+    }
+    
+    string back(int steps) {
+        while(curr->prev and steps)
+        {
+            curr = curr->prev;
+            steps--;
+        }
+        return curr->link;
+    }
+    
+    string forward(int steps) {
+        while(curr->next and steps)
+        {
+            curr = curr->next;
+            steps--;
+        }
+        return curr->link;
+    }
+};
+//[null,null,null,null,"facebook.com","google.com","facebook.com",null,"linkedin.com","google.com","leetcode.com"]
+
+/**
+ * Your BrowserHistory object will be instantiated and called as such:
+ * BrowserHistory* obj = new BrowserHistory(homepage);
+ * obj->visit(url);
+ * string param_2 = obj->back(steps);
+ * string param_3 = obj->forward(steps);
+ */
