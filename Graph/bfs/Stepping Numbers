@@ -1,0 +1,53 @@
+#include<stdlib.h>
+#include<iostream>
+#include<queue>
+#include<vector>
+#include<climits>
+#include<unordered_map>
+using namespace std;
+/*
+10*u + last_digit - 1
+10*u + last_digit + 1
+ */
+ 
+void bfs(int no , int n , int m , vector<int> & ans)
+{
+    queue<int> q;
+    q.push(no);
+    while(!q.empty())
+    {
+        int number = q.front();
+        q.pop();
+        if(number >= n and number <= m)
+            ans.push_back(number);
+        if(number == 0 || number > m)
+            continue;
+        int last_digit = number % 10; 
+        int adj_number1 = number*10 + last_digit - 1; 
+        int adj_number2 = number*10 + last_digit + 1; 
+        if( last_digit == 0 )
+            q.push(adj_number2);
+        else if( last_digit == 9 )
+            q.push(adj_number1);
+        else
+        {
+            q.push(adj_number1);
+            q.push(adj_number2);
+        }
+    }
+}
+vector<int> func(int n ,int m)
+{
+    vector<int> ans;
+    for(int ind = 0 ; ind <= 9 ; ind++)
+        bfs(ind , n , m , ans);
+    return ans;
+}
+int main()
+{
+    int n = 0, m = 210;
+    vector<int> ans = func(n,m);
+    for(auto element : ans)
+        cout << element << " ";
+    return 0;
+}
