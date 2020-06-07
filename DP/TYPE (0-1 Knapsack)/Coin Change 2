@@ -9,19 +9,19 @@ public:
         for(int sum = 0 ; sum <= amount ; sum++)    // Can't build anything without coins
             dp[0][sum] = 0;
         
-        for(int coin = 0 ; coin <= n ; coin++)      // Can build sum = 0 , by using any type of coins ( using nothing)
-            dp[coin][0] = 1;
+        for(int ind = 0 ; ind <= n ; ind++)      // Can build sum = 0 , by using any type of coins ( using nothing)
+            dp[ind][0] = 1;
         
-        for(int coin = 1 ; coin <= n ; coin++)
+        for(int ind = 1 ; ind <= n ; ind++)
         {
             for(int sum = 1 ; sum <= amount ; sum++)
             {
-                dp[coin][sum] = dp[coin - 1][sum];
-                if(sum >= coins[coin-1])
-                    dp[coin][sum] += dp[coin][sum - coins[coin-1]]; 
+                dp[ind][sum] = dp[ind - 1][sum];
+                if(sum >= coins[ind-1])
+                    dp[coin][sum] += dp[ind][sum - coins[ind-1]]; 
                 //                       |                   
                     // Since we can use coins any no of times
-                // Put coin - 1 , we can use only single time in the combination
+                // Put ind - 1 , we can use only single time in the combination
             }
         }
         return dp[n][amount];
