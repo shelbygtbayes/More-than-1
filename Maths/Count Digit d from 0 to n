@@ -1,0 +1,18 @@
+int func(int n , int d)
+{
+	int ans = 0 , st = d;
+	while( d <= n )
+	{
+		if( st % 10 == d )
+			ans++;
+		if( st != 0 and st/10 == d)	// to move from 20 --> 21
+		{
+			ans++;							
+			st++;
+		}
+		else if( st/10 == d-1 ) // to move from 12 --> 12 + 8 = 20
+			st = st + (10 - d); 
+		else 				// to move from 2 --> 12
+			st = st + 10;
+	}
+}
