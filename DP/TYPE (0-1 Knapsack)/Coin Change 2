@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int change(int amount, vector<int>& coins) {
+        
+        int n = coins.size();
+        
+        vector<vector<int>> dp(n+1 , vector<int>(amount+1, 0));
+        
+        for(int sum = 0 ; sum <= amount ; sum++)    // Can't build anything without coins
+            dp[0][sum] = 0;
+        
+        for(int coin = 0 ; coin <= n ; coin++)      // Can build sum = 0 , by using any type of coins ( using nothing)
+            dp[coin][0] = 1;
+        
+        for(int coin = 1 ; coin <= n ; coin++)
+        {
+            for(int sum = 1 ; sum <= amount ; sum++)
+            {
+                dp[coin][sum] = dp[coin - 1][sum];
+                if(sum >= coins[coin-1])
+                    dp[coin][sum] += dp[coin][sum - coins[coin-1]]; 
+                //                       |                   
+                    // Since we can use coins any no of times
+                // Put coin - 1 , we can use only single time in the combination
+            }
+        }
+        return dp[n][amount];
+    }
+};
