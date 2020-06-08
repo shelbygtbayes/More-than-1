@@ -1,0 +1,39 @@
+ int minReorder(int n, vector<vector<int>>& connections) {
+  unordered_map<int , vector<int> > rgrp , grp;
+        int m = connections.size();
+        for(auto edge : connections)
+        {
+            int u = edge[0] , v = edge[1];
+            grp[u].push_back(v);
+            rgrp[v].push_back(u);
+        }
+        queue<int> q;
+        unordered_map< int , int > vis;
+        int ans = 0;
+        q.push(0);
+        vis[0] = 1;
+        while(!q.empty())
+        {
+            int u = q.front();
+            q.pop();
+            
+            for(auto v : grp[u])
+            {
+                if(!vis[v])
+                {
+                    q.push(v);   
+                    vis[v] = 1;
+                }
+            }
+            for(auto v : rgrp[u])
+            {
+                if(!vis[v])
+                {
+                    q.push(v);
+                    ans++;
+                    vis[v] = 1;
+                }
+            }
+        }
+        return m - ans;
+ }
