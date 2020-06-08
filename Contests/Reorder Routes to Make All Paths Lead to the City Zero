@@ -37,3 +37,35 @@
         }
         return m - ans;
  }
+ // TLE BUT TRICKY APPROACH
+ class Solution {
+public:
+    
+    void dfs(int node , int & ans , unordered_map< int , int > &vis , unordered_map<int , vector< pair<int,int> > > graph)
+    {
+        if(vis[node]) return;
+        vis[node] = 1;
+        for(auto edge : graph[node])
+        {
+            int v = edge.first , w = edge.second;
+            if(!vis[v])
+            {
+                ans += w;
+                dfs(v , ans , vis , graph);
+            }
+        }
+    }
+    int minReorder(int n, vector<vector<int>>& connections) {
+        unordered_map<int , vector< pair<int,int> > > graph;
+        for(auto edge : connections)
+        {
+            int u = edge[0] , v = edge[1];
+            graph[u].push_back({v,1});
+            graph[v].push_back({u,0});
+        }
+        unordered_map< int , int > vis;
+        int ans = 0;
+        dfs(0 , ans , vis , graph);
+        return ans;
+    }
+};
