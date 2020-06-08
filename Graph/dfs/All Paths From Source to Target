@@ -1,0 +1,46 @@
+class Solution {
+public:
+    void func(vector<vector<int>> & ans , int node , int parent , int n , unordered_map< int , vector<int> >& graph , vector<int>  temp)
+    {
+        if(node == n-1)
+        {
+           // temp.push_back(node);
+            ans.push_back(temp);
+            return;
+        }
+        //parent[node] = par;
+        //temp.push_back(node);
+        for(auto v : graph[node])
+        {
+            if(v != parent)
+            {
+                //parent[v] = node;   
+                temp.push_back(v);
+                func( ans , v , node , n , graph , temp);
+                temp.pop_back();
+            }
+        }
+        //temp.pop_back();
+        return;
+    }
+    vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
+        vector<vector<int>> ans;
+        int n = graph.size();
+        vector<int> temp;
+        unordered_map< int , vector<int> > g;
+        int node = 0;
+        for(auto edges : graph)
+        {
+            for(auto v : edges)
+            {
+                g[node].push_back(v);
+            }
+            node++;
+        }
+        temp.push_back(0);
+        func( ans , 0 , -1 , n , g , temp);
+        return ans;
+        
+    }
+};
+
