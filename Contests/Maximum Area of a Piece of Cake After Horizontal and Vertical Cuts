@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int maxArea(int h, int w, vector<int>& horizontalCuts, vector<int>& verticalCuts) {
+        
+        int mod = 1000000007;
+        
+        horizontalCuts.push_back(0);
+        horizontalCuts.push_back(h);
+        
+        verticalCuts.push_back(0);
+        verticalCuts.push_back(w);            
+        
+        sort(horizontalCuts.begin() , horizontalCuts.end());
+        sort(verticalCuts.begin() , verticalCuts.end());
+        
+        long long unsigned width_diff = 0 , height_diff = 0;
+        
+        int n = horizontalCuts.size() , m  = verticalCuts.size();
+        
+        for(int ind = 1 ; ind < n ; ind++)
+            width_diff = max(width_diff , (long long unsigned) horizontalCuts[ind] - horizontalCuts[ind-1]);
+        
+        for(int ind = 1 ; ind < m ; ind++)
+            height_diff = max(height_diff , (long long unsigned) verticalCuts[ind] - verticalCuts[ind-1]);
+        
+        long long unsigned ans = (width_diff % mod) * (height_diff % mod );
+        return ans % mod;
+    }
+};
