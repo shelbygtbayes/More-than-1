@@ -1,0 +1,25 @@
+class Solution {
+public:
+    unordered_map<int , vector< vector<int> > > graph;
+    void dfs(int val , int & ans , int node)
+    {
+        ans = max( ans , val );
+        for(auto edge : graph[node])
+        {
+            int v = edge[0] , w = edge[1];
+            dfs(val + w , ans , v);
+        }
+    }
+    int numOfMinutes(int n, int headID, vector<int>& manager, vector<int>& informTime) 
+    {
+        for(int node = 0 ; node < n ; node++)
+        {
+            if(manager[node] != -1)
+                graph[manager[node]].push_back( vector<int>{node,informTime[manager[node]]} );
+        }
+      
+        int ans = informTime[headID];
+        dfs(0 , ans , headID);
+        return ans;
+    }
+};
