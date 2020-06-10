@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int deleteAndEarn(vector<int>& nums) {
+        
+        int n = nums.size() , ans = -1;
+        if(n == 0)
+            return 0;
+        if(n == 1)
+            return nums[0];
+        sort(nums.begin() , nums.end());
+        vector<int> val = nums;
+        for(int end = 1 ; end < n ; end++)
+        {
+            for(int st = 0 ; st < end ; st++)
+            {
+                if(abs(nums[end] - nums[st]) != 1) // select if delete condition not match
+                {
+                    val[end] = max( val[end] , nums[end] + val[st]);   
+                }// Since if match then dp[st] = dp[end]
+                ans = max( ans , val[end]);
+            }
+        }
+        return ans;
+    
+    }
+};
