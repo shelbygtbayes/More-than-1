@@ -1,0 +1,37 @@
+class Solution {
+public:
+    /*
+        1. [2,2,3,3,3,4], one observation is assume array is sorted, if you choose 2, we cannot choose 3. or If choose 3, cannot chose 4. or If choose 4 cannot chose 3.
+        2. Another observation is (ONLY WHEN PLACED IN SORTED ORDER) replacing multiple copies of same number with its sum doesnt matter.
+        3. Now the prob is reduced to House robber problem, where you can only rob houses if they are one distance apart. What is the max money he can get by robbing such.
+        4. We consider money is 0 for missing houses. [2,2,3,3,3,4] indicates house 1 with 0, house 2 with money 4, house 3 with money 9, house 4 with money 4. Total number of houses is max of the nums list.
+    */
+    int deleteAndEarn(vector<int>& nums) {
+        if(nums.size() == 0)
+            return 0;
+        
+        if(nums.size() == 1)
+            return nums[0];
+        
+        int max_ = *max_element(nums.begin() , nums.end());
+        
+        vector<int> house(max_ + 1 , 0);
+        
+        for(auto num : nums)
+        {
+            house[num] += num;
+        }
+         // Now we are like house robber problem 
+        int n = house.size();
+        //cout << n << endl;
+        vector<int> dp(n , 0);
+        dp[1] = house[1];
+        dp[0] = 0;
+        for(int ind = 2 ; ind < n ; ind++)
+        {
+            dp[ind] = max(dp[ind-1] , dp[ind-2] + house[ind]);
+        }
+        return max( dp[n-1] , dp[n-2] );
+    
+    }
+};
