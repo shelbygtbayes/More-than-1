@@ -1,0 +1,55 @@
+class Trie
+{
+  public:
+    unordered_map<char , Trie* > child;
+    bool isend = 0;
+    void insert(string word)
+    {
+        Trie* node = this;
+        for(char c : word)
+        {
+            if(node->child.find(c) == node->child.end())
+                node->child[c] = new Trie();
+            node = node->child[c];
+        }
+        node->isend = 1;
+    }
+    
+    bool search(string word)
+    {
+        Trie * node = this;
+        for(char c : word)
+        {
+            if(node->child.find(c) == node->child.end())
+                return 0;
+            node = node->child[c];
+        }
+        return node->isend;
+    }
+};
+class Solution {
+public:
+    
+    bool wordBreak(string s, vector<string>& wordDict) {
+        int n = s.size();
+        Trie trie;
+        for(auto word : wordDict)
+            trie.insert(word);
+        vector<int> dp(n+1 , 0);
+        dp[0] = 1;
+        // dp[end] --> word from [0...end] --> exists in the dictionary
+        for(int len = 1 ; len <= n ; len++)
+        {
+            for(int st = 0 ; st < len ; st++) // len w.r.t start
+            {
+                // Here len --> total length w.r.t from 0
+                // Therefore net_length = len - st
+                int net_len = len - st;
+                if(dp[st] and trie.search(s.substr(st , net_len)))
+                    dp[len] = 1;
+            }
+        }
+        return dp[n];
+    }
+};
+
