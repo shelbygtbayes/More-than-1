@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int maxCoins(vector<int>& nums) {
+        int n = nums.size();
+        if(n == 0) return 0;
+        else if(n == 1) return nums[0];
+        nums.insert( nums.begin() , 1);
+        nums.push_back(1);
+        vector< vector<int> > table(n+2 , vector<int>(n+2,0)); 
+        for(int len = 1 ; len <= n ; len++)
+        {
+            for(int left = 1 ; left <= n - len + 1; left++)
+            {
+                int right = left + len - 1;
+                
+                table[left][right] = INT_MIN;
+                
+                for(int curr = left; curr <= right ; curr++)
+                {
+                    table[left][right] = max(table[left][right] , table[left][curr-1] + (nums[left-1] * nums[curr] * nums[right+1]) + table[curr+1][right]);
+                }
+            }
+        }
+        return table[1][n];
+    }
+};
+
+
+    
