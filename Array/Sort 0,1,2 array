@@ -1,0 +1,36 @@
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        
+        if(nums.size() == 0) return;
+        int zeroIndex = 0, twoIndex = nums.size() - 1;
+        
+        // Swap the numbers if needed .. 
+        
+        // We will fill 0s at the start of the array and 2s at the end.
+        // Maintain the indexes appropriately 
+        
+        for(int ind = 0 ; ind < nums.size(); ind++)
+        {
+        	if(nums[ind] == 2 )
+            {
+            	// Get the right index for first occurence of two
+                while(nums[twoIndex] == 2 && twoIndex > 0)
+                    twoIndex --;
+                
+                if(ind >= twoIndex) // the numbers are already sorted
+                	break; 
+                swap(nums[ind], nums[twoIndex]); 
+                twoIndex --;    
+            }
+        	// Its possible, after the swap that the current number is 0. then put it in the right index.
+            if(nums[ind] == 0) 
+            {
+                if(ind > zeroIndex)
+                    swap(nums[ind], nums[zeroIndex]);
+                zeroIndex++;
+            }
+        }
+    }
+};
+
