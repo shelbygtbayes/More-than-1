@@ -1,0 +1,15 @@
+Where it can be:
+
+1) Continous Subarray ( Window )
+2) Window of fixed size 'k'
+3) Operation like Max , Min , diff etc
+
+What to do:
+Maintain 2 pointers start ( st ) and end ( end ) for the window
+Whenever the window doesn't satisfy the condition --> st++ ( Shrink )
+else end++ (expand)
+
+for condition check :
+Data structure can be used like : deque<int> --> gives back() , front() --> O(1) 
+set --> For sorted arrangement (distinct)
+Multiset --> same like set + duplicates allowed
