@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int longestSubarray(vector<int>& nums, int limit) {
+        // Basically we maintain min_q --> having elements in ascending order and get the min element from front
+        // we maintain max_q --> having elements in descending order and get the max element from front
+        deque<int> min_q , max_q;
+        // Now last element of min_q --> max and then we get the element which is less than the last, 
+        // Hence, we need to pop out untill the current element > last element , then push back the current element
+        // Similarly for Max_q
+        // Now same like multiset approach
+        // Untill the max - min > limit , Pop out the window start element from both the queue ( front )
+        int start = 0 , ans = 0 , n = nums.size() , end = 0;
+        while( end < n )
+        {
+            while(!min_q.empty() and min_q.back() > nums[end])
+                min_q.pop_back();
+
+            min_q.push_back(nums[end]);    
+            
+            while(!max_q.empty() and max_q.back() < nums[end])
+                max_q.pop_back();
+        
+            max_q.push_back(nums[end]);
+            
+            while(max_q.front() - min_q.front() > limit)
+            {
+                
+                if(!max_q.empty() and max_q.front() == nums[start]) max_q.pop_front();
+                if(!min_q.empty() and min_q.front() == nums[start]) min_q.pop_front();
+                
+                start++;
+            }
+            ans = max( ans , end - start + 1);
+            end++;
+        }
+        return ans;
+    }
+};
