@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int kthSmallest(vector<vector<int>>& mat, int k) {
+        int n = mat.size() , m = mat[0].size();
+        priority_queue< int > pq;
+        
+        for(int c = 0 ; c < m ; c++)
+            pq.push(mat[0][c]);
+        
+        for( int r = 1 ; r < n ; r++)
+        {
+            priority_queue<int> buffer;
+            while(!pq.empty())
+            {
+                int min_sum_so_far = pq.top();
+                pq.pop();
+                for(int c = 0 ; c < m ; c++)
+                {
+                    int sum = mat[r][c] + min_sum_so_far;
+                    if(buffer.size() < k)
+                    {
+                        buffer.push(sum);
+                    }
+                    else if(buffer.top() > sum)
+                    {
+                        buffer.pop();
+                        buffer.push(sum);
+                    }
+                }
+            }
+            pq = buffer;
+        }
+        return pq_r.top();
+    }
+};
+
+    
