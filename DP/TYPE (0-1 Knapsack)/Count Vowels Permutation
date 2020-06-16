@@ -1,0 +1,100 @@
+class Solution {
+public:
+    long long mod = 1e9 + 7;
+    int countVowelPermutation(int n) {
+        
+        //long long a[n][5];
+        //for(int ind = 0 ; ind < 5 ; ind++)
+        //    a[ind][0] = 1;
+        vector< vector< long long > > dp( n, vector<long long >(5 , 1));
+        long long ways = 5;
+        
+        for(int step = 1 ; step < n ; step++)
+         {
+            dp[step][0] = dp[step-1][1];
+            dp[step][1] = dp[step-1][0] + dp[step-1][2];
+            dp[step][2] = ways - dp[step-1][2];
+            dp[step][3] = dp[step-1][2] + dp[step-1][4];
+            dp[step][4] = dp[step-1][0];
+            ways = dp[step][0] % mod + dp[step][1] % mod + dp[step][2] % mod + dp[step][3] % mod + dp[step][4] % mod;
+        }
+        return ways % mod;
+    }
+};
+    /*
+    if( n == 1) return 5;
+        long long dp[5][n];
+        for(int ind = 1 ; ind < 5 ; ind++)
+        {
+            dp[ind][0] = 1;
+        }
+        long long ways = 5;
+        //  0 1 2 3 4
+        //  a e i o u
+        for(int step = 1 ; step < n ; step++)
+        {
+            dp[0][step] = dp[1][step-1] ;
+            dp[1][step] = dp[0][step-1] + dp[2][step-1];
+            dp[2][step] = ways - dp[2][step-1];
+            dp[3][step] = dp[2][step-1] + dp[4][step-1];
+            dp[4][step] = dp[0][step-1];
+            ways =  (dp[0][step] % mod + dp[1][step] % mod + dp[2][step] % mod + dp[3][step] % mod + dp[4][step] % mod)  ;
+        }
+        return ways % mod;
+    }
+    */
+    /*long long mod = 1e9 + 7;
+    void func( unordered_map< char , bool > & vis , char src , int &ans , string temp , int step, unordered_map< char , vector<char> > &g , int k)
+    {
+        if(step == k)
+        {
+            cout << ans;
+            ans = (ans%mod + 1)%mod;
+            cout << "-";
+            return;
+        }
+        cout << src;
+        vis[src] = 1;
+        for(auto dest : g[src])
+        {
+            if(!vis[dest])
+            {
+                func(vis , dest , ans , temp+dest , step+1 , g , k);
+            }
+        }
+    }
+    int countVowelPermutation(int n) {
+        unordered_map< char , vector<char> > g;
+        
+        g['a'].push_back('e');
+        
+        g['e'].push_back('a');
+        g['e'].push_back('i');
+        
+        g['o'].push_back('u');
+        g['o'].push_back('i');
+        
+        g['i'].push_back('u');
+        g['i'].push_back('a');
+        g['i'].push_back('e');
+        g['i'].push_back('o');
+        
+        g['u'].push_back('a');
+        
+        int K = n;
+        vector< char > vert{'a' , 'e' , 'i' , 'o' , 'u'};
+        int ans = 0;
+        //for(char src : vert)
+        //{
+            char src = 'a';
+            string temp = "";
+            unordered_map< char , bool > vis;
+            temp += src;
+            func(vis , src , ans , temp , 1 , g , n);
+            cout << endl;
+        //}
+        return ans;
+    }
+};
+
+    */
