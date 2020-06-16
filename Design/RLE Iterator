@@ -1,0 +1,36 @@
+class RLEIterator {
+public:
+    vector<int> arr;
+    int curr;
+    RLEIterator(vector<int>& A)
+    {
+        arr = A;
+        curr = 0;
+    }
+    
+    int next(int n) {
+        while(curr < arr.size())
+        {
+            if( arr[curr] >= n )
+            {
+                arr[curr] -= n;
+                return arr[curr+1];
+            }
+            else
+            {
+                n -= arr[curr];
+                curr += 2;
+            }
+        }
+        return -1;
+    }
+};
+
+/**
+ * Your RLEIterator object will be instantiated and called as such:
+ * RLEIterator* obj = new RLEIterator(A);
+ * int param_1 = obj->next(n);
+ */
+//  8   8   8   5   5
+//  [8,3]   [5,2]
+
