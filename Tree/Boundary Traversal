@@ -1,0 +1,125 @@
+#include<iostream>
+#include<stdlib.h>
+using namespace std;
+void printLeaves(struct node* root) 
+{ 
+    if (root == NULL) 
+        return; 
+    printLeaves(root->left); 
+    if (!(root->left) && !(root->right)) 
+        printf("%d ", root->data); 
+    printLeaves(root->right); 
+} 
+void printBoundaryLeft(struct node* root) 
+{ 
+    if (root == NULL) 
+        return;   
+    if (root->left) { 
+        printf("%d ", root->data); 
+        printBoundaryLeft(root->left); 
+    } 
+    else if (root->right) { 
+        printf("%d ", root->data); 
+        printBoundaryLeft(root->right); 
+    } 
+} 
+void printBoundaryRight(struct node* root) 
+{ 
+    if (root == NULL) 
+        return;   
+    if (root->right) { 
+        printBoundaryRight(root->right); 
+        printf("%d ", root->data); 
+    } 
+    else if (root->left) { 
+        printBoundaryRight(root->left); 
+        printf("%d ", root->data); 
+    } 
+} 
+void printBoundary(struct node* root) 
+{ 
+    if (root == NULL) 
+        return;   
+    printf("%d ", root->data); 
+    printBoundaryLeft(root->left); 
+    printLeaves(root->left); 
+    printLeaves(root->right); 
+    printBoundaryRight(root->right); 
+} 
+/*
+void view_func(int &curr , TreeNode* root , int level , bool left , bool last , vector<int> &last_level)
+{
+    if(level == 0)
+    {
+        if(last)
+        last_level.push_back(root->val);
+        curr = root->val;
+        return;
+    }
+    if(left)
+    {
+        if(root->right)
+            view_func(curr , root->right , level-1 , left , last , last_level);
+        if(root->left)
+            view_func(curr , root->left , level-1 , left , last , last_level);     
+    }
+    else
+    {
+        if(root->left)
+            view_func(curr , root->left , level-1 , left , last , last_level);
+        if(root->right)
+            view_func(curr , root->right , level-1 , left , last , last_level);
+    }
+}
+int height( TreeNode* root)
+{
+    if(!root) return 0; //[1,2,4,4,3,2,1]
+    int l = height(root->left);
+    int r = height(root->right);
+    return max(l,r) + 1;
+}
+vector<int> boundaryOfBinaryTree(TreeNode * root) {
+    int h = height(root);
+    if(h == 1) return {root->val};
+    vector<int> ans , temp;
+    vector<int> last_level;
+    for(int level = 0 ; level < h ; level++)
+    {
+        int curr , last = 0;
+        if(level == h-1)
+            last = 1;
+        view_func(curr , root , level , 1 , last , last_level);
+        //cout << curr << " ";
+        ans.push_back(curr);
+    }
+    reverse( last_level.begin() , last_level.end() );
+    //cout << endl;
+    ans.pop_back();
+    for(auto node : last_level)
+    {
+        //cout << node << " ";
+        ans.push_back(node);
+    }
+    ans.pop_back();
+    vector<int> _level;
+    for(int level = 0 ; level < h ; level++)
+    {
+        int curr;
+        view_func(curr , root , level , 0 , 0 , _level);
+        _level.push_back(curr);
+    }
+    reverse( _level.begin() , _level.end() );
+    //cout << endl;
+    _level.pop_back();
+    for(auto node : _level)
+    {
+        //cout << node << " ";
+        ans.push_back(node);
+    }
+    return ans;
+}
+*/
+int main()
+{
+    return 0;
+}
