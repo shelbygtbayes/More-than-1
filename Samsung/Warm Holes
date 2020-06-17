@@ -1,0 +1,74 @@
+#include<iostream>
+#include<climits>
+#include<vector>
+struct point
+{
+    int x;
+    int y;
+};
+point pos[10002];
+using namespace std;
+int main()
+{
+    int t;
+    cin >> t;
+    while(t--)
+    {
+        int n;
+        int graph[100][100];
+        for(int x = 0 ; x <= 2*n+2 ; x++)
+        {
+          for(int y = 0 ; y <= 2*n+2 ; y++)
+          {
+            if(x == y) graph[x][y] = 0;
+            else graph[x][y] = INT_MAX;
+          }
+        }
+        int src_x , src_y , dest_x , dest_y;
+        cin >> src_x >> src_y;
+        cin >> dest_x >> dest_y;
+        cin >> n;
+        pos[1].x = src_x;
+        pos[1].y = src_y;
+        pos[2*n+2].x = dest_x;
+        pos[2*n+2].y = dest_y;
+        for(int warm_hole = 1 ; warm_hole <= n ; warm_hole++)
+        {
+            int entry_x , entry_y , exit_x , exit_y , w;
+            cin >> entry_x >> entry_y >> exit_x >> exit_y >> w;
+            
+            pos[2*warm_hole].x = entry_x;
+            pos[2*warm_hole].y = entry_y;
+            pos[2*warm_hole + 1].x = exit_x;
+            pos[2*warm_hole + 1].y = exit_y;
+
+            graph[2*warm_hole][2*warm_hole+1] = w;
+            graph[2*warm_hole+1][2*warm_hole] = w;
+        }
+        for(int st = 1 ; st <= 2*n+2 ; st++)
+        {
+            for(int dest = 1 ; dest <= 2*n+2 ; dest++)
+            {
+                if(st != dest and graph[st][dest] == INT_MAX)
+                {
+                  graph[st][dest] = abs(pos[st].x - pos[dest].x) + abs(pos[st].y - pos[dest].y);
+                }
+            }
+        }
+        for(int k = 1 ; k <= 2*n+2 ; k++)
+        {
+            for(int st = 1 ; st <= 2*n+2 ; st++)
+            {
+                for(int end = 1 ; end <= 2*n+2 ; end++)
+                {
+                    if( graph[st][k] != INT_MAX and graph[k][end] != INT_MAX)
+                    {
+                        graph[st][end] = min( graph[st][k] + graph[k][end] , graph[st][end] );
+                    }
+                }
+            }
+        }
+        cout << graph[1][2*n+2] << endl;
+    }
+    return 0;
+}
