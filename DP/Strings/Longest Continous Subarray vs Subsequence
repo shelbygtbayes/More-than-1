@@ -1,0 +1,48 @@
+class Solution {
+public:
+    int findLength(vector<int>& A, vector<int>& B) {
+        
+        int n = A.size() , m = B.size();
+        vector< vector<int> > dp(n+1 , vector<int>(m+1,0));
+        int ans = 0;
+        for(int pos1 = 1 ; pos1 <= n ; pos1++)
+        {
+            for(int pos2 = 1 ; pos2 <= m ; pos2++)
+            {
+                if(A[pos1-1] == B[pos2-1]) 
+                {
+                    dp[pos1][pos2] = dp[pos1-1][pos2-1] + 1;
+                    ans = max( ans , dp[pos1][pos2]);
+                }
+                /* For Sub-Sequence factor
+                else 
+                    dp[pos1][pos2] = max( dp[pos1 - 1][pos2] , dp[pos1][pos2 - 1] );
+                */
+            }
+        }
+        return ans;
+    }
+};
+                
+    
+/*
+    X   1   2   3   2   1
+X   0   0   0   0   0   0   
+3   0   0   0   1   0   0
+2   0   0   1   0   2   0
+1   0   1   0   2   0   3
+4   0   0   0   0   0   0   
+7   0   0   0   0   0   0
+        
+    X   0   1   1   1
+X   0   0   0   0   0
+1   0   0   1   1   1
+0   0   1   0   0   0
+1   0   0   2   1   1
+0   0   1   0   0   0
+1   0   0   2   1   1
+
+*/
+
+
+
