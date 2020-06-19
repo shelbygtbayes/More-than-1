@@ -1,0 +1,47 @@
+#include<iostream>
+#include<string>
+#include<algorithm>
+#include<vector>                         
+#include<set>
+using namespace std;                    
+vector<string> ans;
+set<string> ans_dist;   //  distinction
+void print_all_permutations(const string& s) // STL
+{
+    string s1 = s;
+    sort(s1.begin(), s1.end()); 
+    do {
+        cout << s1 << endl;
+    } while (next_permutation(s1.begin(), s1.end()));
+}
+                                        //const required here
+                                        // |
+void func(string &s , unsigned mask = 0 , const string &out = string()) // Bit Masking
+{
+    size_t n = s.size();
+    if(out.size() == n)
+    {
+        //cout << ' ' << out;
+        ans.push_back(out);
+        ans_dist.insert(out);
+    }
+    for(size_t ind = 0 ; ind < n ; ind++)
+    {
+        unsigned bit = 1 << ind;
+        if(mask & bit) continue;    // from curr to Already visited
+        func(s , mask | bit , out + s[ind]);
+    }
+}
+int main()
+{
+    string s = "reed";
+    func(s);
+    cout << endl;
+    for(auto str : ans)
+        cout << str << " ";
+    cout << endl;
+    for(auto str : ans_dist)
+        cout << str << " ";
+    
+    return 0;
+}
