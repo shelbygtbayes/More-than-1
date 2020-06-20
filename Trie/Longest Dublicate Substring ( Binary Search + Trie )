@@ -1,0 +1,87 @@
+class Solution {
+public:
+    struct node{
+      node* child[26];
+      bool isEnd;
+    }*root = NULL;
+    node* create()
+    {
+        node* n = new node();
+        for(int ind = 0 ; ind < 26 ; ind++)
+            n->child[ind] = NULL;
+        n->isEnd = 0;
+        return n;
+    }
+    node* insert(string s , node* root)
+    {
+        if(!root)
+            root = new node();
+        
+        node* temp = root;
+        for(auto c : s)
+        {
+            int id = c-'a';
+            if(temp->child[id] == NULL)
+            {
+               temp->child[id] = create();
+            }
+            temp = temp->child[id];
+        }
+        temp->isEnd = 1;
+        //cout << "Inserted " << s << endl;
+        return root;
+    }
+    bool exists(string s , node* root)
+    {
+        if(!root) return 0;
+        node* temp = root;
+        for(auto c : s)
+        {
+            int id = c-'a';
+            if(temp->child[id] == NULL) 
+                return 0;
+            temp = temp->child[id];
+        }
+        //cout << "Exists End " << s << endl; 
+        return temp->isEnd;
+    }
+    bool func(int k , string s , string & ans)
+    {
+        int n = s.size();
+        root = NULL;
+        //cout << k << endl; 
+        for(int ind = 0 ; ind <= n-k ; ind++)
+        {
+            string r = s.substr(ind , k);   
+            //cout <<"Current : "<< r << endl;
+            if(exists(r , root))
+            {
+                ans = r;
+                //cout <<"Got : "<< ans << endl;
+                return 1;
+            }
+            else
+            {
+                root = insert(r , root);
+            }
+        }
+        return 0;
+    }
+    string longestDupSubstring(string S) {
+        int l = 1 , r = S.size()-1;
+        string ans = "";
+        while(l <= r)
+        {
+            int m = l + (r-l)/2;
+            string temp = "";
+            if(func(m,S,temp)) 
+            {
+                l = m+1;
+                ans = temp;
+            }
+            else r = m-1;
+        }
+        
+        return ans;
+    }
+};
