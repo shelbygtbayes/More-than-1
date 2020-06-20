@@ -1,0 +1,38 @@
+Must checkout the Comments
+class Solution {
+public:
+//                            string must be const for string_view
+    string_view func(size_t l , const string &s)
+    {
+        size_t n = s.size();
+        unordered_set< string_view > set;
+        for(size_t ind = 0 ; ind <= n-l ; ind++)
+        {
+            auto [itr , inserted] = set.emplace(s.data() + ind , l);
+            if(!inserted)
+            {
+                return *itr;
+            }
+        }
+        return string_view{}; 
+    }
+    
+    string longestDupSubstring(string S) {
+        size_t n = S.size();
+        size_t l = 1 , r = n-1;
+        string_view ans;
+        while(l <= r)
+        {
+            int m = l + (r-l)/2;
+            auto temp_view = func(m , S);
+            if(temp_view.size() > 0)
+            {
+                l = m+1;
+                ans = temp_view;
+            }
+            else
+                r = m-1;
+        }
+        return {ans.begin() , ans.end()}; // TO convert string_view to string
+    }
+};
