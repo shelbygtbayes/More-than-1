@@ -1,0 +1,50 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+void rollinghash(string pattern , string text , int p)
+{
+    int range = 26;
+    int pattern_hash = 0, text_hash = 0;
+    int m = pattern.size() , n = text.size();
+    int hash = 1;
+    for(int ind = 0 ; ind < m-1 ; ind++)
+        hash = (hash * range) % p;
+    for(int ind = 0 ; ind < m ; ind++)
+    {
+        pattern_hash = ( pattern_hash*range + pattern[ind] ) % p;
+        text_hash = ( text_hash*range + text[ind] ) % p;
+    }
+    for(int ind = 0 ; ind <= n-m ; ind++)
+    {
+        if(pattern_hash == text_hash)
+        {
+            int k = 0;
+            while(k < m)
+            {
+                if(pattern[k] != text[ind + k]) 
+                    break;
+                k++;
+            }
+            if(k == m)
+            {
+                cout << "Got it " << ind << endl;
+                return;
+            }
+        }
+        if(ind < n-m)
+        {
+            text_hash = ( range*( text_hash - text[ind]*hash ) + text[ind + m] ) % p;
+            if( text_hash < 0)
+                text_hash = text_hash + p;
+        }
+    }
+    cout << "not found ";
+}
+int main()  
+{
+    int prime = 5381;
+    string text = "GEEKS FOR GEEKS";
+    string pattern = "FOR";
+    rollinghash(pattern , text , prime);
+    return 0;
+}
