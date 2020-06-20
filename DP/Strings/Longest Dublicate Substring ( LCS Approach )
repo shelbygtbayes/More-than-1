@@ -1,0 +1,44 @@
+class Solution {
+public:
+    string longestDupSubstring(string S) {
+        int n = S.size();
+        int len = -1;
+        int r = 0 , c = 0;
+        vector<vector<int>> dp(n+1 , vector<int>(n+1,0));
+        for(int st = 1 ; st <= n ; st++)
+        {
+            for(int end = st+1 ; end <= n ; end++)
+            {
+                if(S[st-1] == S[end-1])
+                    dp[st][end] = dp[st-1][end-1] + 1;
+                else
+                    dp[st][end] = 0;
+                if(len < dp[st][end])
+                {
+                    len = dp[st][end];
+                    r = st;
+                    c = end;
+                }
+            }
+        }
+        string ans = "";
+        //cout << len << endl;
+        while(len >= 0)
+        {
+            if(S[r-1] == S[c-1])
+            {
+                ans += S[r-1];
+                r = r-1;
+                c = c-1;
+            }
+            else if(dp[r-1][c] > dp[r][c-1])
+                r = r-1;
+            else
+                c = c-1;
+            len--;
+        }
+        reverse(ans.begin() , ans.end());
+        return ans;
+    }
+};
+                                   
