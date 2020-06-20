@@ -1,0 +1,61 @@
+class Solution {
+public:
+    bool func(int l , string s , string & ans)
+    {
+        unordered_map< int , vector<int> > hash_values;
+        int h = 1 , range = 26;
+        int n = s.size();
+        int p = 5381;
+        for(int ind = 0; ind < l-1 ; ind++)
+            h = (h * range) % p;
+        int text_hash = 0;
+        for(int ind = 0 ; ind < l ; ind++)
+            text_hash = (range * text_hash + s[ind]) % p;
+        hash_values[text_hash].push_back(0);
+        for(int ind = 0 ; ind < n-l ; ind++)
+        {
+            text_hash = (range*(text_hash - s[ind] * h) + s[ind + l]) % p;
+            if(text_hash < 0)
+                text_hash += p;
+            if(hash_values[text_hash].size() > 0)
+            {
+                for(auto pos : hash_values[text_hash])
+                {
+                    int k = 0;
+                    while( k < l )
+                    {
+                        if(s[pos + k] != s[ind + 1 + k]) break;
+                        k++;
+                    }
+                    if(k == l)
+                    {
+                        ans = s.substr(pos , l);
+                        return 1;           
+                    }
+                }
+            }
+            hash_values[text_hash].push_back(ind+1);
+        }
+        return 0;
+    }
+    string longestDupSubstring(string S) {
+        int n = S.size();
+        int l = 1 , r = n-1;
+        string ans = "";
+        while( l <= r )
+        {
+            int m = l + (r-l)/2;
+            string temp = "";
+            if(func(m , S , temp))
+            {
+                l = m+1;
+                ans = temp;
+            }
+            else
+            {
+                r = m-1;
+            }
+        }
+        return ans;
+    }
+};;
