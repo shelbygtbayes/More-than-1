@@ -1,0 +1,60 @@
+#include<iostream>
+#include<vector>
+#include<map>
+using namespace std;
+// Unordered_map of vector not possible
+// (r,c) -> position of point of path from start
+// (x,y) -> position of point of path from end
+int palindromic_paths_count(vector<vector<char>> &grid , int r , int c , int x , int y , map< vector<int> , int >& vis )
+{
+    int n = grid.size() , m = grid[0].size();
+    // If point not exisis
+    
+    if(r < 0 or c < 0 or r >= n or c >= m) return 0;
+    if(x < 0 or y < 0 or x >= n or y >= m) return 0;
+    
+    // If value not matching ( not palindromic condition )
+    
+    if(grid[x][y] != grid[r][c]) return 0;
+    
+    // Case to Handle if Same Point or adjacent Points then -> only single Palindromic path possible
+    
+    if(abs(x-r) + abs(y-c) <= 1) return 1;
+    
+    // Else check whether Points already processed ( start_r , start_c , end_x , end_y) 
+    
+    vector<int> pos{r,c,x,y};
+    if(vis.find(pos) != vis.end())
+        return vis[pos];
+    
+    // Cases for Paths possible from st and end points
+    // From start point we can move right( r+1 ) or down ( c+1 )
+    // At same time, From end point we can move up ( x-1 ) or left ( y-1 )
+    
+    int ans = 0;
+    ans += palindromic_paths_count(grid , r+1 , c , x-1 , y , vis);
+    ans += palindromic_paths_count(grid , r+1 , c , x , y-1 , vis);
+    ans += palindromic_paths_count(grid , r , c+1 , x-1 , y , vis);
+    ans += palindromic_paths_count(grid , r , c+1 , x , y-1 , vis);
+    
+    // Marked as visited and store the paths possible from st and end points
+    
+    vis[pos] = ans;
+    return ans;
+}
+int func(vector<vector<char>> &grid)
+{
+    int n = grid.size() , m = grid[0].size();
+    map< vector<int> , int > vis;
+    return palindromic_paths_count(grid , 0 , 0 , n-1 , m-1 , vis);
+}
+int main()
+{
+    vector<vector<char>> grid = {
+        {'a', 'a', 'a', 'b'},
+        {'b', 'a', 'a', 'a'},
+        {'a', 'b', 'b', 'a'},
+    };
+    cout << func(grid);
+    return 0;
+}
