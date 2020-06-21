@@ -1,0 +1,46 @@
+class Solution {
+public:
+    bool func(vector<int> &p_hsh , vector<int> &t_hsh)
+    {
+        for(int ind = 0 ; ind < 256 ; ind++)
+        {
+            if( p_hsh[ind] > t_hsh[ind] ) 
+                return 0;
+        }
+        return 1;
+    }
+    string minWindow(string s, string t) {
+        int n = s.size() , m = t.size();
+        string ans = "";
+        if( n < m )
+            return ans;
+        int l = 0 , r = 0;
+        int st , end , min_length = INT_MAX;
+        vector<int> t_hsh(256,0); 
+        vector<int> s_hsh(256,0);
+        for(auto c : t)
+        {
+            t_hsh[c]++;   
+        }
+        
+        while(r < n)
+        {
+            s_hsh[s[r]]++;
+            while(func(t_hsh , s_hsh))
+            {
+                if(r-l+1 < min_length)
+                {
+                    min_length = r - l + 1;
+                    st = l;
+                    end = r;
+                }
+                s_hsh[s[l]]--;
+                l++;
+            }
+            r++;
+        }
+        if(min_length == INT_MAX) return ans;
+        ans = s.substr(st , end-st+1);
+        return ans;
+    }
+};
