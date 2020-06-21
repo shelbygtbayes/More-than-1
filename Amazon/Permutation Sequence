@@ -1,0 +1,34 @@
+class Solution {
+public:
+    string getPermutation(int n, int k) {
+        string ans = "";
+        if(n == 1 and k == 1)
+            return ans+='1';
+        vector<int> digits(n,1);
+        vector<int> fact(n,1);
+        for(int d = 1 ; d < n ; d++)
+        {
+            fact[d] = fact[d-1] * (d+1);
+            digits[d] = d+1;
+        }
+        while ( ans.size() < n)
+        {
+            int m = fact.size();
+            int repeat = fact[m-2]; // Since Permutation possible from 2nd last element
+            int next_digit = (k-1)/repeat; // the group to which it belongs (k-1) to handle corner cases
+            ans += to_string(digits[next_digit]);
+            digits.erase(digits.begin() + next_digit); // Remove the used digit from digit list
+            k = k % repeat; // modified for left permutations
+            fact.pop_back();
+            if(k == 0) // When got all or reached the required level
+            {
+                for(int ind = digits.size()-1 ; ind >= 0 ; ind--) // Add the left digits in reverse order
+                {
+                    ans += to_string(digits[ind]);
+                }
+            }
+        }
+        return ans;
+    }
+};
+
