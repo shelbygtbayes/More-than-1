@@ -1,0 +1,11 @@
+Answer : Knight can reach the Bottom visiting all squares if the board n = Odd
+
+A knight move ( start -> black color then end -> white color ) and vice-versa
+Since the color of Top left and bottom right are same  
+Now to visit all squares we require N*N - 1 moves
+Now if N -> even hence N*N -> even hence N*N-1 -> odd
+Thus we get different colors
+
+Now if N -> odd hence N*N -> odd hence N*N-1 -> even
+Thus we get same colors --> satisfy our condition 
+
