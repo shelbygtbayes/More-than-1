@@ -1,0 +1,27 @@
+Answer : 4n ( If n -> tourists )
+
+To move 1 tourist to the shore we require 4 moves as
+At t = 0
+
+25T |   |
+2B  |   |
+    
+At t = 1
+
+25T |   |
+    |   | 2B
+    
+At t = 2
+
+25T |   |
+1B  |   | 1B
+
+At t = 3
+
+24T |   | 1T
+1B  |   | 1B
+
+At t = 4
+
+24T |   | 1T
+2B  |   | 
