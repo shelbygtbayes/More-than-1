@@ -1,0 +1,15 @@
+Extension of 1000 bottles and 10 rats 
+https://www.youtube.com/watch?v=N3qmN6pYhi0
+
+Here instead of binary numbers we represent the bottle using 3 bit values ( 0 , 1 , 2 )
+0 --> No drink
+1 --> drink on 1st day
+2 --> drink on 2nd day
+
+r1  r2  r3  r4  r5
+1   1   2   0   1
+
+Like same if bottle no : 11201 --> poison
+then r1 r2 , r5 drinks on 1st day and r3 drinks on 2nd day
+
+Hence using 3 values and 5 rats we can check 3*3*3*3*3 = 243 bottles 
