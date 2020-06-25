@@ -1,0 +1,7 @@
+Jar   1 2 3 4 5
+If sum = 150 --> No contamination
+         149 --> Jar 1
+         148 --> Jar 2
+         147 --> Jar 3
+         146 --> Jar 4
+         145 --> Jar 5
