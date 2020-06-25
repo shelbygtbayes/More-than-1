@@ -1,0 +1,17 @@
+Solution Link: https://www.youtube.com/watch?v=pUj1Xia3FPw
+
+We have 25 horses and 5 tracks
+Let's have 5 groups each having 5 horses ( A B C D E )
+Now we have winner, say ( A1 , B1 , C1 , D1 , E1 ) of the 5 races
+Let's have 1 more race among the winners
+This time let's winner be ( A1 , B1 , C1 )
+Total 6 races : we got the fastest horse ( A1 )
+Now the last 2 horses of each group can be eliminated
+Now since E1, D1 horses aren't much faster hence the horses of the group they belong can be eliminated too
+Moreover C1 comes 3rd hence No need for the Horses of the same group ( since slower than C1 )
+Now Since B1 come's second, But we can't say B2 faster than C1 
+But Since B3 is slower than B2 ( and we are left with 2 rank positions ( 2nd and 3rd ) Hence we can eliminate it too.
+Now we are left with 2 horses ( A2 , A3 ) from A and 2 horses from B ( B1,B2 ) and 1 horse from C ( C1 )
+Conduct the last race to find the winner and runner up
+
+Hence Total races = 7
