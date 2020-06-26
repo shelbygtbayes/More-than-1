@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int nthUglyNumber(int n) {
+        vector<int> ugly(n);
+        ugly[0] = 1;
+        int cnt2 = 0, cnt3 = 0, cnt5 = 0;
+        for(int no = 1; no < n ; no++)
+        {
+            ugly[no] = min(2 * ugly[cnt2] , min(3 * ugly[cnt3] , 5 * ugly[cnt5]));
+            if( ugly[no] == 2 * ugly[cnt2] )
+            {
+                cnt2++;
+            }
+            if( ugly[no] == 3 * ugly[cnt3] )
+            {
+                cnt3++;
+            }
+            if( ugly[no] == 5 * ugly[cnt5] )
+            {
+                cnt5++;
+            } 
+        }
+        return ugly[n-1];
+    }
+};
+/*
+To find the next smallest ugly number sequentially 
+clearly 1st ugly = 1 u[0]
+Now to find we maintain the count of 2's  , 3's and 5's respetively
+We find min product of factor * ugly[count of factor]
+and increase the counter of factor which we had used 
+*/
