@@ -1,0 +1,12 @@
+class Solution {
+public:
+    bool isUgly(int num) 
+    {
+        for (int ind = 2; ind < 6 && num; ind++)
+        {
+            while (num % ind == 0)
+                num /= ind;   
+        }
+        return num == 1;            
+    }
+};
