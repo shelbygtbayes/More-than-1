@@ -1,0 +1,23 @@
+Solution Link: https://www.youtube.com/watch?v=r2ubVzU9b5o
+
+Let Pirates be P1 , P2 , P3 , P4 , P5
+
+consider ( 2 pirates last two left )
+then partition would be 
+P4    P5    Since vote %age = 50% Accepted but P5 got nothing
+100   0
+
+3 pirates
+                  %age vote > 50%
+P3    P4    P5    P5 will accept the scheme because he knew if P3 scheme not accepted and die then P4 will form the scheme
+99    0     1     as above and he will not get anything
+
+4 Pirates
+
+P2  P3  P4  P5    %age vote = 50%
+99  0   1   0     P4 will accept because if P2 die then P3 will form the above scheme and he will not get anything
+
+5 Pirates
+
+P1  P2  P3  P4  P5    %age vote > 50%
+98  0   1   0    1   P3 and P5 both accept because if P1 die then both will not get anything from P2 scheme
