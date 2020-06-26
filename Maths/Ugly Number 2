@@ -24,8 +24,10 @@ public:
     }
 };
 /*
+Link: https://www.youtube.com/watch?v=78Yx7oLA43s
 To find the next smallest ugly number sequentially 
 clearly 1st ugly = 1 u[0]
+We need to find the minimum multiple of 2, 3 and 5 by maintaining the count of last multiplier used
 Now to find we maintain the count of 2's  , 3's and 5's respetively
 We find min product of factor * ugly[count of factor]
 and increase the counter of factor which we had used 
