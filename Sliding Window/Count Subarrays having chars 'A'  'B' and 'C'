@@ -18,7 +18,7 @@ int func(string s)
             c++;
         while( a > 0 and b > 0 and c > 0 and st < n-2)
         {
-            ans += (n-end);
+            ans += (n-end); // once you have at least one share from all the three given companies, you can add any character/share towards the end, and it would still
             if(s[st] == 'A')
                 a--;
             else if(s[st] == 'B')
