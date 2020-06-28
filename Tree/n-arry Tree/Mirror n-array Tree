@@ -1,0 +1,107 @@
+#include<iostream>
+#include<vector>
+#include<climits>
+#include<stdlib.h>
+using namespace std;
+int n = 4;
+struct node{
+    int val;
+    //vector< node* > child;
+    node** child;
+}*root = NULL;
+node* create(int val , int no)
+{
+    node* n = new node();
+    n->val = val;
+    n->child = new node*[4];
+    for(int ind =0 ; ind < no ; ind++)
+      n->child[ind] = NULL;
+    return n;
+}
+node* level_reverse(node* root , int l)
+{
+    if(!root) return NULL;
+    if(l == 1)
+    {
+        for(int ind = 0 ; ind < n/2 ; ind++)
+        {
+            node* temp = root->child[ind];
+            root->child[ind] = root->child[n-ind-1];
+            root->child[n-ind-1] = temp;
+        }
+        return root; 
+    }
+    for(auto ind = 0 ; ind < 4 ; ind++)
+    {
+        auto ch = root->child[ind];
+        ch = level_reverse(ch , l-1);
+    }
+    return root;
+}
+int func(node* root)
+{
+    if(!root) return 0;
+    int max_ = INT_MIN;
+    for(auto ind = 0 ; ind < 4 ; ind++)
+    {
+        auto ch = root->child[ind];
+        max_ = max( max_  , func(ch));
+    }
+    return max_ + 1;
+}
+node* reverse(node* root)
+{
+    if(!root) return NULL;
+    int h = func(root);
+    for(int level = h-1 ; level >= 1 ; level--)
+    {
+        root = level_reverse(root , level);
+    }
+    return root;
+}
+void level_print(node* root , int l)
+{
+    if(!root) return;
+    if(l == 0)
+    {
+        cout << root->val << " "; 
+    }
+    for(int ind = 0 ; ind < 4 ; ind++)
+    {
+        auto ch = root->child[ind];
+        level_print(ch , l-1);
+    }
+}
+void print(node* root)
+{
+    if(!root) return;// NULL;
+    int h = func(root);
+    for(int level = 0 ; level < h ; level++)
+    {
+        level_print(root , level);
+        cout << endl;
+    }
+}
+int main()
+{
+    root = create(10 , n);
+    root->child[0] = create(2 , n);
+    root->child[1] = create(34 , n);
+    root->child[1]->child[0] = create(1 , n);
+
+    root->child[2] = create(56 , n);
+    root->child[3] = create(100 , n);
+    root->child[3]->child[0] = create(7 , n);
+    root->child[3]->child[1] = create(8 , n);
+    root->child[3]->child[2] = create(9 , n);
+    
+    print(root);
+    
+    root = reverse(root);
+    
+    cout << endl;
+    print(root);
+    return 0;
+}
+
+
