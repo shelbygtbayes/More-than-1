@@ -1,0 +1,10 @@
+part1 part2 part3
+  1     2		4
+  
+Day 1 -> give P1							--> 1
+	2	give Take P1 back and give P2		--> 2
+	3	Give P1 back						--> 1+2
+	4	Take P1, P2 back and give P3 		--> 4
+	5	Give P1								--> 4+1
+	6	Take P1 and Give P2					--> 4+2
+	7	Give P1 back						--> 4+2+1
