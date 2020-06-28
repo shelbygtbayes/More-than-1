@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        //Approach1 
+        // dp   TLE
+        /*
+        vector<int> dp(n , INT_MAX);
+        dp[0] = 0; // Min_jums to reach from 0 to index
+        for(int dest = 1 ; dest < n ; dest++)
+        {
+            for(int bypass = 0 ; bypass < dest ; dest++)
+            {
+                if(bypass + nums[bypass] >= dest)
+                {
+                    dp[dest] = min( dp[dest] , dp[bypass] + 1);
+                // move from 0 to bypass and then 1 jump from bypass to dest 
+                }
+            }
+        }
+        return dp[n-1] + 1;
+        */
+        // Aproach 2
+        int n = nums.size();
+        int jumps = 0;
+        if(n == 1)
+            return 0;
+        int maxreach = 0 , currend = 0;
+        for(int ind = 0 ; ind < n-1 ; ind++)
+        {
+            maxreach = max( maxreach , nums[ind] + ind);
+            if(currend == ind)
+            {
+                jumps++;
+                currend = maxreach;
+            }
+        }
+        return jumps;
+    }
+};
