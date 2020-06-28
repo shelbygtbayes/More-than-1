@@ -1,0 +1,40 @@
+class Solution {
+public:
+	vector<string> findItinerary(vector<vector<string>> &tickets) {
+		// Each node (airport) contains a set of outgoing edges (destination).
+		
+    unordered_map<string, multiset<string>> graph;
+		
+    // We are always appending the deepest node to the itinerary, 
+		// so will need to reverse the itinerary in the end.
+		vector<string> ans;
+		if (tickets.size() == 0){
+			return ans;
+		}
+		
+		for (auto edge : tickets)
+    {
+			graph[edge[0]].insert(edge[1]);
+		}
+		stack< string > dfs;
+		dfs.push("JFK");
+		while (!dfs.empty())
+    {
+			string  curr  = dfs.top();
+			if (graph[ curr ].empty())
+      {
+				ans.push_back( curr );
+				dfs.pop();
+			}
+			else 
+      {
+			   auto next = graph[ curr ].begin();
+				dfs.push( *next );
+				graph[ curr ].erase( next );
+			}
+		}
+		// Reverse the itinerary.
+		reverse(ans.begin(), ans.end());
+		return ans;
+	}
+};
