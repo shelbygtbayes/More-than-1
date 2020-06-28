@@ -1,0 +1,36 @@
+class Solution {
+public:
+    // Eulerian Path
+    unordered_map<string, vector<string>> graph;
+	unordered_map<string, int> out;
+	void func(string st , vector<string> &ans)
+    {
+        while( out[st] > 0)
+        {
+            out[st]--;
+            func(graph[st][out[st]] , ans);
+        }
+        ans.push_back(st);
+    }
+	vector<string> findItinerary(vector<vector<string>> &tickets) {
+		vector<string> ans;
+		if (tickets.size() == 0)
+        {
+			return ans;
+		}
+		
+		for (auto edge : tickets)
+        {
+			graph[edge[0]].push_back(edge[1]);
+		    out[edge[0]]++;
+        }
+        
+        // Ensure smallest lexical eulerian path is found
+        for(auto &src : graph)
+            sort(src.second.begin() , src.second.end() , greater<string>());
+		// Reverse the itinerary.
+        func("JFK" , ans);
+		reverse(ans.begin(), ans.end());
+		return ans;
+	}
+};
