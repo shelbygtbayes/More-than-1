@@ -1,0 +1,35 @@
+// Need to think is that
+// For an arbitrary string t, each of its proper suffix is lexicographically smaller than t, and the lexicographic
+// rank of t is at least |t|. Thus, the length of the answer is at most K.
+//Generate all substrings of s whose lengths are at most K. Sort them, unique them, and print the K-th one, where N = |S|.
+// Here "aba" a, ab, aba, b, ba.
+#include<iostream>
+#include<vector>
+#include<set>
+#include<algorithm>
+using namespace std;
+string func(string s , int k)
+{
+    int n = s.size();
+    set<string> pq;
+    for(int ind = 0 ; ind < n ; ind++)
+    {
+        string str = "";
+        for(int st = 0; st < k; st++)
+        {
+            if(ind+st >= n)
+                break;
+            str += s[ind+st];            
+            pq.insert(str);
+        }  
+    }
+    vector<string> ans(pq.begin() , pq.end());
+    return ans[k-1];
+}
+int main()
+{
+    string s = "geeksforgeeks";
+    int k = 5;
+    cout << func(s , k);
+    return 0;
+}
