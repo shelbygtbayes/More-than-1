@@ -1,0 +1,38 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include<unordered_map>
+using namespace std;
+string func(string s)
+{
+    string ans = "";
+    unordered_map< char , vector<int> > pos;
+    priority_queue<char> pq;
+    for(int ind = 0 ; ind < s.size() ; ind++)
+    {
+        pos[s[ind]].push_back(ind);
+        pq.push(s[ind]);
+    }
+    int curr = 0 , prev = -1;
+    while(!pq.empty() and curr < s.size())
+    {
+        char c = pq.top();
+        pq.pop();
+        
+        for(auto ind : pos[c])
+        {
+            curr = ind;
+            if(prev > curr)
+                return ans;
+            prev = curr;
+            ans += s[ind];
+        }
+    }
+    return ans;
+}
+int main()
+{
+    string s = "geeksforgeeks";
+    cout << func(s);
+    return 0;
+}
