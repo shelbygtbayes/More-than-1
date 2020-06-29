@@ -1,0 +1,87 @@
+// Here Deque of STL does't work since iterators don't behave like pointers
+
+#include<iostream>
+#include<unordered_map>
+using namespace std;
+struct node{
+    char c;
+    node * next , * prev;
+};
+node* add(node* head , char c , unordered_map<char , node* > & pos)
+{
+    node* n = new node();
+    n->c = c;
+    n->next = n->prev = NULL;
+    if(head == NULL)
+    {
+        head = n;
+        pos[c] = head;
+        return n;
+    }
+    node* temp = head;
+    while(temp->next != NULL)
+    {
+        temp = temp->next;
+    }
+    temp->next = n;
+    pos[c] = n;
+    n->prev = temp;
+    return head;
+}
+node* delete_(node* head  , char c , unordered_map<char , node* > & pos)
+{
+    node* ptr = pos[c];
+    if(!ptr)
+        return NULL;
+    pos[c] = NULL;
+    node* prev_temp = ptr->prev;
+    node* next_temp = ptr->next;
+    if(prev_temp == NULL){
+        head = next_temp; // Need to update for previous
+        if(next_temp)
+            next_temp->prev = NULL;
+    } 
+    else
+    {
+        prev_temp->next = next_temp;
+        if(next_temp) // Need to update the next
+            next_temp->prev = prev_temp;
+    }
+    return head;
+}
+string func(string s)
+{
+    string ans = "";
+    node* head = NULL;
+    if(s.size() == 0)
+        return ans+="#";
+    else if(s.size() == 1)
+        return ans+=s[0];
+    unordered_map< char , node* > pos;
+    unordered_map<char , int> cnt;
+    unordered_map<char , int> erased;
+    for(auto c : s)
+    {
+        cnt[c]++;
+        if(cnt[c] == 1)
+        {
+            head = add(head , c , pos);
+        }
+        else if( cnt[c] > 1 and !erased[c])
+        {
+            head = delete_(head , c , pos);
+            erased[c] = 1;
+        }
+        if(head!=NULL)
+            ans += head->c;
+        else
+            ans+="#";
+    }
+    return ans;
+}
+int main()
+{
+    string s = "xxikrwmjvsvckfrqxnibkcasompsuyuogauacjrr";//geeksforgeeksandgeeksquizfor";
+    cout << func(s);
+    return 0;
+}
