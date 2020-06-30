@@ -1,0 +1,52 @@
+class Solution {
+public:
+    string removeDuplicates(string s, int k) {
+        if(s.size() == 0)
+            return "";
+        if(s.size() < k)
+            return s;
+        stack < pair< char , int > > st;
+        for(auto ch : s)
+        {
+            if(st.empty())
+            {
+                st.push(make_pair(ch,1));
+            }
+            else
+            {
+                pair< char , int > p = st.top();
+                char c = p.first;
+                int cnt = p.second;
+                if(c == ch)
+                {
+                    st.pop(); // Burst if greater count > k
+                    if(cnt + 1 < k)
+                    {
+                        st.push(make_pair(ch , cnt+1)); // Else push with updated count
+                    }
+                }
+                else
+                {
+                    st.push(make_pair(ch,1));
+                }
+            }
+        }
+        string ans = "";
+        while( !st.empty() )
+        {
+            pair< char , int > p = st.top();
+            string temp = "";
+            for(int ind = 0 ; ind < p.second ; ind++)
+                ans += p.first;
+            st.pop();
+        }
+        reverse(ans.begin() , ans.end());
+        return ans;
+    }
+};
+
+//deeedbbcccbdaa
+
+
+          
+    
