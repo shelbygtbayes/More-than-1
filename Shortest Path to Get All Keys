@@ -1,0 +1,71 @@
+class Solution {
+public:
+    int shortestPathAllKeys(vector<string>& grid) {
+        int n = grid.size() , m = ((n) ? (grid[0].size()) : (0));
+        if(n == 0 or m == 0)
+            return -1;
+        int locks = 0 , path = 0;
+        vector< int > dir{0 , -1 , 0 , 1 , 0};
+        // we need visited vector to mark acc to pos and the No of keys collected
+        int vis[n][m][64]; // Since 6 Keys -> Max combination value = binary(111111) = 64
+        memset(vis , 0 , sizeof(vis));
+        queue< vector<int> > q; // [position , No of Keys Holding ]
+        int steps = 0;
+        for(int r = 0 ; r < n ; r++)
+        {
+            for(int c = 0 ; c < m ; c++)
+            {
+                if(grid[r][c] == '@')
+                {
+                    
+                    // int one_Dimen_index = (row * No_of_columns) + column;
+                    q.push(vector<int>{r*m + c , 0});
+                    vis[r][c][0] = 1;
+                    // int r = on_dim_index / no_of_colums , c = one_dim_index % no_of_colums
+                }
+                else if(grid[r][c] >= 'A' and grid[r][c] <= 'F')
+                    locks++;
+            }
+        }
+        while(!q.empty())
+        {
+            int size = q.size();
+            for(int ind = 0 ; ind < size ; ind++)
+            {
+                vector<int> f = q.front();
+                q.pop();
+                int pos = f[0] , keys_comb = f[1];
+                int r = pos / m , c = pos % m;
+                // Got all keys
+                if(keys_comb == ((1 << locks) - 1))
+                    return steps;
+                for(int d = 0 ; d < 4 ; d++)
+                {
+                    int x = r + dir[d] , y = c + dir[d+1];
+                    int curr_keys = keys_comb;
+                    if( x < 0 or y < 0 or x >= n or y >= m or grid[x][y] == '#')
+                        continue;
+                    
+                    else if( grid[x][y] >= 'a' and grid[x][y] <= 'f') // Got a key Update keys
+                        curr_keys = keys_comb | (1 << (grid[x][y] - 'a')) ;
+                    
+                    else if(grid[x][y] >= 'A' and grid[x][y] <= 'F')
+                    {
+                        // Check if we have key for the lock or not
+                        if((curr_keys & (1 << (grid[x][y] - 'A'))) == 0)
+                            continue;
+                    }
+                    if(!vis[x][y][curr_keys])
+                    {
+                        vis[x][y][curr_keys] = 1;
+                        q.push( vector<int>{x*m + y , curr_keys} );
+                    }
+                }
+            }
+            steps++;
+            //cout << steps << " ";
+        }
+        return -1;
+    }
+};
+    
