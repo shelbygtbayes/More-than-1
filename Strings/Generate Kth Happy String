@@ -1,0 +1,33 @@
+class Solution {
+public:
+    vector<char> alpha{'a' , 'b' , 'c'};
+    int left;
+    string ans = "";
+    void dfs(string & curr , int n)
+    {
+        if(ans.size())  // If got the answer already ( Occur when Recussive constructing )
+            return;
+        if(curr.size() == n)  // Got a 'n'length string
+        {
+            left--;           // Decrement the Counter 
+            if(left == 0)     // For kth string
+                ans = curr;
+            return;
+        }
+        for(auto c : alpha)
+        {
+            if(curr.empty() || c != curr.back())
+            {
+                curr.push_back(c);
+                dfs(curr , n);
+                curr.pop_back();  // Checking other combinaion
+            }
+        }
+    }
+    string getHappyString(int n, int k) {
+        left = k;
+        string curr = "";
+        dfs(curr , n);
+        return ans;
+    }
+};
