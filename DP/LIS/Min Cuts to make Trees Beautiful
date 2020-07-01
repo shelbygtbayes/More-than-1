@@ -1,0 +1,86 @@
+Another Approach
+// construct lis for reverse array too and then check considering every point
+#include<iostream>
+#include<vector>
+#include<climits>
+#include<algorithm>
+#include<stdlib.h>
+using namespace std;
+int func(int * arr , int n)
+{
+    vector<int> dp(n+1 , 0);
+    dp[0] = 1;
+    for(int dest = 1 ; dest < n ; dest++)
+    {
+        for(int st = 0 ; st < dest ; st++)
+        {
+            if(arr[st] < arr[dest])
+            {
+                dp[dest] = max(dp[dest] , dp[st] + 1);
+            }
+        }
+    }
+    vector<int> dpr(n+1 , 0);
+    dpr[n-1] = 1;
+    for(int dest = n-2 ; dest >= 0 ; dest--)
+    {
+        for(int st = n-1 ; st > dest ; st--)
+        {
+            if(arr[st] < arr[dest])
+            {
+                dpr[dest] = max(dpr[dest] , dpr[st] + 1);
+            }
+        }
+    }
+    int changes = INT_MAX;
+    for(int ind = 0 ; ind < n ; ind++)
+    {
+      if(dp[ind] > 0 and dpr[ind] > 0)
+        changes = min( changes , n - (dp[ind] + dpr[ind]) - 1);
+    }
+    return changes;
+}
+
+// My Approach
+#include<iostream>
+#include<vector>
+#include<climits>
+#include<algorithm>
+#include<stdlib.h>
+using namespace std;
+int func(int * arr , int n)
+{
+    vector<int> dp(n+1 , 0);
+    dp[0] = 1;
+    int ans = INT_MIN;
+    int changes = INT_MAX;
+    for(int dest = 1 ; dest < n ; dest++)
+    {
+        for(int st = 0 ; st < dest ; st++)
+        {
+            if(arr[st] < arr[dest])
+            {
+                dp[dest] = max(dp[dest] , dp[st] + 1);
+            }
+        }
+        ans = max( ans , dp[dest]);
+        int end = dest;
+        while(end+1 < n and arr[end] > arr[end+1])
+        {
+          end++;
+        }
+        if(end == n-1)
+        {
+          changes = min(changes , dest - dp[dest] + 1);
+        }
+    }
+    return changes;
+}
+int main()
+{ 
+    int n = 8;
+    int arr[] = {3, 17 ,4, 12, 5, 6, 2 ,1};
+    cout << func(arr , n);
+    return 0;
+}
+//1 2 6 5 3 4 8 4 2 1
