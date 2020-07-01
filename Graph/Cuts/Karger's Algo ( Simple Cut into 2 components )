@@ -1,0 +1,64 @@
+#include<iostream>
+#include<unordered_map>
+#include<vector>
+#include<math.h>
+using namespace std;
+int n;
+int func(vector<vector<int>> edge)
+{
+  vector<int> parent(n , 0);
+  for(int v = 0 ; v < n ; v++)
+    parent[v] = v;
+  auto find = [&](int r){
+    while( r != parent[r])
+      r = parent[r];
+    return parent[r];
+  };
+  auto merge = [&](int a , int b)
+  {
+    int p1 = find(a) , p2 = find(b);
+    if(p1 == p2)
+      return p1;
+    else if(p2 > p1)
+    {
+      parent[p2] = p1;
+      return p1;
+    }
+    else
+    {
+      parent[p1] = p2;
+      return p2;
+    }
+  };
+  int v = n , E = edge.size();
+  while(v > 2)
+  {
+    int ind = rand() % E;
+    int src = edge[ind][0] , dest = edge[ind][1];
+    if(find(src) == find(dest))
+      continue;
+    parent[src] = parent[dest] = merge(src , dest);
+    v--;
+  }
+  int cutPoint = 0;
+  for(auto e : edge)
+  {
+    int src = e[0] , dest = e[1];
+    if(parent[src] != parent[dest])
+      cutPoint++;
+  }
+  return cutPoint;
+}
+int main()
+{
+  n = 4;
+  vector<vector<int>> edge = {
+    {0,1},
+    {0,3},
+    {0,2},
+    {1,3},
+    {2,3},
+  };
+  cout << "MIN Cuts Required to Split to two Components : " << func(edge);
+  return 0;
+}
