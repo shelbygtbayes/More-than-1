@@ -1,0 +1,43 @@
+#include<iostream>
+#include <vector>
+#include<algorithm>
+#include<climits>
+using namespace std;
+int main() {
+  string s = "GEEKSFORGEEKS";
+  string r = s;
+  reverse(s.begin() , s.end());
+  int n = s.size();
+  //vector<int> parent(n,-1);
+  vector<vector<int>> dp(n+1 , vector<int>(n+1 , 0));
+
+  int ans = INT_MIN;
+  for(int ptr1 = 1 ; ptr1 <= n ; ptr1++)
+  {
+    for(int ptr2 = 1 ; ptr2 <= n ; ptr2++)
+    {
+      if(s[ptr1-1] == r[ptr2-1])
+        dp[ptr1][ptr2] = dp[ptr1-1][ptr2-1] + 1;
+      else
+        dp[ptr1][ptr2] = max( dp[ptr1][ptr2-1] , dp[ptr1-1][ptr2] );
+      ans = max( ans , dp[ptr1][ptr2]);
+    }
+  }
+  string result = "";
+  int ptr1 = n , ptr2 = n;
+  while( ptr1 > 0 and ptr2 > 0 )
+  {
+    if(s[ptr1-1] == r[ptr2-1])
+    {
+      result += s[ptr1-1];
+      ptr1--;
+      ptr2--;
+    }
+    else if(dp[ptr1][ptr2-1] > dp[ptr1-1][ptr2])
+      ptr2--;
+    else
+      ptr1--;
+  }
+  cout << result << endl;
+  return 0;
+}
