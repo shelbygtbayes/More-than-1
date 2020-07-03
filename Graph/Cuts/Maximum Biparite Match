@@ -1,0 +1,52 @@
+#include<iostream>
+#include<vector>
+#define no_applicants 6
+#define no_of_jobs 6
+using namespace std;
+
+// DFS 
+bool bipartite_match(vector<vector<int>> graph , int applicant , vector<int> &occupied , vector<int> jobs)
+{
+	  for(int j = 0 ; j < no_of_jobs ; j++) // job
+	  {
+		if(!occupied[j] and graph[applicant][j])
+		{
+		  	occupied[j] = 1; // job is now occupied
+		 
+		 // Check if job is not assigned earlier
+		  // If assigned then check Assigned applicant of that job can
+		  // find the other job if Current job is removed.
+		 
+		  if(jobs[j] < 0 || bipartite_match(graph , jobs[j] , occupied , jobs))
+		  {
+				jobs[j] = applicant; // jth job assigned to the applicant
+				return 1; // return success
+		  }
+		}
+  }
+  // Can't find
+  return 0;
+}
+int maximum_bipartite_match(vector<vector<int>> &graph)
+{
+	  vector<int> jobs(no_of_jobs , -1);
+	  int ans = 0;
+	  for(int applicant = 0 ; applicant < no_applicants ; applicant++)
+	  {
+		vector<int> occupied(no_of_jobs , 0);
+		if( bipartite_match(graph , applicant , occupied , jobs))
+		  ans++;
+	  }
+	  return ans;
+}
+int main()
+{
+  vector<vector<int>> bpGraph = {{0, 1, 1, 0, 0, 0},
+                                  {1, 0, 0, 1, 0, 0},
+                                  {0, 0, 1, 0, 0, 0},
+                                  {0, 0, 1, 1, 0, 0},
+                                  {0, 0, 0, 0, 0, 0},
+                                  {0, 0, 0, 0, 0, 1}};
+    cout << "Maximum number of applicants that can get job is " << maximum_bipartite_match(bpGraph);
+  return 0;
+}
