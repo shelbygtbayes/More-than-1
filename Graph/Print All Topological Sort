@@ -1,0 +1,75 @@
+#include<iostream>
+#include<unordered_map>
+#include<vector>
+using namespace std;
+void topo_backtrack(vector<vector<int>> &ans , vector<int> &temp,
+  vector<int> &vis , vector<int> &indegree ,
+   unordered_map<int, vector<int> > & g , int n)
+{
+  bool flag = 0;
+  for(int u = 0 ; u < n ; u++)
+  {
+    if(!vis[u] and indegree[u] == 0)
+    {
+      for(auto v : g[u])
+      {
+        indegree[v]--;
+      }
+      temp.push_back(u);
+      vis[u] = 1;
+      topo_backtrack(ans , temp , vis , indegree , g , n);
+      vis[u] = 0;
+      temp.pop_back();
+      for(auto v : g[u])
+      {
+        indegree[v]++;
+      }
+      flag = 1;
+    }
+  }
+  if(!flag)
+  {
+    ans.push_back(temp);
+  }
+}
+vector<vector<int>> func(unordered_map<int , vector<int> > &g , int n)
+{
+  vector<int> indegree(n , 0);
+  vector<int> vis(n , 0);
+
+  for(int u = 0 ; u < n ; u++)
+  {
+    for(auto v : g[u])
+    {
+      indegree[v]++;
+    }
+  }
+  vector<vector<int>> ans;
+  vector<int> temp;
+  topo_backtrack(ans , temp , vis , indegree , g , n);
+  return ans;
+}
+void insert(int u , int v , unordered_map<int , vector<int> > & g)
+{
+    g[u].push_back(v);
+}
+int main()
+{
+    unordered_map<int , vector<int> > g;
+    insert( 5 , 2 , g);
+    insert( 5 , 0 , g);
+    insert( 4 , 0 , g);
+    insert( 4 , 1 , g);
+    insert( 2, 3 , g);
+    insert( 3 , 1, g);
+    vector<vector<int>> ans = func(g , 6);
+    for(auto topology : ans)
+    {
+      for(auto v : topology)
+      {
+        cout << v << " ";
+      }
+      cout << endl;
+    }
+    return 0;
+}
