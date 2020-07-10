@@ -1,0 +1,15 @@
+// Count no of set bits in a ^ b
+#include<iostream>
+using namespace std;
+int func(int a , int b)
+{
+  int x = a ^ b;
+  int n = __builtin_popcount(x);
+  return n;
+}
+int main()
+{
+  int a = 10, b = 20;
+  cout << "No of flip-bits require : " << func(a , b);
+  return 0;
+}
