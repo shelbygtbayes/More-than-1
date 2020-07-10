@@ -1,0 +1,63 @@
+#include<iostream>
+#include<vector>
+#include<climits>
+#include<bits/stdc++.h>
+using namespace std;
+struct node{
+  int val;
+  node* dir[2];
+};
+node* newNode()
+{
+  node* n = new node();
+  n->val = 0;
+  n->dir[0] = n->dir[1] = NULL;
+  return n;
+};
+node* insert_xor(node* root , int _xor)
+{
+  node* temp = root;
+  for(int bit = 31 ; bit >=0 ; bit--)
+  {
+      bool bit_val =  _xor & (1 << bit);
+      if(temp->dir[bit_val] == NULL)
+        temp->dir[bit_val] = newNode();
+
+      temp = temp->dir[bit_val];
+  }
+  temp->val = _xor; // value present in the XOR tree
+  return root;
+}
+int search_max_avail(node*root , int _xor )
+{
+  node* temp = root;
+  for(int bit = 31 ; bit >= 0 ; bit--)
+  {
+    bool bit_val = (1 << bit) & _xor;
+    if(temp->dir[1 - bit_val]) // If opposite exits --> for max xor
+      temp = temp->dir[1 - bit_val];
+    else if(temp->dir[bit_val])
+      temp = temp->dir[bit_val];
+  }
+  return temp->val ^ _xor; // if all same then a ^ a = 0
+}
+int max_xor_subaaray(vector<int> &arr , int n)
+{
+  node* root = newNode();
+  root = insert_xor(root , 0);
+  int ans = INT_MIN , _xor = 0;
+  for(auto v : arr)
+  {
+    _xor = _xor ^ v;
+    root = insert_xor(root , _xor);
+    ans = max(ans, search_max_avail(root , _xor));
+  }
+  return ans;
+}
+int main()
+{
+  vector<int> arr{8, 1, 2, 12, 7, 6};
+  int n = arr.size();
+  cout << "Max Sub-array XOR Sum : " << max_xor_subaaray(arr , n);
+  return 0;
+}
