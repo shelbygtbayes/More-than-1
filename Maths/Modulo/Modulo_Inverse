@@ -1,0 +1,37 @@
+/*The multiplicative inverse of “a modulo m” exists
+iff a and m are relatively prime (i.e., if gcd(a, m) = 1).
+Using cofficients of gcdExtend
+*/
+#include<iostream>
+#include<vector>
+using namespace std;
+vector<int> gcdExtend(int a , int b )
+{
+  int x , y;
+  if(a == 0)
+  {
+    x = 0;
+    y = 1;
+    return vector<int>{b , x , y};
+  }
+  vector<int> ans = gcdExtend(b % a , a);
+  int gcd = ans[0] , x1 = ans[1] , y1 = ans[2];
+  x = y1 - (b/a)*x1;
+  y = x1;
+  return vector<int>{gcd , x , y};
+}
+int modolo_inverse(int x , int m)
+{
+  vector<int> ans = gcdExtend(x , m);
+  int gcd = ans[0] , x1 = ans[1] ;
+  if(gcd != 1)
+  {
+    return -1; // Not exists
+  }
+  return (x1 % m + m) % m; // If negative
+}
+int main()
+{
+  cout << modolo_inverse(3 , 11);
+  return 0;
+}
