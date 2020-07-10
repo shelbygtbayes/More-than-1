@@ -1,0 +1,46 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+int check_palind(string s , int st , int end)
+{
+  while(st <= end)
+  {
+    if(s[st] != s[end])
+      return 0;
+    st++;
+    end--;
+  }
+  return 1;
+}
+void func(vector<string> temp , vector<vector<string>> &ans , int st , string s)
+{
+  int n = s.size();
+  if(st >= n)
+  {
+    ans.push_back(temp);
+    return;
+  }
+  for(int index = st ; index < n ; index++)
+  {
+    if(check_palind(s , st , index))                        // if got a palindrome s , insert to temp and check for the coming string
+    {
+      temp.push_back(s.substr(st , index-st+1));
+      func(temp , ans , index+1 , s);
+      temp.pop_back();                                    // pop out for other combonition
+    }
+  }
+}
+int main()
+{
+  string s = "nitin";
+  vector<string> temp;
+  vector<vector<string>> ans;
+  func(temp , ans, 0 , s);
+  for(auto collec : ans)
+  {
+    for(auto str : collec)
+      cout << str << " ";
+    cout << endl;
+  }
+  return 0;
+}
