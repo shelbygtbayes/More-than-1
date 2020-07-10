@@ -1,0 +1,26 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+// To find gcd and (a , b) values from (a*x + b*y = gcd)
+vector<int> gcdExtend(int a , int b )
+{
+  int x , y;
+  if(a == 0)
+  {
+    x = 0;
+    y = 1;
+    return vector<int>{b,x,y};
+  }
+  vector<int> result = gcdExtend( b%a , a);
+  int gcd = result[0], x1 = result[1] , y1 = result[2];
+  x = y1 - (b/a) * x1;
+  y = x1;
+  return vector<int> {gcd , x , y};
+}
+int main()
+{
+  int a = 35 , b = 15;
+  vector<int> ans = gcdExtend(a,b);
+  cout << ans[0] << " " << ans[1] << " "<< ans[2];
+  return 0;
+}
