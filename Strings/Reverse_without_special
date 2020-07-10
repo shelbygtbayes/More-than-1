@@ -1,0 +1,28 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+string func(string s)
+{
+  int end = s.size() - 1;
+  int st = 0;
+  while(st <= end)
+  {
+    if(isalpha(s[st]) and isalpha(s[end]))
+    {
+      swap(s[st] , s[end]);
+      st++;
+      end--;
+    }
+    else if(isalpha(s[st]))
+      end--;
+    else
+      st++;
+  }
+  return s;
+}
+int main()
+{
+  string s = "Ab,c,de!$";
+  cout << func(s) << endl;
+  return 0;
+}
