@@ -1,0 +1,35 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+int func(vector<int> arr , int sum)
+{
+  sort(arr.begin() , arr.end());
+  int n = arr.size();
+  int ans = 0;
+  for(int st = 0 ; st < n-2 ; st++)
+  {
+    int x = sum - arr[st];
+   
+    int front = st+1 , back = n-1;
+    while(front < back)
+    {
+      int val = arr[front] + arr[back];
+      if(val < x)
+      {
+        ans += (back - front);
+        front++;
+      }
+      else
+        back--;
+    }
+  }
+  return ans; 
+}
+int main()
+{
+  vector<int> arr{5, 1, 3, 4, 7};
+  int x = 12;
+  cout << func(arr , x);
+  return 0;
+}
