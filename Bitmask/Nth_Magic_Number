@@ -1,0 +1,26 @@
+// Key Concept
+// nth magic here
+// extending binary (2) to nth number
+// 1  2 4 8 16  32  ...
+// 5  25  125 625 ...
+#include<bits/stdc++.h>
+using namespace std;
+int nth_magic(int n)
+{
+  int sum = 0;
+  int pow = 1;
+  while(n)
+  {
+    pow = pow*5;
+    if(n & 1)
+      sum += pow;
+    n = n >> 1;
+  }
+  return sum;
+}
+int main()
+{
+  int n = 125;
+  cout << nth_magic(n);
+  return 0;
+}
