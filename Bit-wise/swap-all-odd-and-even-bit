@@ -1,0 +1,24 @@
+#include<iostream>
+using namespace std;
+int swap_bits(int n)
+{
+  // to swap bits
+  // use A -> decimal(10) -> binary(1010) --> give even bits
+  // use 5 -> decimal(5) -> binary(0101) --> give odd bits
+  // Now shift evenbits by 1 to right
+  // shift oddbits by 1 to left
+  // Combine the number formed
+  
+  int even_bits = 0xAAAAAAAA & n;
+  int odd_bits = 0x55555555 & n;
+  even_bits >>= 1;
+  odd_bits <<= 1;
+  
+  return (even_bits | odd_bits);
+}
+int main()
+{
+  int n = 23;
+  cout << swap_bits(n);
+  return 0;
+}
