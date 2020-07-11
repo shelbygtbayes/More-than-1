@@ -1,0 +1,96 @@
+// Checkout yourself Please Mast hai
+#include<iostream>
+#include<vector>
+using namespace std;
+// Merging Style
+int iterative_func(vector<int> arr , int n)
+{
+  int dp[n][n];
+  /*
+  //Merge Style
+  for(int len = 0 ; len < n ; len++)
+  {
+    for(int st = 0 ; st < n - len ; st++)
+    {
+      int end = st + len;
+      int x = ((st + 2) <= end) ? dp[st+2][end] : 0;
+      int y = ((st+1) <= end-1) ? dp[st+1][end-1] : 0;
+      int z = (st <= end-2) ? dp[st][end-2] : 0;
+      dp[st][end] = max(min(x,y) + arr[st] , min(y,z) + arr[end]);
+    }
+  }
+  /*/
+  //Another way Diagonal Style
+  for (int len = 0; len < n; len++)
+  {
+      int st = 0;
+      int end = len;
+      while(end < n)
+      {
+        int x = ((st + 2) <= end) ? dp[st+2][end] : 0;
+        int y = ((st+1) <= end-1) ? dp[st+1][end-1] : 0;
+        int z = (st <= end-2) ? dp[st][end-2] : 0;
+        dp[st][end] = max(min(x,y) + arr[st] , min(y,z) + arr[end]);
+        st++;
+        end++;
+      }
+    }
+  //*/
+  return dp[0][n-1];
+}
+int func(vector<int> arr , int st , int end) // recurrsive
+{
+  if(st == end)
+    return arr[st];
+  else if(end == st+1)
+    return max( arr[st] , arr[end] );
+  else
+    return max(
+      arr[st] + min( func(arr , st+2 , end) , func(arr , st+1 , end-1)),
+      arr[end] + min( func(arr , st+1 , end-1) , func(arr , st , end-2))
+    );
+}
+// memoization
+int memo_func(int st , int end , vector<vector<int>> &dp , vector<int> &arr , int n)
+{
+  if(st == end)
+    return dp[st][end] = arr[st];
+  else if(st+1 == end)
+    return dp[st][end] = max( arr[st] , arr[end] );
+  else if(dp[st][end] != -1)
+    return dp[st][end];
+  else
+  {
+    dp[st][end] = max(
+        arr[st] + min( memo_func(st+2 , end , dp , arr , n) , memo_func(st+1 , end-1 , dp , arr , n)),
+        arr[end] + min( memo_func(st+1 , end-1 , dp , arr , n) , memo_func(st , end-2 , dp , arr , n))
+                    );
+  }
+  return dp[st][end];
+}
+int main()
+{
+  vector<int> arr{20, 30, 2, 2, 2, 10 };
+  int n = arr.size();
+  vector<vector<int>> dp(n , vector<int>(n , -1));
+  cout << "Max coin gain : " << func(arr , 0 , n-1) << endl;
+  cout << "Max coin gain : " << memo_func(0 , n-1 , dp , arr , n) << endl;
+  cout << "Max coin gain : " << iterative_func(arr , n);
+  return 0;
+}
+
+// Approach
+// User pick st -> then opponent might pick 1-> st+1 ( then User left (st+2 , end) ) or
+//                                          2-> end ( then User left (st+1 , end-1))
+//  Since Opponent is optimal he will pick Max and give min(1 , 2) -> for User
+// User pick end -> then opponent might pick 3-> st ( then User left (st+1 , end-1) ) or
+//                                           4-> end ( then User left (st , end-2))
+//  Since Opponent is optimal he will pick Max and give min(3 , 4) -> for User
+// Since User is Optimal that will pick max
+//  hence User -> max( min(1,2) , min(3,4) )
+// consider cases :
+// Opponent tries to pick such that next turn we got minimum
+// func(st , end) = min(
+//                    arr[st] + max( func(st+2 , end) , func(st+1 , end-1))
+// ,                  arr[end] + max( func(st+1 , end-1) , func( st , end-2))
+//                    );
