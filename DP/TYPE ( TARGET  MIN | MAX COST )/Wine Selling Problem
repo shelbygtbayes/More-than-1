@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+int max(int a , int b)
+{
+    return (a > b) ? a : b;
+}
+int min(int a , int b)
+{
+    return (a < b) ? a : b;
+}
+
+int func(int st , int end , int* arr , int n , int y)
+{
+    if(st > end) 
+        return 0;
+    else if(st == end)
+        return arr[st]*y;
+    else if(end == st + 1)
+        return max(arr[st] , arr[end]) * (y+1) + min(arr[st], arr[end]) * y;
+    int left =  func(st+1 , end , arr , n , y+1) + arr[st] * y;
+    //printf("%d - %d Left : %d\n",st, end,left);
+    
+    int right = func(st , end-1 , arr , n , y+1) + arr[end] * y;
+    //printf("%d - %d Right : %d\n",st, end,right);
+    
+    return max( left, right);
+}
+int main() {
+
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */    
+    int n;
+    scanf("%d",&n);
+    int arr[n];
+    for(int index = 0 ; index < n ; index++)
+    {
+        int temp;
+        scanf("%d" , &temp);
+        arr[index] = temp;
+    }
+    int ans = func(0 , n-1 , arr , n , 1);
+    printf("%d" , ans);
+    return 0;
+}
