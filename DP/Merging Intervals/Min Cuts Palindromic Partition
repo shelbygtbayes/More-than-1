@@ -1,0 +1,46 @@
+#include<iostream>
+#include<vector>
+#include<climits>
+using namespace std;
+int min_palindromic_partitions(string s)
+{
+  int n = s.size();
+  vector<vector<int>> dp(n,vector<int>(n,INT_MAX));
+  vector<vector<bool>> ispalin(n,vector<bool>(n,0));
+
+  for(int len = 0 ; len < n ; len++)
+  {
+    for(int st = 0 ; st < n-len ; st++)
+    {
+      int end = st+len;
+      if(st == end)
+      {
+        ispalin[st][end] = 1;
+      }
+      else if(len == 1 and s[st] == s[end])
+      {
+        ispalin[st][end] = 1;
+      }
+      else if(s[st] == s[end] and ispalin[st+1][end-1])
+      {
+        ispalin[st][end] = 1;
+      }
+      if(ispalin[st][end])
+        dp[st][end] = 0;
+      else
+      {
+        for(int k = st; k < end ; k++)
+        {
+          dp[st][end] = min( dp[st][k] + dp[k+1][end] + 1 , dp[st][end] );
+        }
+      }
+    }
+  }
+  return dp[0][n-1];
+}
+int main()
+{
+  string s = "ababbbabbababa";
+  cout << min_palindromic_partitions(s);
+  return 0;
+}
