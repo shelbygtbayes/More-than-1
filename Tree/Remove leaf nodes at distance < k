@@ -1,0 +1,82 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+struct node{
+  int val;
+  node* left , *right;
+};
+node* newNode(int v)
+{
+  node* n = new node();
+  n->val = v;
+  n->left = n->right = NULL;
+  return n;
+}
+void level_order(int level , node* r)
+{
+  if(!r) return;
+  if(level == 0)
+  {
+    cout << r->val << " ";
+    return;
+  }
+  level_order(level-1 , r->left);
+  level_order(level-1 , r->right);
+}
+int height(node * root)
+{
+  if(!root) return 0;
+  int l = height(root->left);
+  int r = height(root->right);
+  return max(l,r) + 1;
+}
+void level_traversal(node* root)
+{
+  int h = height(root);
+  for(int level = 0 ; level < h ; level++)
+  {
+    level_order(level , root);
+    cout << endl;
+  }
+}
+bool isLeaf(node* r)
+{
+  if(!(r->left) and !(r->right))
+    return 1;
+  return 0;
+}
+// Main Code Here 
+node* remove_k(node* root , int level , int k)
+{
+  if(!root)
+    return NULL;
+  root->left = remove_k(root->left , level +1 , k);
+  root->right = remove_k(root->right , level +1 , k);
+  if(isLeaf(root) and level < k)
+  {
+    delete root;
+    return NULL;
+  }
+  return root;
+}
+
+int main()
+{
+    int k = 4;
+    node *root = newNode(1);
+    root->left = newNode(2);
+    root->right = newNode(3);
+    root->left->left = newNode(4);
+    root->left->right = newNode(5);
+    root->left->left->left = newNode(7);
+    root->right->right = newNode(6);
+    root->right->right->left = newNode(8);
+    cout << "Level Traversal of Original tree" << endl;
+    level_traversal(root);
+    cout << endl;
+    cout << "Level Traversal of Modified tree" << endl;
+    root = remove_k(root , 1 , k);
+    level_traversal(root);
+    //return 0;
+  return 0;
+}
