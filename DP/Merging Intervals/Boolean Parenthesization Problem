@@ -1,0 +1,97 @@
+#include<iostream>
+using namespace std;
+int func(int st ,int end, bool true_req , string arr)
+{
+  if(st > end) return 0;
+  if(st == end)
+  {
+    if(true_req)
+      return arr[st] == 'T';
+    else
+      return arr[st] == 'F';
+  }
+  int ans = 0;
+  for(int k = st+1 ; k < end ; k += 2) // In between 2 operands
+  {
+    int left_true  =  func(st , k-1 , 1 , arr);
+    int right_true =  func(k+1 , end , 1 , arr);
+    int left_false  = func(st , k-1 , 0 , arr);
+    int right_false = func(k+1 , end , 0 , arr);
+    
+    if(arr[k] == '&')
+    {
+      if(true_req)
+        ans += left_true * right_true;
+      else
+        ans += left_false * right_false + left_false * right_true + left_true * right_false;
+    }
+    else if(arr[k] == '|')
+    {
+      if(true_req)
+        ans += left_true * right_true + left_false * right_true + left_true * right_false;
+      else
+        ans += left_false * right_false;
+    }
+    else
+    {
+      if(true_req)
+        ans += left_true * right_false + left_false * right_true;
+      else
+        ans += left_false * right_false + left_true * right_true;
+    }
+  }
+  return ans;
+}
+/*char symbols[] = "TTFT";
+char operators[] = "|&^";
+*/
+int main()
+{
+  string s = "T|T&F^T";
+  cout << func(0 , s.size()-1 , 1 , s);
+  return 0;
+}
+/*
+if t(left) --> no of ways for which left -> true
+   f(left) --> no of ways for which left -> false
+
+if exp = left operator right
+then
+if opertor =  &
+then t(exp) = t(left) * t(right)
+and f(exp)  = f(left) * f(right) + f(left) * t(right) + t(left) * f(right);
+
+if opertor =  |
+then t(exp) = t(left) * t(right) + f(left) * t(right) + t(left) * f(right)
+and  f(exp) = f(left) * f(right)
+
+if opertor =  ^
+then t(exp) = t(left) * f(right) + f(left) * t(right)
+and  f(exp) = f(left) * f(right) + t(left) * t(right)
+
+
+func(st , end)
+{
+  if(st > end) return 0;
+  if(st == end)
+  {
+    if(true_req)
+      return arr[st] == 'T';
+    else
+      return arr[st] == 'T';
+  }
+  // st
+  // |
+  // a ^ b & c | d 
+  //   |         |
+  //   k         end
+  int ans = 0;
+  for(int k = st+1 ; k < end ; k += 2) // In between 2 operands
+  {
+    left  = [st , k-1]
+    right = [k+1 , end]
+    ans += check operator and find the val
+  }
+  return ans;
+}
+*/
