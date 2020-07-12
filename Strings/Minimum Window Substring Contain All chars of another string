@@ -1,0 +1,55 @@
+#include<iostream>
+#include<climits>
+#include<map>
+using namespace std;
+void func(string pattern , string text)
+{
+  map<char , int> cnt_pattern , cnt_text;
+  for(auto c : pattern)
+    cnt_pattern[c]++;
+  int st = 0 , ans = INT_MAX;
+  int beg = -1 , fin = -1;
+  int cnt = 0;
+  for(int end = 0 ; end < text.size() ; end++)
+  {
+      char c = text[end];
+      if(cnt_pattern[c] == 0) // if not require
+        continue;
+      cnt_text[c]++;
+      if(cnt_pattern[c] >= cnt_text[c]) // Has Pattern Chars
+        cnt++;
+      if(cnt == pattern.size()) // Window found all chars
+      {
+        // Remove not require or excess
+        while( cnt_pattern[text[st]] == 0 or
+        cnt_text[text[st]] > cnt_pattern[text[st]])
+        {
+          if(cnt_text[text[st]] > cnt_pattern[text[st]])
+            cnt_text[text[st]]--;
+          st++;
+        }
+        int len = end - st + 1;
+        if(len < ans)
+        {
+          beg = st;
+          fin = end;
+          ans = len;
+        }
+      }
+  }
+  if(ans != INT_MAX)
+  {
+    for(int index = beg; index <= fin ; index++)
+    {
+        cout << text[index] << " ";
+    }
+  }
+//  return ans;
+}
+int main()
+{
+  string text = "ABXBACBADAS";
+  string pattern = "BABD";
+  func(pattern,text);
+  return 0;
+}
