@@ -1,0 +1,33 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+char* removeAdjDup(char * s, int n)
+{
+    int index;
+    int k = 0; 
+    /*cout <<"Begin "<< s << endl;
+    cout <<"Length Taken : " << n << endl;*/
+    for (index=1; index < n; index++)
+    {
+        if (s[index-1] != s[index]) // Copying the different
+            s[k++] = s[index-1];
+        else
+            while(s[index-1] == s[index]) // Removing Adjacent
+                index++;
+    }
+    s[k++] = s[index-1]; // Last Char
+    s[k] =  '\0'; // Null Character "End for new string"
+    /*cout <<"Ended "<< s << endl;
+    cout <<"Length Taken : " << k << endl;*/
+    if (k != n) // If All characters are not taken
+        return removeAdjDup(s, k);
+    return s;
+}
+int main()
+{
+  char s[] = "ABCCBCBANNNNNN";
+  int n = strlen(s);
+  removeAdjDup(s , n);
+  cout << s;
+  return 0;
+}
