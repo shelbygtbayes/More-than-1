@@ -32,8 +32,6 @@ int Solution::anytwo(string A) {
     int n = res.size();
     if(ispalind(res)) 
     {
-        if(n & 1) // Odd length  
-            return A[n/2] == A[n/2-1];  
         return 0;
     }
     else // If not a palindrome -> definetly exists 
