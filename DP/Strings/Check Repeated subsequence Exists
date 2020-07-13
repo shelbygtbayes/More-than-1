@@ -1,0 +1,43 @@
+bool ispalind(string r)
+{
+  int st = 0 , end = r.size()-1;
+  while(st <= end)
+  {
+      if(r[st] != r[end])
+        return 0;
+      st++;
+      end--;
+  }
+  return 1;
+}
+int Solution::anytwo(string A) {
+    //int n = A.size();
+    if(A.size() == 1)
+        return 0;
+    unordered_map< char , int > cnt;
+    for(auto c : A)
+        cnt[c]++;
+    for(auto c : A)
+    {
+        if(cnt[c] > 2)  // If exists 3 elements of same char as A(A)A --> repeated subsequence can be generated as A(A) and (A)A
+            return 1;
+    }
+   
+    string res = "";
+    for(auto c : A)
+    {
+        if(cnt[c] > 1) // Take only repeating chars
+            res += c;
+    }
+    int n = res.size();
+    if(ispalind(res)) 
+    {
+        if(n & 1) // Odd length  
+            return A[n/2] == A[n/2-1];  
+        return 0;
+    }
+    else // If not a palindrome -> definetly exists 
+        return 1;
+}
+
+
