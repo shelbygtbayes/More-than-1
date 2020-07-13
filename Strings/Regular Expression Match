@@ -1,0 +1,32 @@
+int Solution::isMatch(const string A, const string B) 
+{
+    int n = A.size() , m = B.size();
+    bool dp[n+1][m+1];
+    memset(dp , 0, sizeof(dp));
+    dp[0][0] = 1;
+    for(int ind1 = 1 ; ind1 <= m ; ind1++)
+    {
+        if(B[ind1-1] == '*')               
+            dp[0][ind1] = dp[0][ind1-1];    
+    }
+    for(int ind1 = 1 ; ind1 <= n ; ind1++)
+    {
+        for(int ind2 = 1 ; ind2 <= m ; ind2++)
+        {
+            if(A[ind1-1] == B[ind2-1] or B[ind2-1] == '?')
+                dp[ind1][ind2] = dp[ind1-1][ind2-1];        //  Like Replace 
+            else if(B[ind2-1] == '*')
+                dp[ind1][ind2] = dp[ind1][ind2-1] or dp[ind1-1][ind2]; 
+        }
+    }
+    return dp[n][m];
+}
+/*
+
+Case 1: The character is {*}
+Here two cases arise
+
+    We can ignore {*} character and move to next character in the Pattern.                                          [ind1][ind2-1]
+    {*} character matches with one or more characters in Text. Here we will move to next character in the string.   [ind1-1][ind2]
+
+*/
