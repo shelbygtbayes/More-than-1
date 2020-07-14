@@ -1,0 +1,26 @@
+vector<int> Solution::solve(int A, int B, int C, int D) {
+    vector<int>ans;
+    set<int>s;
+    s.insert(A);
+    s.insert(B);
+    s.insert(C);
+    if(!D) return ans;
+    while(!s.empty()) 
+    {
+        int t = *(s.begin());
+        s.erase(s.begin());
+        ans.push_back(t);
+        if(ans.size()==D) return ans;
+        s.insert(t*A);
+        s.insert(t*B);
+        s.insert(t*C);
+    }
+}
+/*
+A             B             C 
+|
+A*(a,b,c)     |
+              B*(b,c)     C
+
+res = A
+vis[]*/
