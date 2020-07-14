@@ -1,0 +1,36 @@
+int Solution::isMatch(const string A, const string B) {
+    int n = A.size();
+    int m = B.size();
+    bool dp[n+1][m+1];
+    memset(dp , 0 , sizeof(dp));
+    dp[0][0] = 1;
+    for(int ind2 = 1; ind2 <= m ; ind2++)  // Matching for * (Empty case Handle)
+    {
+        if(B[ind2-1] == '*' and ind2 >= 2)
+            dp[0][ind2] = dp[0][ind2-2];
+    }
+    for(int ind1 = 1; ind1 <= n ; ind1++)
+    {
+        for(int ind2 = 1; ind2 <= m ; ind2++)
+        {
+            if(B[ind2-1] == '.' or B[ind2-1] == A[ind1-1]) // Like LCS match or Replace
+                dp[ind1][ind2] = dp[ind1-1][ind2-1];
+            else if(B[ind2-1] == '*' and ind2 >= 2) 
+            {
+                dp[ind1][ind2] = dp[ind1][ind2-2]; // Considering 0 occurence ( by ignoring the preceeding letter too ) 
+                if((B[ind2-2] == '.' or B[ind2-2] == A[ind1-1])) 
+                    dp[ind1][ind2] = dp[ind1][ind2] or dp[ind1-1][ind2]; // For the rest Match left in the text
+                    // Since we need to check for multiple occurence iff previous text matches upto the current pattern index
+            }
+            else
+                dp[ind1][ind2] = 0;
+        }
+    }
+    return dp[n][m];
+}
+  ind1
+   | 
+abcdkhflpopg
+abcde****lmo
+   |
+  ind2
