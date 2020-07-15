@@ -1,0 +1,60 @@
+// O(sum) and O(1)
+int count(int n , int sum)
+{
+//in case n = 2 start is 10 and end is (100-1) = 99  
+    int start = pow(10, n-1);  
+    int end = pow(10, n)-1;  
+
+    int count = 0;  
+    int num = start;  
+          
+     while(num <= end)
+     {     
+      int cur = 0;  
+      int temp = num;  
+
+      while( temp != 0)
+      {  
+          cur += temp % 10;  
+          temp = temp / 10;  
+      }  
+
+      if(cur == sum)
+      {              
+          count++;              
+          num += 9;          
+       }
+       else
+          num++;   
+     }      
+     return count;  
+}
+// dp
+int Solution::solve(int N, int sum) {
+    if(N == 0)
+        return 0;
+    if(N == 1)
+        return (sum >= 0 and sum <= 9);
+    vector<vector<int>> dp(N+1 , vector<int>(sum+1 , 0));
+    dp[0][0] = 1;
+    int mod = 1e9 + 7;
+    for(int n = 1 ; n <= N ; n++)
+    {
+        for(int s = 0 ; s <= sum ; s++)
+        {
+              int st = 0;
+              if(n == 1)
+                  st = 1;
+              for(int val = st ; val < 10 ; val++)
+              {
+                  if(s-val >= 0)
+                  {
+                      dp[n][s] += dp[n-1][s - val];
+                      dp[n][s] %= mod;
+                  }
+              }
+          }
+      }
+  
+    return dp[N][sum];
+}
