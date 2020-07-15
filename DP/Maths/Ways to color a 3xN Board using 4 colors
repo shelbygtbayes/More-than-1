@@ -1,0 +1,103 @@
+/*
+f(0) = 12
+g(0) = 24
+
+f(x+1) = 7*f(x) + 5*g(x)
+g(x+1) = 10*f(x) + 11*g(x)
+
+return f(n) + g(n)
+*/
+int Solution::solve(int n) 
+{
+    if(n <= 0)
+        return 1;
+    long long int mod = 1e9 + 7;
+    
+    vector<long long int> ways_2_colors(n+1, 0);
+    vector<long long int> ways_3_colors(n+1, 0);
+    
+    ways_2_colors[1] = 12;
+    ways_3_colors[1] = 24;
+    
+    for(int c = 2 ; c <= n ; c++)
+    {
+        ways_2_colors[c] = ((7*ways_2_colors[c-1] ) % mod+ (5*ways_3_colors[c-1] )% mod) % mod;
+        ways_3_colors[c] = ((10*ways_2_colors[c-1]) % mod +(11*ways_3_colors[c-1])% mod) % mod;
+    }
+    return (int)((ways_2_colors[n] % mod + ways_3_colors[n] % mod)% mod);
+}
+/*
+Brute force Type
+vector< vector<int> > firstcol;
+void func()
+{
+    for(int r1 = 0 ; r1 < 4 ; r1++)
+    {
+        for(int r2 = 0 ; r2 < 4 ; r2++)
+        {
+            for(int r3 = 0 ; r3 < 4 ; r3++)
+            {
+                if(r1 != r2 and r2 != r3)
+                    firstcol.push_back({r1,r2,r3});
+            }
+        }
+    }
+}
+//    c1 c2 c3    n
+int dp[4][4][4][100001];
+bool check(vector<int> c1 , vector<int> c2)
+{
+    if(c1[0] == c2[0] or c1[1] == c2[1] or c1[2] == c2[2])
+        return 0;
+    return 1;
+}
+int Solution::solve(int n) 
+{
+    if(n <= 0)
+        return 1;
+    long long int mod = 1e9 + 7;
+    func();
+    for(int col = 1 ; col <= n ; col++)
+    {
+        for(int comb1 = 0 ; comb1 < 36 ; comb1++)
+        {
+            int row1 = firstcol[comb1][0];
+            int row2 = firstcol[comb1][1];
+            int row3 = firstcol[comb1][2];
+            
+            if(col == 1)
+                dp[ row1 ][ row2 ][ row3 ][col] = 1;
+            else
+            {
+                long long int sum = 0;
+                for(int comb2 = 0 ; comb2 < 36 ; comb2++)
+                {
+                    if(check(firstcol[comb1] , firstcol[comb2]))
+                    {
+                        int r1 = firstcol[comb2][0];
+                        int r2 = firstcol[comb2][1];
+                        int r3 = firstcol[comb2][2];
+                        
+                        sum += dp[r1][r2][r3][col-1];
+                        sum %= mod;
+                    }
+                }
+                dp[ row1 ][ row2 ][ row3 ][col] = sum;
+            }
+        }
+    }
+    
+    long long int ans = 0;
+    
+    for(int comb = 0 ; comb < 36 ; comb++)
+    {
+        int r1 = firstcol[comb][0];
+        int r2 = firstcol[comb][1];
+        int r3 = firstcol[comb][2];
+        
+        ans += dp[r1][r2][r3][n];
+        ans %= mod;
+    }
+    return ans;
+}  
+*/
