@@ -1,0 +1,34 @@
+int Solution::chordCnt(int n) {
+    if(n == 1)
+        return 1;
+    vector<long long int> dp(2*n + 1,0);
+    dp[0] = 0;
+    dp[1] = 0;
+    dp[2] = 1;
+    long long int mod = 1e9 + 7;
+    for(int points = 4 ; points <= 2*n ; points+=2)
+    {
+        long long int sum = 0;
+        for(int fh = 0 ; fh < points ; fh++) // considering the points in the first half
+        {
+            int sh = points - fh - 2 ; // the points of partition --> otherwise will intersect
+            if(fh == 0)
+            {
+                sum += dp[sh];
+                sum %= mod;   
+            }
+            else if(sh == 0)
+            {
+                sum += dp[fh];
+                sum += mod;
+            }
+            else
+            {
+                sum += ((dp[fh] * dp[sh])%mod); // n*m --> in terms of correct ways
+                sum %= mod;
+            }
+        }
+        dp[points] = sum;
+    }
+    return dp[2*n];
+}
