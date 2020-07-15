@@ -1,0 +1,34 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+void func(int n , int sum , int temp , int place , int N, vector<int> &ans)
+{
+    if(n == N)
+    {
+        if(sum == 0)
+            ans.push_back(temp);
+        return;
+    }
+    int st = 0;
+    if(n == 0)
+        st = 1;
+    for(int val = st ; val < 10 ; val++)
+    {
+        sum -= val;
+        temp = temp*place + val;
+        func(n+1 , sum , temp , place*10 , N, ans);
+        sum += val;
+        temp -= val;
+        temp /= place;
+    }
+}
+int main()
+{
+  int N = 3;
+  int sum = 15;
+  vector<int> ans;
+  func(0 , sum , 0 , 1 , N , ans);
+  for(auto c : ans)
+    cout << c << " ";
+  return 0;
+}
