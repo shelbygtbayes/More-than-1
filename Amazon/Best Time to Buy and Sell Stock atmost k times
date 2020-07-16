@@ -1,0 +1,51 @@
+// O(n*k)
+int Solution::solve(vector<int> &prices, int k)
+{
+    int n = prices.size();
+    if( n <= 1)
+        return 0;
+     if( k > n ) 
+        k = n;
+    vector<vector<int>> profit(k+1 , vector<int>(n));
+    for(int ind = 0 ; ind < n ; ind++)
+        profit[0][ind] = 0;
+    
+    for(int times = 0 ; times <= k ; times++)
+        profit[times][0] = 0;
+        
+    for(int times = 1 ; times <= k ; times++)
+    {
+        int prev_diff = INT_MIN;
+        for(int day = 1 ; day < n ; day++)
+        {
+            prev_diff = max( prev_diff , profit[times-1][day-1] -  prices[day-1]);
+            profit[times][day] = max( profit[times][day-1] , prev_diff + prices[day]);
+        }
+    }
+    return profit[k][n-1];
+}
+// O( n*n*k ) TLE
+/*int Solution::solve(vector<int> &price, int k) 
+{   
+    int n = price.size();
+    int profit[k + 1][n]; 
+  
+    for (int times = 0; times <= k; times++) 
+        profit[times][0] = 0; 
+  
+    for (int ind = 0; ind < n; ind++) 
+        profit[0][ind] = 0; 
+  
+    for (int times = 1; times <= k; times++) 
+    { 
+        for (int end = 1; end < n; end++)
+        { 
+            int max_so_far = INT_MIN; 
+            for (int st = 0; st < end; st++) 
+                max_so_far = max(max_so_far, price[end] - price[st] + profit[times - 1][st]); 
+  
+            profit[times][end] = max(profit[times][end - 1], max_so_far); 
+        } 
+    } 
+    return profit[k][n]; 
+}*/
