@@ -1,0 +1,39 @@
+// Find max element at manhattan dis = 1 and update the input matrix for same
+// now after completion for dis = 1 repeat the same process for the updated ans as input
+
+vector<vector<int> > Solution::solve(int k, vector<vector<int> > &matrix) 
+{
+    int n = matrix.size() , m = matrix[0].size();
+    vector<vector<int> > ans = matrix;
+    auto check = [&](int r , int c)
+    {
+        if(r < 0 or c < 0 or r >= n or c >=m) 
+                return 0;
+        return 1;
+    };
+    int dx[4] = {-1,1,0,0};
+    int dy[4] = {0,0,-1,1};
+    for(int d = 1 ; d <= k ; d++)
+    {
+        for(int r = 0 ; r < n ; r++)
+        {
+            for(int c = 0 ; c < m ; c++)
+            {
+                    int temp = matrix[r][c];
+                    for(int dir = 0 ; dir < 4 ; dir++)
+                    {
+                        int x = r + dx[dir];
+                        int y = c + dy[dir];
+                        if(check(x,y))
+                            temp = max(temp , matrix[x][y]);
+                    }
+                    ans[r][c] = temp;
+            }
+        }
+        matrix = ans;
+    }
+    return matrix;
+}
+
+
+
