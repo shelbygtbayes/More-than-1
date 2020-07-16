@@ -1,0 +1,51 @@
+int Solution::longestValidParentheses(string s) {
+    int n = s.size(); 
+    if(n == 1)
+        return 0;
+    int result = 0; 
+    vector<int> longest(n, 0); 
+    for (int index = 1; index < n; index++)
+    { 
+        int closing = index - longest[index-1] - 1;
+        if(s[index] == ')' && closing >= 0 && s[closing] == '(') 
+        { 
+            int x = (closing-1 >= 0)  ? (longest[closing - 1]) : (0);
+            longest[index] = longest[index - 1] + 2 +  x; 
+            result = max(longest[index], result); 
+        } 
+    } 
+    return result; 
+}
+
+int solve(string s, int n) 
+{ 
+    int left = 0, right = 0, maxlength = 0; 
+    for (int i = 0; i < n; i++) 
+    { 
+        if (s[i] == '(') 
+            left++; 
+        else
+            right++; 
+  
+        if (left == right) 
+            maxlength = max(maxlength, 2 * right); 
+        else if (right > left) 
+            left = right = 0; 
+    } 
+  
+    left = right = 0; 
+    // Reverse check
+    for (int i = n - 1; i >= 0; i--)
+    { 
+        if (s[i] == '(') 
+            left++; 
+        else
+            right++; 
+        
+        if (left == right) 
+            maxlength = max(maxlength, 2 * left); 
+        else if (left > right) 
+            left = right = 0; 
+    } 
+    return maxlength; 
+} 
