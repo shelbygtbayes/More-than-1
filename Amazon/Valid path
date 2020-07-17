@@ -1,0 +1,46 @@
+string Solution::solve(int x, int y, int n, int rad, vector<int> &xc, vector<int> &yc) {
+    
+    vector<vector<int>> matrix(x+1 , vector<int>(y+1 , 0));
+    for(int row = 0 ; row <= x ; row++)
+    {
+        for(int c = 0 ; c <= y ; c++)
+        {
+            for(int ind = 0 ; ind < n ; ind++)
+            {
+                if(sqrt(pow(xc[ind] - row  , 2) + pow(yc[ind] - c  , 2)) <= rad)
+                    matrix[row][c] = -1;
+            }
+        }
+    }
+    
+    if(matrix[0][0] == -1 or matrix[x][y] == -1) 
+        return "NO";
+    int dx[8] = {-1,1,-1,1,0,0,1,-1};
+    int dy[8] = {-1,1,1,-1,1,-1,0,0};
+    queue < vector<int> > q;
+    auto exists = [&](int r , int c){
+        if( r < 0 or c < 0 or r > x or c > y)
+            return 0;
+        return 1;
+    };
+    q.push({0,0});
+    matrix[0][0] = 1;
+    while(!q.empty())
+    {
+        vector<int> f = q.front();
+        q.pop();
+        int xf = f[0] , yf = f[1];
+        if(xf == x and yf == y)
+            return "YES";
+        for(int dir = 0 ; dir < 8 ; dir++)
+        {
+            int r = xf + dx[dir] , c = yf + dy[dir];
+            if(exists(r,c) and matrix[r][c] != -1 and !matrix[r][c])
+            {
+                q.push({r,c});
+                matrix[r][c] = 1;
+            }
+        }
+    }
+    return "NO";
+}
