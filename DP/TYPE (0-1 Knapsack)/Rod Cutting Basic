@@ -1,0 +1,29 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+int func(vector<int> & price, int n)
+{
+  int m = price.size();
+  vector<vector<int>> dp(n+1 , vector<int>(m+1 , 0));
+  for(int len = 1 ; len <= n ; len++)
+    dp[len][1] = price[1] * len;
+
+  for(int len = 1 ; len <= n ; len++)
+  {
+    for(int cutlen = 2; cutlen <= m ; cutlen++ )
+    {
+      if(cutlen > len)
+        dp[len][cutlen] = dp[len][cutlen-1];
+      else
+        dp[len][cutlen] = max(dp[len][cutlen-1] , dp[len - cutlen][cutlen] + price[cutlen]);
+    }
+  }
+  return dp[n][m];
+}
+int main()
+{
+  vector<int> price =     {0,1,5,8,9,10,17,17,20};
+//sell price for cutlen =  0 1 2 3 4 5  6  7  8
+  cout << func(price , 5);
+  return 0;
+}
