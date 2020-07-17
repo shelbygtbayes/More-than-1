@@ -1,0 +1,42 @@
+/*
+  Find out the row sum in the reverse order
+  Now since we are confirmed rows and cols are sorted we don't need to check every matrix
+  Matrix sum from (r,c) to the (n-1 , m-1 ) ( as diagonal points ) = dp_sum[row][col] = dp_sum[row+1][col] + matrix[row][col] + reverse_row_sum[row][col+1]
+*/
+int Solution::solve(vector<vector<int> > &matrix) {
+    int n = matrix.size();
+    int m = matrix[0].size();
+    if(n == 1 and m == 1)
+        return matrix[0][0];
+    vector<vector<int>> reverse_row_sum( n , vector<int>( m , 0));
+    for(int row = 0 ; row < n ; row++)
+    {
+        for(int col = m-1 ; col >= 0 ; col--)
+        {
+            if(col == m-1)
+                reverse_row_sum[row][col] = matrix[row][col];
+            else
+                reverse_row_sum[row][col] = reverse_row_sum[row][col+1] + matrix[row][col];
+        }
+    }
+    vector<vector<int>> dp_sum( n , vector<int>( m , 0));
+    int ans = INT_MIN;
+    for(int col = m-1 ; col >= 0 ; col--)
+    {
+        for(int row = n-1 ; row >= 0 ; row--)
+        {
+            int sum = 0;
+            if(row < n-1)
+                sum += dp_sum[row+1][col];
+            
+            if(col < m-1)
+                sum += reverse_row_sum[row][col+1];
+            dp_sum[row][col] = sum + matrix[row][col];
+            ans = max( ans , dp_sum[row][col] );
+        }
+    }
+    return ans;
+}
+
+
+    
