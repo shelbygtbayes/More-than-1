@@ -1,0 +1,43 @@
+// O(n) space
+
+int Solution::minimumTotal(vector<vector<int> > &matrix) {
+    int n = matrix.size();
+    if(n == 0)
+        return 0;
+    int m = matrix[n-1].size();
+    if(n == 1 and m == 1)
+        return matrix[0][0];
+    vector<int> min_row(m , 0);
+    for(int index = 0 ; index < m ; index++)
+        min_row[index] = matrix[n-1][index];
+    for(int row = n-2 ; row >= 0 ; row--)
+    {
+        for(int col = 0 ; col < matrix[row].size() ; col++)
+        {
+            min_row[col] = min(min_row[col] , min_row[col+1]) + matrix[row][col];
+        }
+    }
+    return min_row[0];
+}
+
+int Solution::minimumTotal(vector<vector<int> > &matrix) {
+    int n = matrix.size();
+    if(n == 0)
+        return 0;
+    int m = matrix[n-1].size();
+    if(n == 1 and m == 1)
+        return matrix[0][0];
+    vector<vector<int>> dp(n , vector<int>(m , 0));
+    
+    for(int col = 0 ; col < m ; col++)
+        dp[n-1][col] = matrix[n-1][col];
+    for(int r = n-2 ; r >= 0 ; r--)
+    {
+        m = matrix[r].size();
+        for(int col = 0 ; col < m ; col++)
+        {
+            dp[r][col] = min(dp[r+1][col] , dp[r+1][col+1]) + matrix[r][col];
+        }
+    }
+    return dp[0][0];
+}
