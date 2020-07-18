@@ -1,0 +1,43 @@
+string Solution::multiple(int n) {
+    vector<int> parent(n+1 , -1);
+    unordered_map<int , char> represent;
+    queue< int > q;
+    q.push(1 % n);                //      1 --> 0 ( 1 % 1)
+    string ans = "";
+    parent[1 % n] = -2;         //      1 --> 0 ( 1 % 1)
+    represent[1 % n] = '1';
+    while(!q.empty())
+    {
+        int f = q.front();
+        q.pop();
+        if( f == 0 )
+        {
+            int t = f;
+            while(parent[t] != -2)
+            {
+                ans += represent[t];
+                t = parent[t];
+            }
+            ans += represent[1 % n];
+            reverse(ans.begin() , ans.end());
+            break;
+        }
+        int n1 = (f*10) % n;            // 100 % n
+        int n2 = ((f*10) % n + 1) % n; //  101 % n
+        if(parent[n1] == -1)
+        {
+            q.push(n1);
+            parent[n1] = f;
+            represent[n1] = '0';
+        }
+        if(parent[n2] == -1)
+        {
+            q.push(n2);
+            parent[n2] = f;
+            represent[n2] = '1';
+        }
+    }
+    return ans;
+}
+
+
