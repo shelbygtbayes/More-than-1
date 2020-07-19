@@ -1,0 +1,71 @@
+int mod = 1e9 + 7;
+long long maxe;
+long long net_sum;
+
+long long int func(vector<int> &w , int src , unordered_map<int , vector<int> > &g , int parent)
+{
+    long long sum = w[src-1];
+    for(int v : g[src])
+    {
+        if(v == parent)
+            continue;
+        sum += func(w , v , g , src);
+    }
+    long long res=((sum%mod)*((net_sum-sum)%mod))%mod;
+    maxe = max(maxe,res);
+    return sum;
+}
+int Solution::deleteEdge(vector<int> &node_weight, vector<vector<int> > &edgelist) {
+    int n = node_weight.size();
+    unordered_map<int , vector<int> > g;
+    net_sum = 0;
+    maxe = 0;
+    for(auto edge : edgelist)
+    {
+        int u = edge[0] , v = edge[1];
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+    for(auto elem : node_weight)
+        net_sum += elem;
+    
+    func(node_weight , 1 , g , -1);
+    return maxe;
+}
+
+
+
+
+    /*long long int sum = 0;
+    for(auto node : g[src])
+    {
+        if(node != parent)
+        {
+            long long int x = func(w , tw , node , g , src);
+            sum = sum % mod + x % mod;
+            sum %= mod;   
+        }
+    }
+    sum = sum % mod + w[src-1] % mod;
+    sum %= mod;
+    tw[src] = sum;
+    //cout <<"Here : " <<src << " " << tw[src] << endl;
+    return sum % mod;*/
+
+/*long long int ans = -1;
+    long long int net_sum = tree_weight[1];
+    //cout << net_sum << endl;
+    /*for(int node = 1 ; node <= n ; node++)
+        cout << tree_weight[node] << " ";
+    cout << endl;
+    
+    for(auto edge : edgelist)
+    {
+        int u = edge[0] , v = edge[1];
+        int subTree1_weight = tree_weight[v] % mod;
+        int subTree2_weight = (net_sum % mod - tree_weight[v] % mod) % mod;
+        //cout << subTree1_weight << " " << subTree2_weight << endl;
+        long long int product = (subTree1_weight * subTree2_weight) % mod;
+        ans = max( ans , product);
+    }*/
+    
