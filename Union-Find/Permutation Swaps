@@ -1,0 +1,54 @@
+int Solution::solve(vector<int> &A, vector<int> &B, vector<vector<int> > &C) {
+
+    int n = A.size();
+    vector<int> parent(n+1 , -1);
+    vector<int> index(n+1 , -1);
+    for(int ind = 1 ; ind <= n ; ind++)
+    {
+        parent[ind] = ind;
+    }
+    auto find = [&](int r ){
+          while(r != parent[r])
+            r = parent[r];
+         return parent[r];
+    };
+    auto merge = [&](int r1 , int r2)
+    {
+      int p1 = find(r1) , p2 = find(r2);
+      if(p1 == p2) return p1;
+      else if(p1 > p2)
+      {
+          parent[p1] = p2;
+          return p2;
+      }
+      else
+      {
+          parent[p2] = p1;
+          return p1;
+      }
+    };
+    
+    for(int ind = 0 ; ind < n ; ind++)
+    {
+        index[A[ind]] = ind+1;
+    }
+    for(auto edge : C)
+    {
+        int u = edge[0] , v = edge[1];
+        if(find(u) != find(v))
+        {
+            parent[u] = parent[v] = merge(u , v);
+        }
+    }
+    for(int ind = 0 ; ind < n ; ind++)
+    {
+        if(A[ind] != B[ind])
+        {
+            int u = ind+1;
+            int v = index[B[ind]];
+            if(find(u) != find(v))
+                return false;
+        }
+    }
+    return true;
+}
