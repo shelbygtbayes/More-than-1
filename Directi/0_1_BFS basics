@@ -1,0 +1,57 @@
+#include<iostream>
+#include<unordered_map>
+#include<queue>
+#include<climits>
+#include<vector>
+using namespace std;
+unordered_map<int , vector<vector<int>>> g;
+void addEdge(int n , int m , int w)
+{
+  g[n].push_back({m,w});
+  g[m].push_back({n,w});
+}
+void func_bfs(int src , int n) // like dijkstra
+{
+  vector<int> dis(n , INT_MAX);
+  dis[src] = 0;
+  deque<vector<int>> q;
+  q.push_back({src , 0});
+  while(!q.empty())
+  {
+    vector<int> fr = q.front();
+    int u = fr[0] , w = fr[1];
+    q.pop_front();
+    for(auto edge : g[u])
+    {
+      int v = edge[0] , weight = edge[1];
+      if(dis[v] > w + weight)
+      {
+        dis[v] = weight + w;
+        if(weight == 0)
+          q.push_front({v , dis[v]});
+        else
+          q.push_back({v , dis[v]});
+      }
+    }
+  }
+  for(int ind = 0 ; ind < n ; ind++)
+    cout << dis[ind] << " ";
+}
+int main()
+{
+  addEdge(0, 1, 0);
+  addEdge(0, 7, 1);
+  addEdge(1, 7, 1);
+  addEdge(1, 2, 1);
+  addEdge(2, 3, 0);
+  addEdge(2, 5, 0);
+  addEdge(2, 8, 1);
+  addEdge(3, 4, 1);
+  addEdge(3, 5, 1);
+  addEdge(4, 5, 1);
+  addEdge(5, 6, 1);
+  addEdge(6, 7, 1);
+  addEdge(7, 8, 1);
+  func_bfs(0 , 9);
+  return 0;
+}
