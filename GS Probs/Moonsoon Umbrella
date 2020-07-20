@@ -1,0 +1,26 @@
+int getUmbrella(int requirements,vector<int> sizes) {
+        int n=sizes.size();
+		    sort(sizes.begin(),sizes().end());
+        long long dp[n+1][requirements+1]; // minimum no of umberallas from given n umberalls required to meet requirement 
+        
+        // when having zero umberalla
+        for(int i=0 ; i<=requirements ; i++)
+            dp[0][i] = INT_MAX-1;
+            
+        // when no requirements
+        for(int i=0;i<=n;i++)
+            dp[i][0]=0;
+            
+            
+        for(int i=1 ; i<=n ; i++) // for each umberalla like avalible coins
+        {
+            for(int j=1 ; j <= requirements ; j++) // size requirement Like sum for coin change
+            {
+                if(sizes[i-1] <= j) // take the umberalla
+                    dp[i][j] = min( dp[i-1][j] , dp[i][j-sizes[i-1]] + 1);
+                else // don't take the umberalla
+                    dp[i][j] = dp[i-1][j];
+            }
+        }
+        return dp[n][requirements] > requirements ? -1 : dp[n][requirements];
+    }
