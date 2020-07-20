@@ -1,0 +1,43 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include<climits>
+using namespace std;
+int func(vector<int> &arr , int n)
+{
+  vector<int> dis(n , INT_MAX); // Dijstra distance
+  priority_queue<int> q;
+  dis[0] = arr[0];
+  q.push(0);
+  while(!q.empty())
+  {
+    int current_index = q.top();
+    q.pop();
+    if(current_index + 2 < n) // 2 step forward
+    {
+      int next = index+2;
+      if(dis[next] > dis[current_index] + arr[next]) // Update the distance
+      {
+        dis[next] = dis[current_index] + arr[next];
+        q.push(next);
+      }
+    }
+    if(current_index - 1 >= 0) // 1 step backward
+    {
+      int next = current_index-1;
+      if(dis[next] > dis[current_index] + arr[next]) // dijstra Update distance
+      {
+        dis[next] = dis[current_index] + arr[next];
+        q.push(next);
+      }
+    }
+  }
+  return dis[n-1];
+}
+int main()
+{
+  vector<int> arr{1,2,3,4,5,6};
+  int n = arr.size();
+  cout << func(arr , n);
+  return 0;
+}
