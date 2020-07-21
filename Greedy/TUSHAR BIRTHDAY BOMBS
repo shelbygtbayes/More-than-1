@@ -1,0 +1,55 @@
+vector<int> Solution::solve(int sum, vector<int> &arr) {
+    int n = arr.size();
+    vector<int> ans;
+    int minx = *min_element(arr.begin() , arr.end());
+    int max_times = sum / minx;
+    if(sum % minx == 0)
+    {
+        while(max_times > 0)
+        {
+            ans.push_back(minx);
+            max_times--;
+        }
+        return ans;
+    }
+    else
+    {
+        int left = sum - (max_times)*minx;
+        int st = 0;
+        while(ans.size() < max_times)
+        {
+            if(arr[st] - minx <= left)   
+            {
+                ans.push_back(st);
+                left = left - (arr[st] - minx);
+            }
+            else
+                st++;
+        }
+        return ans;
+    }
+    /*
+    DP fails here but greedy works
+    vector<int> sp(sum+1 , 0);
+    vector<int> back(sum+1);
+    for(int ind = 1 ; ind <= n ; ind++)
+    {
+        for(int s = 1 ; s <= sum ; s++)
+        {
+            if(s - arr[ind-1] >= 0 and sp[s-arr[ind-1]] + 1 > sp[s] )
+            {
+                back[s] = ind-1;
+                sp[s] = sp[s-arr[ind-1]] + 1;
+            }
+        }
+    }
+    vector<int> ans;
+    int aux = sum;
+    while(aux >= 0 and aux - arr[back[aux]] >= 0)
+    {
+        ans.push_back(back[aux]);
+        aux = aux - arr[back[aux]];
+    }
+    sort(ans.begin() , ans.end());
+    return ans;*/
+}
