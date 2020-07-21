@@ -1,0 +1,44 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+int func(vector<int> &arr , int sum)
+{
+  int n = arr.size();
+//  vector<vector<int>> dp(n+1 , vector<int>(sum+1 , 0));
+  vector<int> sp(sum+1 , 0);
+  vector<int> back(sum+1);
+
+  for(int ind = 1 ; ind <= n ; ind++)
+  {
+      for(int s = 1 ; s <= sum ; s++)
+      {
+          /*dp[ind][s] = dp[ind-1][s];
+          if(s - arr[ind-1] >= 0)
+              dp[ind][s] = max(dp[ind][s] , dp[ind][s-arr[ind-1]] + 1);
+          */
+          if(s - arr[ind-1] >= 0 and sp[s-arr[ind-1]] + 1 > sp[s])
+          {
+            back[s] = ind-1;
+            sp[s] = sp[s-arr[ind-1]] + 1;
+          }
+      }
+  }
+  vector<int> ans;
+  int aux = sum;
+  while( aux >= 0 and aux - arr[back[aux]] >=0)
+  {
+    ans.push_back(back[aux]);
+    aux = aux - arr[back[aux]];
+  }
+  for(auto v : ans)
+    cout << v << " ";
+  cout << endl;
+  return sp[sum];
+}
+int main()
+{
+  vector<int> arr{3,4};
+  int sum = 12;
+  cout << func(arr , sum);
+  return 0;
+}
