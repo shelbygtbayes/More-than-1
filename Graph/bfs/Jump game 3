@@ -1,0 +1,32 @@
+class Solution {
+public:
+    bool canReach(vector<int>& arr, int start) {
+        int n = arr.size();
+        //vector<int> dis(n , INT_MAX);
+        queue<int> q;
+        q.push(start);
+        vector<int> vis(n,0);
+        vis[start] = 1;
+       // dis[start] = 0;
+        while(!q.empty())
+        {
+            int f = q.front();
+            q.pop();
+            if(arr[f] == 0)
+                return 1;
+            int next = f + arr[f];
+            if(next >=0 and next < n and !vis[next])
+            {
+                q.push(next);
+                vis[next] = 1;
+            }
+            next = f - arr[f];
+            if(next >=0 and next < n and !vis[next])
+            {
+                q.push(next);
+                vis[next] = 1;
+            }
+        }
+        return false;
+    }
+};
