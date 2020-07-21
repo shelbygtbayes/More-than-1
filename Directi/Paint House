@@ -1,0 +1,23 @@
+int Solution::solve(vector<vector<int> > &arr) {
+    int n = arr.size();
+    vector<vector<int>> dp(n , vector<int>(3 , 0));
+    dp[0][0] = arr[0][0];
+    dp[0][1] = arr[0][1];
+    dp[0][2] = arr[0][2];
+    
+    for(int row = 1 ; row < n ; row++)
+    {
+        for(int c = 0 ; c < 3 ; c++)
+        {
+            int x = 0;
+            if(c == 0)
+                x = min( dp[row-1][1] , dp[row-1][2]);
+            else if(c == 1)
+                x = min( dp[row-1][0] , dp[row-1][2]);
+            else
+                x = min( dp[row-1][0] , dp[row-1][1]);
+            dp[row][c] = x + arr[row][c];
+        }
+    }
+    return min(dp[n-1][0] , min(dp[n-1][1] , dp[n-1][2]));
+}
