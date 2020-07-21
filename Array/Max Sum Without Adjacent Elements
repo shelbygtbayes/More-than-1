@@ -1,0 +1,19 @@
+int Solution::adjacent(vector<vector<int> > &arr) {
+    int m = arr[0].size();
+    int temp1 , temp2 , incl1 = arr[0][0], incl2 = arr[1][0] , excl1 = 0 , excl2 = 0;
+    for(int ind = 1 ; ind < m ; ind++)
+    {
+        temp1 = incl1;
+        incl1 = max( incl1 , max( excl1 + arr[0][ind] , excl1 + arr[1][ind]));
+        excl1 = temp1;
+        temp2 = incl2;
+        incl2 = max( incl2 , max( excl2 + arr[1][ind] , excl2 + arr[0][ind]));
+        excl2 = temp2;
+    }
+    return max( incl1 , max( excl1 , max(incl2 , excl2)));  
+}
+/*
+int temp = incl;
+incl = max(incl , excl + arr[ind]);
+excl = temp;
+*/
