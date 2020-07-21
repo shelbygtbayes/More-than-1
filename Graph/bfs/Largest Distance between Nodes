@@ -1,0 +1,82 @@
+unordered_map<int , vector<int> > graph;
+/*int func(int root , vector<int> & vis)
+{
+    vis[root] = 1;
+    int dis = 1;
+    for(auto v : graph[root])
+    {
+        if(!vis[v])
+            dis = max ( dis , func(v , vis) + 1);
+    }
+    return dis;
+}*/
+pair<int,int> bfs(int root , int n)
+{
+    vector<int> dis(n,-1);
+    dis[root] = 0;
+    queue<int> q;
+    q.push(root);
+    
+    while(!q.empty())
+    {
+        int u = q.front();
+        q.pop();
+        for(auto v : graph[u])
+        {
+            if(dis[v] == -1)
+            {
+                dis[v] = dis[u] + 1;
+                q.push(v);
+            }
+        }
+    }
+    int maxdis = 0 , end = root;
+    for(int ind = 0 ; ind < n ; ind++)
+    {
+        if(maxdis < dis[ind])
+        {
+            maxdis = dis[ind];
+            end = ind;
+        }
+    }
+    return make_pair(end , maxdis);
+}
+int Solution::solve(vector<int> &arr) {
+    int root = 0 , n = arr.size();
+    if(n == 1 or n == 0)
+        return 0;
+    for(int ind = 0 ; ind < n ; ind++)
+    {
+        if(arr[ind] == -1)
+            root = ind;
+        else
+        {
+            graph[arr[ind]].push_back(ind);
+            graph[ind].push_back(arr[ind]);
+        }
+    }
+    pair<int,int> one_end = bfs(root , n);
+    pair<int,int> ans = bfs(one_end.first , n);
+
+    return ans.second;
+}
+    /*int ans = INT_MIN;
+    for(int ind = 0 ; ind < n ; ind++)
+    {
+        if(graph[ind].size() == 1)
+        {
+            vector<int> vis(n,0);
+            int x = func(ind , vis ) - 1;
+       //     cout << ind << " " << x << endl;
+            ans = max( ans , x);
+        }
+    }
+  //  cout << "Returning " << ans;
+    return ans;
+}
+
+
+// -1, 0, 0, 1, 2, 1, 5 
+ // 0  1  2  3  4  5  6
+  */
+ 
