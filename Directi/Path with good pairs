@@ -1,0 +1,38 @@
+vector<int> g[100001];
+int cnt;
+void func(int root , int parent, int &ans , vector<int> &good , int count)
+{
+    if(good[root-1])
+        cnt++;
+    bool isLeaf = 1;
+    for(auto node : g[root])
+    {
+        if(node!= parent)
+        {
+            isLeaf = 0;
+            func(node , root , ans , good , count);
+        }
+    }
+    
+    if(isLeaf and cnt <= count)
+        ans++;
+       
+    if(good[root-1])
+        cnt--;
+}
+int Solution::solve(vector<int> &good, vector<vector<int> > &edges, int count) {
+
+    for(int ind = 1;  ind <= good.size() ; ind++)
+        g[ind].clear();
+    for(auto e : edges)
+    {
+        int u = e[0] , v = e[1];
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+    int ans = 0;
+    cnt = 0;
+    
+    func(1 , -1 , ans , good , count);
+    return ans;
+}
