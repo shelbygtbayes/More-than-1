@@ -1,0 +1,12 @@
+int Solution::solve(int r, int c) {
+// return 2*min(min(r,c)-1,8-max(r,c))+7;
+    int top_left = min(r,c) - 1;
+    (top_left >= 0) ? (top_left) : (0);
+    int bottom_right = 8 - max(r,c);
+    (bottom_right >= 0) ? (bottom_right) : (0);
+    int top_right = min(r,9 - c) - 1;
+    (top_right >= 0) ? (top_right) : (0);
+    int bottom_left = 8-max(r,9-c);
+    (bottom_left >= 0) ? (bottom_left) : (0);
+    return top_left + bottom_right + top_right + bottom_left;
+}
