@@ -1,0 +1,35 @@
+int Solution::solve(vector<int> &arr, int power) {
+    int n = arr.size();
+    int range = 2*(power-1);
+    for(int ind = 0 ; ind < n ; ind++)
+    {
+        if(arr[ind])
+        {
+            int left = max(0 , ind-(power-1));
+            int right = min(n-1 , ind+(power-1));
+            for(int st = left ; st <= right ; st++) 
+                arr[st] = 1;
+        }
+    }
+    for(int ind = 0 ; ind < n ; ind++)
+    {
+        if(arr[ind] == 0)
+            return -1;
+    }   
+    int end = range, cnt = 0 , prev_end = 0;
+    while(end < n)
+    {
+        cnt++;
+        prev_end = end;
+        end += (range);
+    }
+    if(prev_end < n) // to light up which are left
+        cnt++;
+    return max(1,cnt);
+}
+/*
+First lightup all units using all the lights
+[ind - (power-1) , ind + (power-1)] -> range = 2*(power-1)
+
+hence we require exactly 1 light for 2*(power-1) units
+*/
