@@ -1,0 +1,36 @@
+int Solution::maximumGap(const vector<int> &arr) {
+    int n = arr.size();
+    vector<int> rightmax(n);
+    rightmax[n-1] = arr[n-1];
+    for(int ind = n-2 ; ind >= 0 ; ind--)
+    {
+        rightmax[ind] = max( rightmax[ind+1] , arr[ind] );
+    }
+    int i = 0 , j = 0 , ans = 0;
+    while(i < n and j < n)
+    {
+        if(arr[i] <= rightmax[j] )
+        {
+            ans = max( ans , j-i );
+            j++;
+        }
+        else
+            i++;
+    }
+    return ans;
+    /*if (A.size() == 0) return -1;
+    if (A.size() == 1) return 0;
+    vector<pair<int, int> > toSort; 
+    for (int i = 0; i < A.size(); i++) {
+        toSort.push_back(make_pair(A[i], i));
+    }
+    sort(toSort.begin(), toSort.end());
+    int len = toSort.size();
+    int maxIndex = toSort[len - 1].second;
+    int ans = 0;
+    for (int i = len - 2; i >= 0; i--) {
+        ans = max(ans, maxIndex - toSort[i].second);
+        maxIndex = max(maxIndex, toSort[i].second);
+    }
+    return ans;*/
+}
