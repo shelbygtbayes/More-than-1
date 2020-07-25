@@ -1,0 +1,50 @@
+int Solution::solve(vector<int> &arr) {
+    int n = arr.size();
+    vector<int> maxright(n+1);
+    maxright[n] = 0;
+    for(int ind = n-1; ind >= 0 ; ind--)
+    {
+        maxright[ind] = max(maxright[ind+1] , arr[ind]);
+    }
+    set<int> minleft;
+    int ans = 0;
+    minleft.insert(INT_MIN); // to handle case when the number itself is minimum
+    for(int ind = 0; ind < n-1 ; ind++)
+    {
+        if(maxright[ind+1] > arr[ind])
+        {
+            auto it = minleft.lower_bound(arr[ind]);
+            it--;
+            int maximum_left = *it;
+            ans = max( ans, maximum_left + arr[ind] + maxright[ind+1]);
+        }
+        minleft.insert(arr[ind]);
+    }
+    return ans;
+}
+// If allowed to picky any 3 distinct
+/*
+    int max1 , max2 , max3;
+    int ans = 0;
+    max1 = max2 = max3 = -1;
+    for(int ind = 0 ; ind < n ; ind++)
+    {
+        if(max1 < arr[ind])
+        {
+            max3 = max2;
+            max2 = max1;
+            max1 = arr[ind];
+        }
+        else if(max2 < arr[ind])
+        {
+            max3 = max2;
+            max2 = arr[ind];
+        }
+        else if(max3 < arr[ind])
+        {
+            max3 = arr[ind];
+        }
+    }
+    ans = max( ans , max1 + max2 + max3);
+    return ans;
+*/
