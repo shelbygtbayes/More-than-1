@@ -1,0 +1,47 @@
+vector<int> Solution::subUnsort(vector<int> &arr) {
+    vector<int> ans;
+    int minindex = 0 , maxindex = 0;
+    int n = arr.size();
+    int left = 0 , right = n-1;
+    while(left < n-1 and arr[left] <= arr[left+1])
+    {
+        left++;
+    }
+    
+    if(left == n-1)
+        return {-1};
+        
+    while(right >= 0 and arr[right-1] <= arr[right])
+    {
+        right--;
+    }
+    // find out min and max values in the[left ... right]
+    int maxi = arr[left] , mini = arr[left];
+    for(int ind = left ; ind <= right ; ind++)
+    {
+        maxi = max(arr[ind] , maxi);
+        mini = min(arr[ind] , mini);
+    }
+    // now find the correct position of mini in [0...left] and maxi in [right .. n]
+    // These correct positions will be our exact answer 
+    int p1 = 0 , p2 = 0;
+    for(int st = 0 ; st <= left ; st++)
+    {
+        if(mini < arr[st])
+        {
+            p1 = st;
+            break;
+        }
+    }
+    for(int end = n-1 ; end >= right ; end--)
+    {
+        if(maxi > arr[end])
+        {
+            p2 = end;
+            break;
+        }
+    }
+    ans.push_back(p1);
+    ans.push_back(p2);
+    return ans;
+}
