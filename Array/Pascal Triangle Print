@@ -1,0 +1,25 @@
+vector<vector<int> > Solution::solve(int n) {
+    vector<vector<int>> ans;
+    if(n == 0)
+        return ans;
+    ans.push_back({1});
+    if(n == 1)
+        return ans;
+    
+    ans.push_back({1,1});
+    if(n == 2)
+        return ans;
+    
+    for(int r = 2 ; r < n ; r++)
+    {
+        vector<int> temp;
+        temp.push_back(1);
+        for(int c = 1 ; c < r ; c++)
+        {
+            temp.push_back(ans[r-1][c] + ans[r-1][c-1]);
+        }
+        temp.push_back(1);
+        ans.push_back(temp);
+    }
+    return ans;
+}
