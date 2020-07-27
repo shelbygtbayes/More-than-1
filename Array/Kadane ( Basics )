@@ -1,0 +1,14 @@
+int maxSubarray_sum(vector<int> & arr)
+{
+  int n = arr.size() , ans = INT_MIN , st = 0 , curr_sum = 0;
+  while( st < n )
+  {
+    curr_sum += arr[st];
+    if( curr_sum > ans )
+      ans = curr_sum;
+    if( curr_sum < 0 )
+      curr_sum = 0;
+     st++;
+  }
+  return ans;
+}
