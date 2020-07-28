@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int jobScheduling(vector<int>& startTime, vector<int>& endTime, vector<int>& profit) {
+        int n = profit.size();
+        // step 1 sort all the jobs according to the end time
+        vector<vector<int>> jobs;
+        for(int ind = 0 ; ind < n ; ind++)
+        {
+            jobs.push_back({startTime[ind],endTime[ind], profit[ind]});
+        }
+        sort(jobs.begin() , jobs.end() , [](const vector<int> &j1 ,const vector<int> &j2){
+            if(j1[1] == j2[1]) return (j1[0] == j2[0]) ? (j1[2] > j2[2]) : (j1[0] < j2[0]);
+            return j1[1] < j2[1];
+        });
+        vector<int> dp(n);
+        dp[0] = jobs[0][2];
+        // Now find the job having start >= end of the current job
+        for(int curr = 1 ; curr < n ; curr++)
+        {
+            dp[curr] = max(dp[curr-1] , jobs[curr][2]); // Either schedule the previous only
+                                                       //  Schedule the Current only
+            for(int ind1 = curr-1 ; ind1 >= 0 ; ind1--)
+            {
+                // if start of current >= end of previous
+                if(jobs[ind1][1] <= jobs[curr][0])
+                {
+                                                         // max profit
+                    dp[curr] = max(dp[curr] , dp[ind1] + jobs[curr][2]);
+                    break;
+                }
+            }
+        }
+        int ans = INT_MIN;
+        for(auto elem : dp)
+            ans = max(ans , elem);
+        return ans;
+    }
+};
