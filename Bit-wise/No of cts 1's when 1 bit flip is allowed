@@ -1,0 +1,50 @@
+to binary :  while(n!=0) {r=(n%2==0 ?"0":"1")+r; n/=2;}
+#include<iostream>
+using namespace std;
+int func(int n)
+{
+  if(~n == 0)
+    return 8*sizeof(int);
+  int curr_len = 0 , prev_len = 0 , max_len = 0;
+  while(n != 0)
+  {
+    if((n & 1) == 1)  // if bit_val = 1, continue the curr_len
+        curr_len++;
+    else if((n & 1) == 0) // else
+    {  //                     2nd 1st(curr)
+      // to check the next bit 1   0
+     // If next bit = 0, then set prev_len = 0 ( 00 )
+    //  Else set continue with 1's    
+      prev_len = (n & 2) == 0 ? 0 : curr_len;
+      curr_len = 0;
+    }
+    max_len = max( max_len , prev_len + curr_len);
+    n >>= 1;
+  }
+  return max_len+1;
+}
+int main()
+{
+  int n;
+  cin >> n;
+  cout << func(n);
+  return 0;
+}
+/*
+int temp = n , len = 0;
+int prev_prev_0 = -1 , prev_0 = -1 , curr = 0;
+while(temp)
+{
+  int bit = temp % 2;
+  if(bit == 0)
+  {
+    if(prev_prev_0 >= 0)
+      len = max(len , curr - prev_prev_0);
+    prev_prev_0 = prev_0;
+    prev_0 = curr;
+  }
+  temp /= 2;
+  curr++;
+}
+return len;
+*/
