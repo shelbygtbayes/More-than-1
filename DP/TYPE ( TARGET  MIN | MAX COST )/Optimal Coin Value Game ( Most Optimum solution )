@@ -1,0 +1,36 @@
+#include<bits/stdc++.h>
+using namespace std;
+int dp[101][101]; // Maximum value we can get from start to end
+//Note: dp[st][end] = arr[st] + ((Total_coins_sum - arr[st]) - dp[st+1][end])
+int memo(int st , int end , int sum , vector<int> &arr)
+{
+  if(st > end)
+    return 0;
+  if(dp[st][end] != -1)
+    return dp[st][end];
+  if(st == end)
+    dp[st][end] = 0;
+  else if(end-st == 1)
+    dp[st][end] = max(arr[st] , arr[end]);
+  else
+  {
+    // now if we select the ith coin
+    dp[st][end] = max(sum - memo(st+1 , end , sum - arr[st] , arr),
+                       sum - memo(st , end-1 , sum - arr[end] , arr));
+  }
+  return dp[st][end];
+}
+int func(vector<int> coins , int n)
+{
+  int sum = accumulate(coins.begin() , coins.end(), 0);
+  int st = 0 , end = n-1;
+  memset(dp , -1 , sizeof(dp));
+  return memo(0 , n-1 , sum , coins);
+}
+int main()
+{
+  int n;
+  vector<int> coins{20, 30, 2, 2, 2, 10};
+  cout << func(coins , coins.size());
+  return 0;
+}
