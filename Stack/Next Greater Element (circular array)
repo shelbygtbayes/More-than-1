@@ -1,0 +1,38 @@
+class Solution {
+public:
+    vector<int> nextGreaterElements(vector<int>& nums) {
+        int n = nums.size();
+        if(n == 0)
+            return {};
+        stack<int> s;
+        int ind = 0;
+        vector<int> nextG(n,INT_MIN);
+        vector<int> LeftMax(n);
+        LeftMax[0] = nums[0];
+        while(ind < n)
+        {
+            if(s.empty() or nums[ind] <= nums[s.top()])
+                s.push(ind++);
+            else if(!s.empty())
+            {
+                int x = s.top();
+                s.pop();
+                nextG[x] = nums[ind];
+            }
+            if(ind > 0 and ind < n)
+                LeftMax[ind] = max(LeftMax[ind-1] , nums[ind]);
+        }
+        for(int ind = 0 ; ind < n; ind++)
+        {
+            if(nextG[ind] == INT_MIN)
+            {
+                int pos = upper_bound(LeftMax.begin() , LeftMax.end() , nums[ind]) - LeftMax.begin();
+                if(pos != n)
+                    nextG[ind] = nums[pos];
+                else
+                    nextG[ind] = -1;
+            }
+        }
+        return nextG;
+    }
+};
