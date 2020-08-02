@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int leastInterval(vector<char>& tasks, int n) {
+        vector<int> cnt(26,0);
+        int no_of_tasks = tasks.size();
+        if(n == 0)
+            return no_of_tasks;
+        for(auto ch : tasks)
+        {
+            cnt[ch-'A']++;
+        }
+        int max_cnt = 0;
+        for(int ind = 0 ; ind < 26 ; ind++)
+            max_cnt = max( max_cnt , cnt[ind] );
+        int element_count = 0;
+        for(int ind = 0 ; ind < 26 ; ind++)
+        {
+            if(cnt[ind] == max_cnt) 
+                element_count++;
+        }
+        return max(no_of_tasks , (max_cnt - 1)*( n + 1) + element_count);
+    }
+};
+
+// 
