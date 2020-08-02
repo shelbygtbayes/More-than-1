@@ -1,0 +1,89 @@
+// Using the Bitwise operations (fast)
+class MyHashSet {
+public:
+    /** Initialize your data structure here. */
+    vector<int> v;
+    int index , offset;
+    MyHashSet() {
+        v.clear();
+    }
+    
+    void add(int key) {
+        index = key / 8;
+        offset = key % 8;
+        while(v.size() < index + 1)
+            v.push_back(0);
+        v[index] = v[index] | (1 << offset);
+    }
+    
+    void remove(int key) {
+        index = key / 8;
+        offset = key % 8;
+        if(v.size() > index)
+        {
+            v[index] = v[index] & (0xff ^ (1 << offset)); 
+        }
+    }
+    
+    /** Returns true if this set contains the specified element */
+    bool contains(int key) {
+        index = key / 8;
+        offset = key % 8;
+        if(v.size() <= index)
+            return false;
+        return v[index] & (1 << offset);
+    }
+};
+
+// Using the Buckets
+struct Buckets{
+    vector<int> bucket = {};  
+    void add(int val)
+    {
+        if(!contains(val))
+            bucket.push_back(val);
+    }
+    bool contains(int val)
+    {
+        return find(begin(bucket) , end(bucket) , val) != end(bucket);
+    }
+    void remove(int val){
+        auto pos = find(begin(bucket) , end(bucket) , val);
+        if(pos != end(bucket))
+            bucket.erase(pos);
+    }
+};
+class MyHashSet {
+public:
+    /** Initialize your data structure here. */
+    vector<Buckets> buckets;
+    int hsh_size;
+    MyHashSet(int size = 128) {
+        hsh_size = size;
+        buckets.resize(size);
+    }
+    
+    void add(int key) {
+        int index = key % hsh_size;
+        buckets[index].add(key);
+    }
+    
+    void remove(int key) {
+        int index = key % hsh_size;
+        buckets[index].remove(key);
+    }
+    
+    /** Returns true if this set contains the specified element */
+    bool contains(int key) {
+        int index = key % hsh_size;
+        return buckets[index].contains(key);
+    }
+};
+
+/**
+ * Your MyHashSet object will be instantiated and called as such:
+ * MyHashSet* obj = new MyHashSet();
+ * obj->add(key);
+ * obj->remove(key);
+ * bool param_3 = obj->contains(key);
+ */
