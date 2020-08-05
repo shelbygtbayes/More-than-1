@@ -1,0 +1,68 @@
+class Solution {
+public:
+    
+vector<string> one = { "", "One ", "Two ", "Three ", "Four ",
+				"Five ", "Six ", "Seven ", "Eight ",
+				"Nine ", "Ten ", "Eleven ", "Twelve ",
+				"Thirteen ", "Fourteen ", "Fifteen ",
+				"Sixteen ", "Seventeen ", "Eighteen ",
+				"Nineteen " };
+
+vector<string> ten = { "", "", "Twenty ", "Thirty ", "Forty ",
+				"Fifty ", "Sixty ", "Seventy ", "Eighty ",
+				"Ninety " };
+
+    // n is 1- or 2-digit number
+    string numToWords(int n, string s)
+    {
+        string str = "";
+   
+        if (n > 19)
+            str += ten[n / 10] + one[n % 10];
+        else
+            str += one[n];
+
+        if (n)
+            str += s;
+
+        return str;
+    }
+    
+    string convertToWords(int n, string s)
+    {
+        string str = "";
+        str += numToWords(n/100 , "Hundred ");
+
+        /*if (n > 100 && n % 100)
+            str += "and ";
+        */
+        str += numToWords((n % 100), "");
+        if(n)
+            str += s;
+        return str;
+    }
+    
+    string numberToWords(int n)
+    {
+        if(n == 0)
+            return "Zero";
+            
+        string out;
+        
+        out += numToWords((n / 1000000000), "Billion ");
+
+        out += convertToWords(((n / 1000000)  % 1000), "Million ");
+
+        out += convertToWords(((n / 1000) % 1000), "Thousand ");
+
+        out += numToWords(((n / 100) % 10), "Hundred ");
+
+        /*if (n > 100 && n % 100)
+            out += "and ";
+    */
+        out += numToWords((n % 100), "");
+        out.pop_back();
+        
+        return out;
+    }
+};
