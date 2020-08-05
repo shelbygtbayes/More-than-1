@@ -1,0 +1,68 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* elem1;
+    TreeNode* elem2;
+    TreeNode* prev;
+    void inorder(TreeNode* root)
+    {
+        if(!root)
+            return;
+        inorder(root->left);
+        if(prev and root->val < prev-> val)
+        {
+            if(elem1 == NULL)
+                elem1 = prev;
+            elem2 = root;
+        }
+        prev = root;
+        inorder(root->right);
+    }
+    void recoverTree(TreeNode* root) {
+        if(!root)
+            return;
+        prev = NULL;
+        inorder(root);
+        // swap the elements value;
+        int temp = elem1->val;
+        elem1->val = elem2->val;
+        elem2->val = temp;
+        
+    }
+};
+/*
+class Solution {
+public:
+    vector<int> value;
+    vector<TreeNode*> tree_array;
+    void insertArray(TreeNode* root)
+    {
+        if(!root) return;
+        insertArray(root->left);
+        tree_array.push_back(root);
+        value.push_back(root->val);
+        insertArray(root->right);
+    }
+    void recoverTree(TreeNode* root) {
+        if(!root)
+            return;
+        insertArray(root);
+        sort(value.begin() , value.end());
+        for(int ind = 0 ; ind < tree_array.size() ; ind++)
+        {
+            TreeNode* r = tree_array[ind];
+            r->val = value[ind];
+        }
+    }
+};
+*/
