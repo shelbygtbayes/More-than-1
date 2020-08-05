@@ -1,0 +1,51 @@
+Approach:
+
+Traverse the string in the reverse direction
+Determine the last occurance of each character
+
+Now take max_last_occ = -1;
+
+Now traverse the string
+If( curr_index == max_last_occ )
+  ans++;
+If( max_last_occ < last_occ[ch] )
+  update the max_last_occ
+  
+Code:
+#include<iostream>
+#include<vector>
+using namespace std;
+int func(string s)
+{
+  vector<int> last_occ(26 , -1);
+  int n = s.size();
+  for(int ind = n-1; ind >= 0 ; ind--)
+  {
+    int char_index = s[ind] - 'a';
+    if(last_occ[char_index] == -1)
+      last_occ[char_index] = ind;
+  }
+  int max_last_occ = -1;
+  int ans = 0;
+  for(int ind = 0 ; ind < n ; ind++)
+  {
+    int char_index = s[ind] - 'a';
+    if(max_last_occ == ind)
+      ans++;
+    if(max_last_occ < last_occ[char_index])
+      max_last_occ = last_occ[char_index];
+  }
+  return ans;
+}
+int main()
+{
+  int t;
+  cin >> t;
+  while(t--)
+  {
+    string s;
+    cin >> s;
+    cout << func(s) << endl;
+  }
+  return 0;
+}
