@@ -1,0 +1,71 @@
+class Solution {
+public:
+    bool findWord(string startWord , string endWord , unordered_set< string > & dict , unordered_map< string , vector< string > > & child)
+    {
+        unordered_set< string > current , next;
+        current.insert(startWord);
+        while(true)
+        {
+            for( auto word : current) // Mark as visited or remove from the dictionary ( wordList )
+                dict.erase(word);
+                
+            for( auto word : current)
+            {
+                string parent = word; // Now try each combination
+                for(int ind = 0 ; ind < word.size() ; ind++)
+                {
+                    char prev_char = word[ind];
+                    for(char ch = 'a'; ch <= 'z' ; ch++)
+                    {
+                        word[ind] = ch;
+                        if( dict.find( word ) != dict.end() )
+                        {
+                            next.insert(word);
+                            child[parent].push_back( word );
+                        }
+                    }
+                    word[ind] = prev_char;
+                }
+            }
+            if(next.empty())
+                return false;
+            if(next.find(endWord) != next.end())
+                return true;
+            current.clear();
+            swap( current , next );
+        }
+        
+        return false;
+    }
+    void func(string curr_word, string endWord, vector<string> ladder, vector<vector<string> > &ladders, unordered_map<string, vector<string>> & child)
+    {
+        if(curr_word == endWord)
+        {
+            ladders.push_back(ladder);
+        }
+        else
+        {
+            for(auto word : child[curr_word])
+            {
+                ladder.push_back(word);
+                func( word , endWord , ladder , ladders , child );
+                ladder.pop_back();
+            }
+        }
+    }
+    vector<vector<string>> findLadders(string beginWord, string endWord, vector<string>& wordList) 
+    {
+        unordered_set< string > dict(wordList.begin() , wordList.end());
+        if(dict.find(endWord) == dict.end())
+            return {};
+        unordered_map< string , vector<string> > child;
+        if(!findWord(beginWord , endWord , dict , child))
+            return {};
+        
+        vector< vector<string> > ladders;
+        vector< string > ladder;
+        ladder.push_back(beginWord);
+        func( beginWord , endWord , ladder , ladders , child );
+        return ladders;
+    }
+};
