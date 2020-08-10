@@ -1,0 +1,38 @@
+class TicTacToe{
+  private:
+    int * rows;
+    int size;
+    int * cols;
+    int diagonals = 0;
+    int anti_diagonals = 0;
+  public:
+    TicTacToe(int n)
+    {
+      rows = new int[n];
+      cols = new int[n];
+      diagonals = 0;
+      size = n;
+      anti_diagonals = 0;
+    }
+  /*
+    0: No one wins.
+    1: Player 1 wins.
+    2: Player 2 wins.
+  */
+  int move(int r , int c , int player)
+  {
+    int count = (player == 1) ? (1) : (-1);
+    rows[r] += count;
+    cols[c] += count;
+    if(r == c)
+      diagonals += count;
+    if( r + c == size-1 )
+      anti_diagonals += count;
+    if(abs(rows[r]) == size or
+       abs(cols[c]) == size or
+       abs(diagonals) == size or abs(anti_diagonals) == size){
+      return (count > 0) ? (1) : (2);
+    }
+    return 0;
+  }
+};
