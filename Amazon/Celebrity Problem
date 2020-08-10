@@ -1,0 +1,103 @@
+#include<bits/stdc++.h>
+using namespace std;
+// Here matrix represent that Matrix[a][b] -> a 'knows' b
+vector<vector<int>> matrix = {
+                    {0, 0, 1, 0},
+                    {0, 0, 1, 0},
+                    {0, 0, 0, 0},
+                    {0, 0, 1, 0}
+                  };
+int knows(int r , int c)
+{
+    return matrix[r][c];
+}
+// 2 Pointer Approach to find the celebrity 2*(n-1) comparisons
+// O(n) time and O(1) space
+// Returns id if celebrity exists else return -1;
+int celebrity_pointer(int n)
+{
+  int a = 0;
+  int b = n-1;
+  while( a < b )
+  {
+    if(knows(a,b))
+      a++;
+    else
+      b--;
+  }
+  // Check is 'a' celebrity
+  for(int member = 0 ; member < n ; member++)
+  {
+    if(member != a and (knows(a,member) or !knows(member , a)))
+      return -1;
+  }
+  return a;
+}
+// Using recurrsion O(1) space and O(n) space
+int findcelebrity(int n)
+{
+  if(n == 1)
+    return 0;
+  int id = findcelebrity(n-1);
+  if(id == -1)
+    return n-1;
+  else if(knows(id , n-1) and !knows(n-1 , id))
+    return n-1;
+  else if(knows(n-1 , id) and !knows(id , n-1))
+    return id;
+  return -1;
+}
+// Returns id if celebrity exists else return -1;
+int celebrity(int n)
+{
+  int id = findcelebrity(n);
+  if(id == -1)
+    return -1;
+  else
+  {
+    int indegree = 0 , outdegree = 0;
+    for(int member = 0 ; member < n ; member++)
+    {
+      if(member != id)
+      {
+        indegree += knows(member , id);
+        outdegree += knows(id , member);
+      }
+    }
+    if(indegree == n-1 and outdegree == 0)
+      return id;
+  }
+  return -1;
+}
+// Using graph O(n) space and O(n*n) time
+bool iscelebritypresent_graph()
+{
+  int n = matrix.size();
+  vector<int> indegree(n,0);
+  vector<int> outdegree(n,0);
+  for(int r = 0 ; r < n ; r++)
+  {
+    for(int c = 0 ; c < n ; c++)
+    {
+      if(knows(r,c))
+      {
+        indegree[c]++;
+        outdegree[r]++;
+      }
+    }
+  }
+  for(int r = 0 ; r < n ; r++)
+  {
+    if(indegree[r] == n-1 and outdegree[r] == 0)
+      return 1;
+  }
+  return 0;
+}
+
+int main()
+{
+  //cout << iscelebritypresent_graph();
+  //cout << celebrity(4);
+  cout << celebrity_pointer(4);
+  return 0;
+}
