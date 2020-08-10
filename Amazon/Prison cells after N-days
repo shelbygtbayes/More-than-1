@@ -1,0 +1,55 @@
+// brute force Total 64 states possible
+class Solution {
+public:
+    vector<int> nextDay(vector<int> cells)
+    {
+        vector<int> next(8,0);
+        for(int ind = 1 ; ind < 7 ; ind++)
+        {
+            next[ind] = (cells[ind-1] == cells[ind+1]) ? (1) : (0);
+        }
+        return next;
+    }
+    vector<int> prisonAfterNDays(vector<int>& cells, int N) {
+        
+        bool hascycle = 0;
+        int len = 0;
+        set< vector<int> > vis;
+        for(int iter = 0 ; iter < N ; iter++)
+        {
+            vector<int> next = nextDay(cells);
+            if(vis.find(next) != vis.end())
+            {
+                hascycle = 1;
+                break;
+            }
+            len++;
+            vis.insert(next);
+            cells = next;
+        }
+        if(hascycle)
+            return prisonAfterNDays(cells, N % len);
+        return cells;
+    }
+};
+// tricky maths
+class Solution {
+public:
+    vector<int> nextDay(vector<int> &cells)
+    {
+        vector<int> next(8,0);
+        for(int ind = 1 ; ind < cells.size() - 1; ind++)
+        {
+            next[ind] = (cells[ind-1] == cells[ind+1]) ? (1) : (0);
+        }
+        return next;
+    }
+    vector<int> prisonAfterNDays(vector<int>& cells, int N) {
+        N = (N-1) % 14 + 1;
+        for(int ind = 0 ; ind < N ; ind++)
+        {
+            cells = nextDay(cells);
+        }
+        return cells;
+    }
+};
