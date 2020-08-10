@@ -1,0 +1,39 @@
+int getMinRiskValue(int n, int m, vector<int> &x, vector<int> &y, vector<int> &w) {
+        vector<int> parent(n+1,-1);
+        for(int ind = 0 ; ind <= n ; ind++)
+            parent[ind] = ind;
+        vector<vector<int>> edges;
+        for(int ind = 0 ; ind < m ; ind++)
+        {
+            int src = x[ind] , dest = y[ind] , weight = w[ind];
+            edges.push_back(vector<int>{weight , src , dest});
+        }
+        auto find = [&](int root){
+              while(root != parent[root])
+                root = parent[root];
+            return parent[root];
+        };
+        auto merge = [&](int node1 , int node2){
+          int parent1 = find(node1) , parent2 = find(node2);
+          if(parent1 > parent2){
+              parent[parent1] = parent[parent2];
+              return parent[parent2];
+          }
+          else
+          {
+              parent[parent2] = parent[parent1];
+              return parent[parent1];
+          }
+        };
+        sort(edges.begin() , edges.end());
+        for(auto edge : edges){
+            int weight = edge[0] , src = edge[1] , dest = edge[2];
+            parent[src] = parent[dest] = merge(src , dest);
+            if(find(0) == find(n))
+            {
+                return weight;   
+            }
+        }
+        return -1;
+    }
+};
