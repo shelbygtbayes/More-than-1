@@ -1,0 +1,140 @@
+#include<bits/stdc++.h>
+using namespace std;
+// To handle lexicographical we use a map
+class FileSystem{
+private:
+  vector<string> tokenize(string &path)
+  {
+      vector<string> ans;
+      int pos = 1;
+      string token;
+      while(pos < path.size())
+      {
+        if(path[pos] == '/')
+        {
+          ans.push_back(token);
+          token = "";
+        }
+        else
+        {
+          token += path[pos];
+        }
+        pos++;
+      }
+      if( token.size() > 0)
+        ans.push_back(token);
+      return ans;
+  }
+  class Node // Abstract class
+  {
+    protected:
+      string name;
+    public:
+      map< string , Node* > sub_directories;
+      Node(string &name)
+      {
+        this->name = name;
+      }
+      string getName()
+      {
+        return name;
+      }
+      virtual bool isDirectory() = 0; // Abstract function
+      virtual vector<string> ls() = 0;
+    };
+  class File : public Node // A file is a special Node
+  {
+    private:
+      string data;
+    public:
+      File(string &name) : Node(name)
+      {
+      }
+      bool isDirectory() override{
+        return 0;
+      }
+      vector<string> ls() override{
+        return {name};
+      }
+      void add_data(string &str){
+        data.append(str);
+      }
+      string read_data(){
+        return data;
+      }
+  };
+  class Directory : public Node // A Directory is a special Node
+  {
+  public:
+    Directory(string &name) : Node(name)
+    {}
+    bool isDirectory() override{
+      return 1;
+    }
+    vector<string> ls() override
+    {
+      vector<string> containers;
+      for(auto it = sub_directories.begin(); it != sub_directories.end() ; it++)
+      {
+        containers.push_back(it->first);
+      }
+      return containers;
+    }
+  };
+public:
+  Node* root;
+  FileSystem(){
+    root = new Directory("");
+  }
+  vector<string> ls(string &path)
+  {
+      vector<string> tokens = tokenize(path);
+      Node* current = root;
+      for(auto token : tokens)
+        current = root->sub_directories[token];
+      return current->ls();
+  }
+  void mkdir(string & path)
+  {
+    vector<string> tokens = tokenize(path);
+    Node* current = root;
+    for(auto token : tokens)
+    {
+      if(current->sub_directories[token] == NULL)
+        current->sub_directories[token] = new Directory(token);
+      current = current->sub_directories[token];
+    }
+  }
+  void addContent_to_file(string &filePath , string &content)
+  {
+    vector<string> tokens = tokenize(filePath);
+    Node* current = root;
+    for(auto token : tokens)
+    {
+      if(current->sub_directories[token] == NULL)
+      {
+        current->sub_directories[token] = new File(token);
+        break;
+      }
+      current = current->sub_directories[token];
+    }
+    // Since we have taken a pointer of Type Node
+    // TO append to file we need to call File function
+    // By typecasting the Node pointer
+    ((File*)current)->add_data(content);
+  }
+  string readContentFromFile(string filePath)
+  {
+    vector<string> tokens = tokenize(filePath);
+    Node* current = root;
+    for(auto token : tokens)
+    {
+      current = current->sub_directories[token];
+    }
+    return ((File*)current)->read_data();
+  }
+};
+int main()
+{
+  return 0;
+}
