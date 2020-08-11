@@ -1,0 +1,36 @@
+class Solution {
+public:
+    unordered_set< string > dict;
+    
+    // whether it is possible to form the word starting from the current index by using words present in the dictionary
+    bool func( int current , string &word )
+    {
+        if(current > 1 and current == word.size())
+            return 1;
+        for(int index = current ; index < word.size() ; index++)
+        {
+            string sub = word.substr(current , index - current + 1);
+            if( dict.find(sub) != dict.end() and func(index+1 , word))
+                return 1;
+        }
+        return 0;
+    }
+    vector<string> findAllConcatenatedWordsInADict(vector<string>& words) {
+    
+        for(auto word : words)
+            dict.insert(word);
+        
+        vector< string > ans;
+        
+        for(auto word : words)
+        {
+            dict.erase(word);
+
+            if( func(0 , word) )
+                ans.push_back(word);
+
+            dict.insert(word);
+        }
+        return ans;
+    }
+};
