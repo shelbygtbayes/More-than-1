@@ -1,0 +1,51 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+using namespace std;
+
+int Previous_Non_Conflict_Job(vector<vector<int>> &jobs , int current)
+{
+  for(int ind = current - 1 ; ind >= 0 ; ind--)
+  {
+    if(jobs[ind][1] <= jobs[current][0])
+      return ind;
+  }
+  return -1;
+}
+int maxProfit(vector<int> &start , vector<int> &end , vector<int> &profit)
+{
+  int n = start.size();
+  vector<vector<int>> jobs;
+  
+  for(int ind = 0 ; ind < n ; ind++)
+    jobs.push_back(vector<int>{start[ind] , end[ind] , profit[ind]});
+    
+  auto comp = [&](vector<int> &a , vector<int> &b)
+  {
+    if(a[1] == b[1])
+      return (a[0] != b[0]) ? (a[0] < b[0]) : (a[2] > b[2]);
+    else
+      return a[1] < b[1]; // sort by finish time
+  };
+  sort(jobs.begin() , jobs.end() , comp);
+  vector<int> table(n,0);
+  table[0] = jobs[0][2];
+  for(int ind = 1 ; ind < n ; ind++)
+  {
+    int inclusiveProfit = jobs[ind][2];
+    int previous_job = Previous_Non_Conflict_Job(jobs , ind);
+    if(previous_job != -1)
+      inclusiveProfit += table[previous_job];
+    // Max of including , excluding
+    table[ind] = max( inclusiveProfit , table[ind-1] );
+  }
+  return table[n-1];
+}
+int main()
+{
+  vector<int> st = {3,1,6,2};
+  vector<int> end = {10,2,19,100};
+  vector<int> profit = {20,50,100,200};
+  cout << maxProfit(st , end , profit);
+  return 0;
+}
