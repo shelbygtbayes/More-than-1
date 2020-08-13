@@ -1,0 +1,68 @@
+/*
+Approach:
+
+Here we are asked to find the cell on which both oceans can meet
+The Pacific starts from the Top and Left of the matrix
+The Atlantic starts from the Right and the Bottom of the matrix
+
+Now the movement of water (from (r,c) --> (x,y) ) depends as Matrix[r][c] >= Matrix[x][y]
+
+In order to solve the problem 
+Start from the Ends and perform the dfs as ( reverse water movement and determine which cells can be reached from the respective oceans )
+At last return the cells which are visited by the both oceans 
+*/
+class Solution {
+public:
+    vector<int> dir = {0,-1,0,1,0};
+    int n , m;
+    bool not_exists(int x , int y)
+    {
+        return x < 0 or y < 0 or x >= n or y >= m ;
+    }
+    void dfs(int r , int c , vector<vector<bool>> &ocean , vector<vector<int>>& matrix)
+    {
+        ocean[r][c] = 1;
+        for(int d = 0 ; d < 4 ; d++)
+        {
+            int x = r + dir[d] , y = c + dir[d+1];
+            if(!not_exists(x,y) and !ocean[x][y] and matrix[x][y] >= matrix[r][c])
+                dfs(x,y,ocean,matrix);
+        }
+    }
+    vector<vector<int>> pacificAtlantic(vector<vector<int>>& matrix) 
+    {    
+        vector<vector<int>> ans;
+        n = matrix.size();
+        if(n == 0)
+            return ans;
+        m = matrix[0].size();
+        vector<vector<bool>> pacific(n,vector<bool>(m,0));
+        vector<vector<bool>> atlantic(n,vector<bool>(m,0));
+        for(int row = 0 ; row < n ; row++)
+        {
+            if(!pacific[row][0])
+                dfs(row , 0 , pacific , matrix);
+            if(!atlantic[row][m-1])
+                dfs(row , m-1 , atlantic , matrix);
+        }
+        
+        for(int col = 0 ; col < m ; col++)
+        {
+            if(!pacific[0][col])
+                dfs(0 , col , pacific , matrix);
+            if(!atlantic[n-1][col])
+                dfs(n-1 , col , atlantic , matrix);
+        }
+        
+        
+        for(int row = 0 ; row < n ; row++)
+        {
+            for(int col = 0 ; col < m ; col++)
+            {
+                if(pacific[row][col] and atlantic[row][col])
+                    ans.push_back({row,col});
+            }
+        }
+        return ans;
+    }
+};
