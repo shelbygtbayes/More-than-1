@@ -1,0 +1,50 @@
+/*
+Approach:
+Traverse the string and account the Count of each character in a Max-Heap
+Now Take the Most frequent character , add to the answer and reduce it's frequency
+Now for alternate factor Take account of previous character used ( assume initially '#' count = -1 )
+Now if the previous frequency is positive then add to the Max-Heap
+Keep updating the previous with the current character when processed
+Finally check the Length of answer string
+*/
+#include<iostream>
+#include<queue>
+#include<vector>
+using namespace std;
+string func(string s)
+{
+  int n = s.size();
+  vector<int> cnt(26,0);
+  for(auto ch : s)
+  {
+    cnt[ch-'a']++;
+  }
+  priority_queue< pair< int , char > > pq;
+  for(auto ch = 'a' ; ch <= 'z' ; ch++)
+  {
+    if(cnt[ch-'a'] > 0)
+      pq.push(make_pair(cnt[ch-'a'] , ch));
+  }
+  string ans = "";
+  pair< int , char > prev = make_pair(-1 , '#');
+  while(!pq.empty())
+  {
+    pair< int , char > current = pq.top();
+    pq.pop();
+    char ch = current.second;
+    ans += ch;
+    if(prev.first > 0)
+      pq.push(prev);
+    current.first -= 1;
+    prev = current;
+  }
+  if(n != ans.size())
+    return "Not Possible";
+  return ans;
+}
+int main()
+{
+  string s = "bbaaa";
+  cout << func(s);
+  return 0;
+}
