@@ -1,0 +1,88 @@
+class Solution {
+    public:
+      int n,m;
+      struct node 
+      {
+        array<node*, 26> children;
+        string word = "";
+        bool is_word = false;
+      };
+      node* root = new node();
+      void insert(string& word) 
+      {
+        node* ptr = root;
+        for (char &c : word) 
+        {
+          int index = c - 'a';
+          if (ptr->children[ index ] == NULL) 
+            ptr->children[ index ] = new node();
+
+          ptr = ptr->children[index];
+        }
+        ptr->word = word;
+        ptr->is_word = 1;
+      }
+
+      bool trieSearch(node* ptr, char c, set<string>& retWords) 
+      {
+        int index = c - 'a';
+        if (!ptr->children[ index ]) 
+            return false;
+        ptr = ptr->children[ index ];
+        if (ptr->is_word) 
+          retWords.emplace(ptr->word);
+        return true;
+      }
+      vector<int> dir = {0,1,0,-1,0};
+
+      bool dfs(int row, int  col , vector<vector<char>>& board, set<string>& words, node* ptr) 
+      {
+        if (!ptr) return false;
+        if (row < 0 or col < 0 or row >= board.size() or  col >= board[row].size() or board[row][ col ] == '#' ) return false;
+
+        bool ans_got = 0;
+
+        if (trieSearch(ptr, board[ row ][ col ], words)) 
+        {
+          int index = board[ row ][ col ] - 'a';
+          ptr = ptr->children[ index ];
+          char c = board[ row ][ col ];
+          board[ row ][ col ] = '#';
+          for(int d = 0 ; d < 4; d++ )
+          {
+              int x = row + dir[d] , y = col + dir[d+1];
+              if( dfs(x , y , board , words , ptr) ){
+                  ans_got = 1;
+                  break;
+              }
+          }
+          board[row][ col ] = c;
+        } 
+        return ans_got;
+      }
+    
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& dict) {
+        
+        vector<string> ans;
+        n = board.size();
+        
+        if(n == 0)
+          return ans;
+        
+        m = board[0].size();
+        
+        for (auto w : dict) 
+            insert(w);
+        
+        set<string> words ;
+
+        for (int row = 0; row < n ; row++ ){
+            for (int col = 0; col < m ; col++ ) 
+              dfs(row, col , board, words , root);
+        }
+
+        for (auto word : words ) 
+            ans.push_back(word);
+        return ans;
+    }
+};
