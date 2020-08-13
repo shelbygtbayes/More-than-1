@@ -1,0 +1,44 @@
+class Solution {
+public:
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        unordered_map< int , vector<int> > graph;
+        unordered_map< int , vector<int> > reverse_graph;
+        
+        for(auto edge : prerequisites)
+        {
+            int u = edge[0] , v = edge[1];
+            graph[u].push_back(v);
+            reverse_graph[v].push_back(u);
+        }
+        
+        queue< int > q;
+        vector<int> inDegree(numCourses , 0);
+        
+        for(int ind = 0 ; ind < numCourses ; ind++)
+        {
+            inDegree[ind] = reverse_graph[ind].size();
+            if(inDegree[ind] == 0)
+                q.push(ind);
+        }
+        
+        vector<int> ans;
+        int total = 0;
+        while(!q.empty())
+        {
+            int completed = q.front();
+            q.pop();
+            total++;
+            ans.push_back(completed);
+            for(auto course : graph[completed])
+            {
+                inDegree[course]--;
+                if(inDegree[course] == 0)
+                    q.push(course);
+            }
+        }
+        reverse(ans.begin() , ans.end());
+        if(total == numCourses) return ans;
+        return {};
+   }
+};
+
