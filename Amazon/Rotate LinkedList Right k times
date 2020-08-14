@@ -1,0 +1,56 @@
+Approach
+if( n < k )
+    k = k % n
+
+L1= take n-k elements from beg
+L2 = take k elements from last
+L = L2 U L1
+return L
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        if(head == NULL or head->next == NULL)
+            return head;
+        int n = 0;
+        ListNode* ptr = head;
+        while(ptr)
+        {
+            n++;
+            ptr = ptr->next;
+        }
+        if(k >= n)
+            k = k % n;
+        if(k == 0)
+            return head;
+        ptr = head;
+        ListNode *L1_end , *L2;
+        int ind = 0;
+        ptr = head;
+        while(ind < n-k) 
+        {
+            L1_end = ptr;
+            ptr = ptr->next;
+            ind++;
+        }
+        L2 = ptr;
+        while(ptr and ptr->next)
+        {
+            ptr = ptr->next;
+        }
+        ptr->next = head;
+        head = L2;
+        L1_end->next = NULL;
+        return head;
+    }
+};
