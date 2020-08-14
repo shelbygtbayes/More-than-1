@@ -1,0 +1,35 @@
+/*
+Approach:
+Recurrsively create the root , TreeNode using the (mid) of the List 
+Here we assume function for [start, end)
+Then root->left = func( start , mid ) and root->right = func(mid+1 , end )
+In order to find the mid of the list [start , end ) use tortoise-hare algo 
+as Untill fast->next and fast->next->next exists ( Not equal to 'end' )
+Now create root = ( mid )
+( mid+1 ) -> slow->next
+*/
+class Solution {
+public:
+    TreeNode* sortedListToBST(ListNode* head) {
+        ListNode* start = head , *end = NULL;
+        return preorder(start , end);
+    }
+    TreeNode* preorder(ListNode* start , ListNode* end)
+    {
+        if(start == end)
+            return NULL;
+        ListNode *slow , *fast;
+        slow = fast = start;
+        while( fast->next != end and fast->next->next != end )
+        {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        ListNode* mid = slow;
+        TreeNode* root = new TreeNode(mid->val);
+        root->left = preorder(start , mid);
+        mid = mid->next;
+        root->right = preorder( mid , end );
+        return root;
+    }
+};
