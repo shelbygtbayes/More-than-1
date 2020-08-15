@@ -1,0 +1,81 @@
+Approach
+
+ Given an array A of non-negative integers and a positive integer k, 
+ we have to divide A into k of fewer partitions such that the maximum sum of the elements in a partition, overall partitions is minimized
+
+func(n,k) = ans : for index = 1 to n:
+                    min( ans , max( func(index , k-1) , sum[index .. n] ) )
+#include<iostream>
+#include<vector>
+#include<climits>
+using namespace std;
+vector<int> sum;
+void set_sum(vector<int> &arr)
+{
+  int n = arr.size();
+  sum.resize(n+1);
+  sum[1] = arr[0];
+  for(int index = 2 ; index <= n ; index++)
+  {
+    sum[index] += (sum[index-1] + arr[index-1]);
+  }
+}
+// Iterative n paintings k painters
+int func_dp(int n , int k , vector<int> & arr)
+{
+  if(n == 1)
+    return arr[0];
+  else if(k == 1)
+    return sum[n];
+  int dp[k+1][n+1] = {0};
+  // Single Painter
+  for(int ind = 1; ind <= n ; ind++)
+    dp[1][ind] = sum[ind];
+  // Single Painting
+  for(int painters = 1; painters <= k ; painters++)
+      dp[painters][1] = arr[0];
+  for(int painters = 2 ; painters <= k ; painters++)
+  {
+    for(int index = 2 ; index <= n ; index++)
+    {
+      int ans = INT_MAX , summation = 0;
+      for(int inter = 1; inter <= n ; inter++)
+      {
+        if(inter == 1)
+          summation = sum[index];
+        else
+          summation = sum[index] - sum[inter];
+        ans = min(ans , max( dp[painters-1][inter] , summation ));
+      }
+      dp[painters][index] = ans;
+    }
+  }
+  return dp[k][n];
+}
+// Recurrsive
+int func(int n, int k , vector<int> & arr)
+{
+  if(n == 1)
+    return arr[0];
+  if( k == 1 )
+    return sum[n];
+  int ans = INT_MAX;
+  int summation = 0;
+  for(int index = 1; index <= n ; index++)
+  {
+    if(index == 1)
+      summation = sum[n];
+    else
+      summation = sum[n] - sum[index];
+    ans = min(ans , max( func(index , k-1 , arr) , summation ));
+  }
+  return ans;
+}
+int main()
+{
+  vector<int> arr = {10, 20, 60, 50, 30, 40};
+  set_sum(arr);
+  int n = arr.size() , k = 3;
+  cout << func_dp(n , k , arr);
+  return 0;
+}
