@@ -1,0 +1,57 @@
+class Solution {
+public:
+    void func_smallest(TreeNode* root , int &curr , int k , int &ans)
+    {
+        if(!root)
+            return;
+        func_smallest(root->left , curr , k , ans);
+        curr++;
+        if(curr == k)
+        {
+            ans= root->val;
+            return;
+        }
+        func_smallest(root->right , curr , k , ans);
+    }
+    void func_largest(TreeNode* root , int & curr , int k , int & ans)
+    {
+        if(!root) return;
+        func_largest( root->right , curr , k , ans );
+        curr++;
+        if(curr == k)
+        {
+          ans = root->val;
+          return;
+        }
+        func_largest( root->left , curr , k , ans );
+    }
+    int kthSmallest(TreeNode* root, int k) { 
+        int curr = 0 , ans = 0;
+        func_smallest(root , curr , k , ans);
+        return ans;
+    }
+};
+
+Using Stack
+
+int kthSmallest(TreeNode* root, int k) 
+{
+        TreeNode* curr = root;
+        stack< TreeNode*> st;
+        int cnt = 0;
+        while(!st.empty() || curr != NULL)
+        {
+            while(curr != NULL)
+            {
+                st.push(curr);
+                curr = curr->left;   
+            }
+            curr = st.top();
+            st.pop();
+            cnt++;
+            if(cnt == k)
+                break;
+            curr = curr->right;
+        }
+        return curr->val;
+}
