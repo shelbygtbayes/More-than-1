@@ -1,3 +1,4 @@
+// Linear complexity O(m+n)
 #include<iostream>
 #include<vector>
 using namespace std;
