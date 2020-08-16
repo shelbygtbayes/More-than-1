@@ -1,0 +1,83 @@
+#include<bits/stdc++.h>
+using namespace std;
+struct Node{
+    int val;
+    Node* left , *right;
+    Node(int value)
+    {
+      val = value;
+      left = right = NULL;
+    }
+};
+int size(Node * root)
+{
+  if(!root) return 0;
+  int left_cnt = size(root->left);
+  int right_cnt = size(root->right);
+  return left_cnt + right_cnt + 1;
+}
+void store_array(Node* root , vector<int> &arr)
+{
+  if(!root) return;
+  store_array(root->left , arr);
+  arr.push_back(root->val);
+  store_array(root->right , arr);
+}
+void print_pairs(vector<int> & arr1 , vector<int> & arr2 , int k)
+{
+  int ind1 = 0 , ind2 = arr2.size() - 1;
+  while(ind1 < arr1.size() and ind2 >= 0)
+  {
+    if(arr1[ind1] + arr2[ind2] > k)
+    {
+      int i = ind1;
+      while(i < arr1.size())
+      {
+        cout << "(" << arr1[i] << ", " << arr2[ind2] << ")" << endl;
+        i++;
+      }
+      ind2--;
+    }
+    else
+      ind1++;
+  }
+}
+void print_pairs_func(Node* root1 , Node* root2 , int k)
+{
+  int n1 = size(root1);
+  int n2 = size(root2);
+  vector<int> arr1 , arr2;
+  store_array(root1 , arr1);
+  store_array(root2 , arr2);
+  print_pairs(arr1 , arr2 , k);
+}
+Node* insert(Node* root , int key)
+{
+  if(!root) return new Node(key);
+  else if(root->val > key) root->left = insert(root->left , key);
+  else if(root->val < key) root->right = insert(root->right , key);
+  return root;
+}
+int main()
+{
+  Node* root1 = NULL;
+  root1 = insert(root1 , 5);
+  root1 = insert(root1 , 3);
+  root1 = insert(root1 , 2);
+  root1 = insert(root1 , 4);
+  root1 = insert(root1 , 7);
+  root1 = insert(root1 , 6);
+  root1 = insert(root1 , 8);
+
+  Node* root2 = NULL;
+  root2 = insert(root2 , 10);
+  root2 = insert(root2 , 6);
+  root2 = insert(root2 , 15);
+  root2 = insert(root2 , 3);
+  root2 = insert(root2 , 8);
+  root2 = insert(root2 , 11);
+  root2 = insert(root2 , 18);
+
+  print_pairs_func(root1 , root2 , 20);
+  return 0;
+}
