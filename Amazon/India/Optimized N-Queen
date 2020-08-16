@@ -1,0 +1,44 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+int ld[36] = {0};    // Left diagonal
+int rd[36] = {0};   // right diagonal
+int cl[36] = {0};  //  column check
+bool backtrack(vector<vector<int>> &board , int col , int n)
+{
+  if(col >= n)
+    return 1;
+  for(int row = 0 ; row < n ; row++)
+  {
+    if ((ld[row - col + n - 1] != 1 and rd[row + col] != 1) and cl[row] != 1)
+    {
+      board[row][col] = 1;
+      ld[row - col + n - 1] = rd[row + col] = cl[row] = 1;
+      if(backtrack(board , col+1 , n))
+        return 1;
+      board[row][col] = 0;
+      ld[row - col + n - 1] = rd[row + col] = cl[row] = 0;
+    }
+  }
+  return 0;
+}
+void func(int n)
+{
+    vector<vector<int>> board(n , vector<int>(n,0));
+    if(backtrack(board , 0, n))
+    {
+      for(int ind = 0 ; ind < n ; ind++)
+      {
+        for(int col = 0 ; col < n ; col++)
+          cout << board[ind][col] << " ";
+        cout << endl;
+      }
+    }
+    else
+      cout << "Not Possible";
+}
+int main()
+{
+  func(5);
+  return 0;
+}
