@@ -1,0 +1,82 @@
+#include<bits/stdc++.h>
+using namespace std;
+struct Node{
+    int val;
+    Node* left , *right;
+    Node(int value)
+    {
+      val = value;
+      left = right = NULL;
+    }
+};
+Node* insert(Node* root , int key)
+{
+  if(!root) return new Node(key);
+  else if(root->val > key) root->left = insert(root->left , key);
+  else if(root->val < key) root->right = insert(root->right , key);
+  return root;
+}
+int count_Pairs(Node* root1 , Node* root2 , int value)
+{
+  if(!root1 or !root2)  return 0;
+  int ans = 0;
+  stack<Node*> inorder1, reverse_inorder2;
+  while(1){
+    while(root1)
+    {
+      inorder1.push(root1);
+      root1 = root1->left;
+    }
+    while(root2)
+    {
+      reverse_inorder2.push(root2);
+      root2 = root2->right;
+    }
+    if(inorder1.empty() or reverse_inorder2.empty())
+      break;
+    Node* top1 = inorder1.top(), *top2 = reverse_inorder2.top();
+    if(top1->val + top2->val == value)
+    {
+      ans++;
+      cout << "(" << top1->val << ", " << top2->val << ")" << endl;
+      inorder1.pop();
+      reverse_inorder2.pop();
+      root1 = top1->right;
+      root2 = top2->left;
+    }
+    else if(top1->val + top2->val > value)
+    {
+      reverse_inorder2.pop();
+      root2 = top2->left;
+    }
+    else
+    {
+      inorder1.pop();
+      root1 = top1->right;
+    }
+  }
+  return ans;
+}
+int main()
+{
+  Node* root1 = NULL;
+  root1 = insert(root1 , 5);
+  root1 = insert(root1 , 3);
+  root1 = insert(root1 , 2);
+  root1 = insert(root1 , 4);
+  root1 = insert(root1 , 7);
+  root1 = insert(root1 , 6);
+  root1 = insert(root1 , 8);
+
+  Node* root2 = NULL;
+  root2 = insert(root2 , 10);
+  root2 = insert(root2 , 6);
+  root2 = insert(root2 , 15);
+  root2 = insert(root2 , 3);
+  root2 = insert(root2 , 8);
+  root2 = insert(root2 , 11);
+  root2 = insert(root2 , 18);
+
+  cout << count_Pairs(root1 , root2 , 16);
+  return 0;
+}
