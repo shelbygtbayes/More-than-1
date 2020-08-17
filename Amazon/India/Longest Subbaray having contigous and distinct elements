@@ -1,0 +1,35 @@
+#include<iostream>
+#include<vector>
+#include<set>
+using namespace std;
+int contigous(vector<int> & arr)
+{
+  int n = arr.size();
+  int st = 0 , ans = 1;
+  while(st < n-1)
+  {
+    int end = st+1;
+    set<int> s;
+    int min_ = arr[st] , max_ = arr[st];
+    s.insert(arr[st]);
+    while(end < n)
+    {
+      if(s.find(arr[end]) != s.end())
+        break;
+      s.insert(arr[end]);
+      min_ = min( arr[end] , min_);
+      max_ = max( arr[end] , max_);
+      if(max_ - min_ == end-st)
+        ans = max( ans , end-st + 1);
+      end++;
+    }
+    st++;
+  }
+  return ans;
+}
+int main()
+{
+  vector<int> arr = {10, 12, 12, 10, 10, 11, 10};
+  cout << contigous(arr);
+  return 0;
+}
