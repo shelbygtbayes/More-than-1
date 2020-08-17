@@ -1,0 +1,51 @@
+we are not provided with the coordinates of both robots
+
+Hence moving in opposite direction may leads to divergence 
+
+Moreover we are expect the same code for the both robots
+Hence we can't wake other robot to meet on reaching a parachute site by other explicitly
+
+technique 1:
+
+Move left 1 time
+then right 2 times
+then left 3 times
+and so on...
+Definetly after some point one robot will go over its own parachute and also parachute of another robot. 
+At this point, it has met with the other robot.
+
+technique 2:
+
+If reached the point then move left 2 times 
+else move left single time and stay for another unit of time.
+
+This way one robot will double it’s speed as soon as it reaches the other’s parachute and eventually they will meet.
+Note: Don’t move a robot with twice as speed as other from landing point onwards. As we don’t have any information which robot is behind and which robot is at front. 
+So if front robot is moved with double speed than lagging behind robot then it will never be able to catch it hence, never meet.
+void robotMeet()
+{
+  bool reached_parachute = 0;
+
+  // Till both robots meet
+
+    while( !did_robots_meet() )
+    {
+      // if reached move left twice
+      if( reached_parachute )
+      {
+        moveLeft();
+        moveLeft();
+      }
+      // Else walk left (slow) and stay
+      else
+      {
+        moveLeft();
+        no_movement();
+      }
+      // If reach the top of parachute
+      if( onTop_of_Parachute() )
+      {
+        reached_parachute = 1;
+      }
+    }
+}
