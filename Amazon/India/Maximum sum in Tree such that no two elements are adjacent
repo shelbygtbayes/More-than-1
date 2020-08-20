@@ -1,0 +1,77 @@
+/*
+Two cases:
+  Include root then check the grandchildren
+  Exclude root then check the children
+  Maintain the ans as global maximum
+*/
+#include<iostream>
+#include<climits>
+#include<vector>
+#include<unordered_map>
+using namespace std;
+struct node{
+  int val;
+  node* left , *right;
+  node(int x)
+  {
+    val = x;
+    left = right = NULL;
+  }
+};
+unordered_map< node* , int > hsh;
+static int ans = 0;
+int max_sum(node* root)
+{
+  if(!root)
+    return INT_MIN;
+  if(hsh.find(root) != hsh.end())
+    return hsh[root];
+  int sum = 0;
+  if(root->left)
+  {
+    sum = max(sum , sum + max_sum(root->left->left));
+    sum = max(sum , sum + max_sum(root->left->right));
+  }
+  if(root->right)
+  {
+    sum = max(sum , sum + max_sum(root->right->left));
+    sum = max(sum , sum + max_sum(root->right->right));
+  }
+  hsh[root] = max(sum + root->val,max(max_sum(root->left) , max_sum(root->right)));
+  ans = max(ans , hsh[root]);
+  return hsh[root];
+}
+vector<int> max_sum_pair(node* root)
+{
+  if(!root)
+  {
+    vector<int> sum = {0,0};
+    return sum;
+  }
+  vector<int> left = max_sum_pair(root->left);
+  vector<int> right = max_sum_pair(root->right);
+  int excl_left_child = left[1];
+  int excl_right_child = right[1];
+  int includ_root = root->val + excl_left_child + excl_right_child;
+  int excl_root = max( left[0] , left[1]) + max(right[0] , right[1]);
+  return vector<int>{includ_root , excl_root};
+}
+int getMaxSum(node * root)
+{
+  int temp = max_sum(root);
+  vector<int> temp2 = max_sum_pair(root);
+  return max(temp2[0] , temp2[1]);
+}
+int main()
+{
+  node* root = new node(1);
+  root->left = new node(2);
+  root->right = new node(3);
+  root->right->left = new node(4);
+  root->right->right = new node(5);
+  root->left->left = new node(1);
+
+  cout << getMaxSum(root) << endl;
+
+  return 0;
+}
