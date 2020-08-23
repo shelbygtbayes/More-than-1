@@ -1,0 +1,45 @@
+#include<iostream>
+using namespace std;
+struct node
+{
+    int val;
+    struct node* left;
+    struct node* right;
+    node (int data)
+    {
+        this->val = data;
+        left = right = NULL;
+    }
+};
+void morris_traversal(node* root)
+{
+  node* curr = root;
+  while(curr)
+  {
+    if(curr->left)
+    {
+      node* temp = curr;
+      curr = curr->left;
+      while(curr->right)
+        curr = curr->right;
+      curr->right = temp;
+      curr = temp->left;
+      temp->left = NULL;
+    }
+    else
+    {
+      cout << curr->val << " ";
+      curr = curr->right;
+    }
+  }
+}
+int main()
+{
+    struct node *root = new node(1);
+    root->left        = new node(2);
+    root->right       = new node(3);
+    root->left->left  = new node(4);
+    root->left->right = new node(5);
+  morris_traversal(root); 
+  return 0;
+}
